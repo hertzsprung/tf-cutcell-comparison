@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{siunitx}
+\usepackage{booktabs}
 
 \title{Comparison of Terrain Following and Cut Cell Grids with a Non-Hydrostatic Model}
 \author{James Shaw}
@@ -35,6 +36,24 @@
 	\caption{Comparing our BTF cubicUpwindCPCFit result with Schaer's 4th order result}
 	\label{fig:advection}
 \end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}{ l l l l l l }
+\toprule
+& \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{2}{c}{Sch\"ar 4th order} \\
+& $\ell^2$ error & min & max & min & max \\
+\midrule
+Analytic  & 0 & 0 & 1 & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+BTF 	  & TODO & TODO & TODO & \num{-0.058} & \num{1.001} \\
+SnapCol   & TODO & TODO & TODO & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+noOrography & TODO & TODO & TODO & \num{-0.002} & \num{0.984} \\
+\bottomrule
+\end{tabular}
+%
+\caption{Min, max and error norms compared with \textcite{schaer2002}}
+\label{tab:advection-stats}
+\end{table}
 
 \begin{figure}
 	\includegraphics[height=2in]{wobblyTracerAdvection.png}
@@ -77,7 +96,7 @@
 \begin{enumerate}
 	\item BTF grid isn't as bad as people say it is.  We found that:
 	\begin{itemize}
-		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection})
+		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection}, Table~\ref{tab:advection-stats})
 		\item Advection in a TF velocity field, if we include it, gives better results on BTF than SnapCol (Figure~\ref{fig:wobblyTracerAdvection})
 		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})  Could also compare with \textcite{zaengl2012}, \textcite{good2014}
 		\item gravity waves results visually as good as reference solution from \textcite{melvin2010} (figure~\ref{fig:gw-w})
@@ -93,14 +112,13 @@ Miscellany:
 \begin{itemize}
 	\item Advection accuracy depends on alignment of the flow with grid layers
 	\item Little/no evidence of small cell problem in GW test
-	\item Lack of energy conservation (evidenced in resting atmosphere test, Fig 4.12d in MSc dissertation)
+	\item Formulation does not conserve energy (evidenced in resting atmosphere test, Fig 4.12d in MSc dissertation)
 \end{itemize}
 
 \section{Further work}
 \begin{itemize}
-	\item Lorenz computational mode motivates formulation of C-P staggering on unstructured grids
+	\item Lorenz computational mode motivates formulation of C-P staggering for cut cell grids
 	\item Find out what excites the Lorenz computational mode
-	\item Fix lack of energy conservation
 \end{itemize}
 
 \end{document}
