@@ -15,13 +15,48 @@
 
 \maketitle
 
-\section{Results}
+Builds on the work of \textcite{schaer2002} (MWR), \textcite{klemp2011} (MWR), \textcite{weller-shahrokhi2014} (MWR)
+
+Results also compared with \textcite{melvin2010} (QRJ), maybe \textcite{zaengl2012} (MWR), \textcite{good2014} (Atmos Sci Letters)
+
+\section{Introduction}
 
 \begin{itemize}
-	\item Horizontal advection
-	\item \TODO{Maybe wobblyTracerAdvection}
-	\item Resting atmosphere
-	\item Gravity waves
+	\item Small cell problem
+\end{itemize}
+
+\section{Results}
+\begin{itemize}
+	\item \TODO{How much do I need to say about the model?  Just cite \textcite{weller-shahrokhi2014}?}
+	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975}?}
+	\item \TODO{Explain how SnapCol grid is constructed?}
+\end{itemize}
+
+\subsection{Advection}
+\begin{itemize}
+	\item Motivation: tests advection scheme accuracy, especially with grid distortions
+	\item Specify domain, terrain, discretisation in time and space, tracer
+	\item Specify wind field, projection method for non-divergence
+	\item Advection equation in flux form
+	\item Upwind-biased cubic advection scheme, non-monotonic, not flux corrected
+	\item d/dt scheme (RK2)
+\end{itemize}
+
+We compare the following grids:
+\begin{itemize}
+	\item No orography (which tells us how good the model can get)
+	\item BTF
+	\item SLEVE (only briefly since it's not adding so much to our argument)
+	\item SnapCol (briefly because it's the same as noOrography)
+\end{itemize}
+
+Analysis:
+\begin{itemize}
+	\item Upwind-biased cubic is qualitatively better than Sch\"ar's 4th order leapfrog on BTF grid (figure~\ref{fig:advection})
+	\item SnapCol error, min and max is almost identical to noOrography (unsurprisingly) (table~\ref{tab:advection})  This agrees with \textcite{good2014}
+	\item SLEVE error, min and max are part-way between BTF and noOrography (again, unsurprisingly)
+	\item noOrography, BTF and SLEVE min and max comparable to \textcite{schaer2002}
+	\item Conclusion: advection more accurate on more regular grids, but nevertheless satisfactory on all grids
 \end{itemize}
 
 \begin{figure}
@@ -52,15 +87,26 @@ noOrography & TODO & TODO & TODO & \num{-0.002} & \num{0.984} \\
 \end{tabular}
 %
 \caption{Min, max and error norms compared with \textcite{schaer2002}}
-\label{tab:advection-stats}
+\label{tab:advection}
 \end{table}
 
-\begin{figure}
-	\includegraphics[height=2in]{wobblyTracerAdvection.png}
-%
-	\caption{tracer advection in terrain following velocity field}
-	\label{fig:wobblyTracerAdvection}
-\end{figure}
+\subsection{Resting atmosphere}
+
+\TODO{do we want to discuss energy measures?  1. we can't compare our results with anybody else, 2. we'll have to explain how we calculate the energy measures 3. it could open a can of worms w.r.t. lack of conservation}
+
+\begin{itemize}
+	\item Motivation: challenge accuracy of H operator (\TODO{if we mention H op here we'll have to explain it beforehand})
+	\item Specify domain, thermodynamics, discretisation in time and space
+\end{itemize}
+
+Analysis:
+\begin{itemize}
+	\item Spurious $w$ significantly less than those found by \textcite{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
+	\item SnapCol $w$ (\SI{1e-3}{\meter\per\second}) significantly lower and energy conservation better than BTF or SLEVE
+	\item Formulation is not energy conserving
+	\item \TODO{Could also compare with \textcite{zaengl2012}, \textcite{good2014}?}
+	\item Conclusion: non-orthogonality is a significant cause of numerical error in this test but, again, satisfactory on all grids
+\end{itemize}
 
 \begin{figure}
 	\includegraphics[height=3in]{resting-atmosphere-w.png}
@@ -68,6 +114,18 @@ noOrography & TODO & TODO & TODO & \num{-0.002} & \num{0.984} \\
 	\caption{Comparing our results with \textcite{klemp2011}'s}
 	\label{fig:resting}
 \end{figure}
+
+\subsection{Gravity waves}
+\begin{itemize}
+	\item \TODO{Motivation: it models a real dynamic process?}
+	\item Specify domain, thermodynamics, prescribed inlet wind
+	\item Specify sponge layers, BCs
+	\item Compare BTF and SnapCol results (\TODO{no need to include SLEVE here as the results are visually identical to BTF?})
+\end{itemize}
+
+\begin{itemize}
+	\item Little/no evidence of small cell problem
+\end{itemize}
 
 \begin{figure}
 	\includegraphics[height=2in]{gw-w-btf.png}
@@ -92,13 +150,13 @@ noOrography & TODO & TODO & TODO & \num{-0.002} & \num{0.984} \\
 	\label{fig:gw-exner-theta}
 \end{figure}
 
+
 \section{Conclusions}
 \begin{enumerate}
 	\item BTF grid isn't as bad as people say it is.  We found that:
 	\begin{itemize}
-		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection}, Table~\ref{tab:advection-stats})
-		\item Advection in a TF velocity field, if we include it, gives better results on BTF than SnapCol (Figure~\ref{fig:wobblyTracerAdvection})
-		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})  Could also compare with \textcite{zaengl2012}, \textcite{good2014}
+		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection}, Table~\ref{tab:advection})
+		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})
 		\item gravity waves results visually as good as reference solution from \textcite{melvin2010} (figure~\ref{fig:gw-w})
 	\end{itemize}
 
@@ -106,12 +164,19 @@ noOrography & TODO & TODO & TODO & \num{-0.002} & \num{0.984} \\
 	\begin{itemize}
 		\item Lorenz computational mode found on SnapCol grid only (figure~\ref{fig:gw-theta}, \ref{fig:gw-exner-theta})
 	\end{itemize}
+
+	\item Cut cell grids can also be better than TF grids in more artificial test cases:
+	\begin{itemize}
+		\item SnapCol $w$ two orders of magnitude smaller in resting atmosphere test
+		\item SnapCol advection test as good as noOrography
+	\end{itemize}
 \end{enumerate}
+
+\textbf{With the exception of the Lorenz computational mode on the SnapCol grid in the gravity waves test, results were satisfactory across BTF, SLEVE and SnapCol grids in all three test cases.}
 
 Miscellany:
 \begin{itemize}
-	\item Advection accuracy depends on alignment of the flow with grid layers
-	\item Little/no evidence of small cell problem in GW test
+	\item Advection accuracy depends on alignment of the flow with grid layers (\TODO{we kinda need wobblyTracerAdvection to reach this conclusion})
 	\item Formulation does not conserve energy (evidenced in resting atmosphere test, Fig 4.12d in MSc dissertation)
 \end{itemize}
 
