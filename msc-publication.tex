@@ -22,13 +22,14 @@ Results also compared with \textcite{melvin2010} (QRJ), maybe \textcite{zaengl20
 \section{Introduction}
 
 \begin{itemize}
+	\item Comparing results BTF, SLEVE and cut cell style grid for three standard two-dimensional test cases
 	\item Small cell problem
 \end{itemize}
 
 \section{Results}
 \begin{itemize}
 	\item \TODO{How much do I need to say about the model?  Just cite \textcite{weller-shahrokhi2014}?}
-	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975}?}
+	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975} and SLEVE equations from \textcite{schaer2002}?}
 	\item \TODO{Explain how SnapCol grid is constructed?}
 \end{itemize}
 
@@ -120,11 +121,20 @@ Analysis:
 	\item \TODO{Motivation: it models a real dynamic process?}
 	\item Specify domain, thermodynamics, prescribed inlet wind
 	\item Specify sponge layers, BCs
-	\item Compare BTF and SnapCol results (\TODO{no need to include SLEVE here as the results are visually identical to BTF?})
+	\item Compare BTF, SLEVE and SnapCol results (SLEVE only briefly as visually identical to BTF)
 \end{itemize}
 
+Analysis:
 \begin{itemize}
-	\item Little/no evidence of small cell problem
+	\item $w$ contours visually similar on all grids, agree with \textcite{melvin2010} (Figure~\ref{fig:gw-w})
+	\item \TODO{don't know if divergence is relevant -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
+	\item $\theta$ anomalies similar on all grids EXCEPT...
+	\item ... on SnapCol grid in lee of mountain near the ground. (Figure~\ref{fig:gw-theta})
+	\item \TODO{worth mentioning implications of this?  1. reduced stability, although not enough to create vertical motion in this instance 2. model has no viscosity so thermal mixing should not occur in theory}
+	\item Lorenz computation mode has been excited because Exner sample line at $x = \SI{50}{\kilo\meter}$ is in hydrostatic balance (Figure~\ref{fig:gw-exner-theta})
+	\item \TODO{We can speculate on what excites the computational mode, but perhaps better not to?}
+	\item Little/no evidence of small cell problem -- \TODO{don't know that we can say much here without another vertical momentum test; our hypothesis about the quasi-horizontal flow isn't backed up with a test case}
+	\item Conclusion: results similar on all grids, agree with literature, except for Lorenz computational mode on SnapCol grid
 \end{itemize}
 
 \begin{figure}
