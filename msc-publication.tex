@@ -1,4 +1,6 @@
-\documentclass{ametsoc}
+\documentclass[twocol]{ametsoc}
+\journal{mwr}
+
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{mathtools}
@@ -19,9 +21,9 @@
 
 \maketitle
 
-Builds on the work of \citet{schaer2002} (MWR), \textcite{klemp2011} (MWR), \textcite{weller-shahrokhi2014} (MWR)
+Builds on the work of \citet{schaer2002}, \citet{klemp2011}, \citet{weller-shahrokhi2014} (all MWR)
 
-Results also compared with \textcite{melvin2010} (QRJ), maybe \textcite{zaengl2012} (MWR), \textcite{good2014} (Atmos Sci Letters)
+Results also compared with \citet{melvin2010} (QRJ), maybe \textcite{zaengl2012} (MWR), \citet{good2014} (Atmos Sci Letters)
 
 \section{Introduction}
 
@@ -33,8 +35,8 @@ Results also compared with \textcite{melvin2010} (QRJ), maybe \textcite{zaengl20
 
 \section{Results}
 \begin{itemize}
-	\item \TODO{How much do I need to say about the model?  Just cite \textcite{weller-shahrokhi2014}?}
-	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975} and SLEVE equations from \textcite{schaer2002}?}
+	\item \TODO{How much do I need to say about the model?  Just cite \citet{weller-shahrokhi2014}?}
+	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975} and SLEVE equations from \citet{schaer2002}?}
 	\item \TODO{Explain how SnapCol grid is constructed?}
 \end{itemize}
 
@@ -59,9 +61,9 @@ We compare the following grids:
 Analysis:
 \begin{itemize}
 	\item Upwind-biased cubic is qualitatively better than Sch\"ar's 4th order leapfrog on BTF grid (figure~\ref{fig:advection})
-	\item SnapCol error, min and max is almost identical to noOrography (unsurprisingly) (table~\ref{tab:advection})  This agrees with \textcite{good2014}
+	\item SnapCol error, min and max is almost identical to noOrography (unsurprisingly) (table~\ref{tab:advection})  This agrees with \citet{good2014}
 	\item SLEVE error, min and max are part-way between BTF and noOrography (again, unsurprisingly)
-	\item noOrography, BTF and SLEVE min and max comparable to \textcite{schaer2002}
+	\item noOrography, BTF and SLEVE min and max comparable to \citet{schaer2002}
 	\item Conclusion: advection more accurate on more regular grids, but nevertheless satisfactory on all grids
 \end{itemize}
 
@@ -90,17 +92,17 @@ Analysis:
 
 Analysis:
 \begin{itemize}
-	\item Spurious $w$ significantly less than those found by \textcite{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
+	\item Spurious $w$ significantly less than those found by \citet{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
 	\item SnapCol $w$ (\SI{1e-3}{\meter\per\second}) significantly lower and energy conservation better than BTF or SLEVE
 	\item Formulation is not energy conserving
-	\item \TODO{Could also compare with \textcite{zaengl2012}, \textcite{good2014}?}
+	\item \TODO{Could also compare with \textcite{zaengl2012}, \citet{good2014}?}
 	\item Conclusion: non-orthogonality is a significant cause of numerical error in this test but, again, satisfactory on all grids
 \end{itemize}
 
 \begin{figure}
-	\includegraphics[height=3in]{resting-atmosphere-w.png}
+	\includegraphics[height=2in]{resting-atmosphere-w.png}
 %
-	\caption{Comparing our results with \textcite{klemp2011}'s}
+	\caption{Comparing our results with \citet{klemp2011}'s}
 	\label{fig:resting}
 \end{figure}
 
@@ -114,7 +116,7 @@ Analysis:
 
 Analysis:
 \begin{itemize}
-	\item $w$ contours visually similar on all grids, agree with \textcite{melvin2010} (Figure~\ref{fig:gw-w})
+	\item $w$ contours visually similar on all grids, agree with \citet{melvin2010} (Figure~\ref{fig:gw-w})
 	\item \TODO{don't know if divergence is relevant -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
 	\item $\theta$ anomalies similar on all grids EXCEPT...
 	\item ... on SnapCol grid in lee of mountain near the ground. (Figure~\ref{fig:gw-theta})
@@ -135,14 +137,14 @@ Analysis:
 
 \begin{figure}
 	\includegraphics[height=3in]{gw-theta.png}
-	\includegraphics[height=3in]{gw-theta-zoom.png}
+	\includegraphics[height=2in]{gw-theta-zoom.png}
 %
 	\caption{Gravity wave thermal anomalies from initial thermal profile}
 	\label{fig:gw-theta}
 \end{figure}
 
 \begin{figure}
-	\includegraphics[height=3in]{gw-exner-theta.png}
+	\includegraphics[height=2in]{gw-exner-theta.png}
 %
 	\caption{Vertical sample line of Exner function of pressure and theta to demonstrate Lorenz computational mode}
 	\label{fig:gw-exner-theta}
@@ -155,7 +157,7 @@ Analysis:
 	\begin{itemize}
 		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection}, Table~\ref{tab:advection})
 		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})
-		\item gravity waves results visually as good as reference solution from \textcite{melvin2010} (figure~\ref{fig:gw-w})
+		\item gravity waves results visually as good as reference solution from \citet{melvin2010} (figure~\ref{fig:gw-w})
 	\end{itemize}
 
 	\item Cut cell grids can be worse than TF grids:
@@ -196,7 +198,7 @@ Start acknowledgments here.
 % TABLES
 
 \begin{table}[t]
-\caption{Min, max and error norms compared with \textcite{schaer2002}}
+\caption{Min, max and error norms compared with \citet{schaer2002}}
 \label{tab:advection}
 %
 \begin{center}
