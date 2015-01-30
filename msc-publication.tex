@@ -28,6 +28,7 @@ Results also compared with \citet{melvin2010} (QRJ), maybe \textcite{zaengl2012}
 \section{Introduction}
 
 \begin{itemize}
+	\item A sentence or two about why orography is important to represent in NWP
 	\item Comparing results BTF, SLEVE and cut cell style grid for three standard two-dimensional test cases
 	\item TF grids often shown to have lesser accuracy than cut cells in some test cases, often significantly so.  Our results demonstrate that accuracy need not be much reduced and can even be better than cut cells.
 	\item Small cell problem common in cut cell grids (\TODO{citations})
@@ -35,7 +36,7 @@ Results also compared with \citet{melvin2010} (QRJ), maybe \textcite{zaengl2012}
 
 \section{Results}
 \begin{itemize}
-	\item \TODO{How much do I need to say about the model?  Just cite \citet{weller-shahrokhi2014}?}
+	\item \TODO{How much do I need to say about the model?  -- Give a summary: what equation set? finite volume with curl-free pressure grad; lorenz grid; advection scheme}
 	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975} and SLEVE equations from \citet{schaer2002}?}
 	\item \TODO{Explain how SnapCol grid is constructed?}
 \end{itemize}
@@ -58,6 +59,8 @@ We compare the following grids:
 	\item SnapCol (briefly because it's the same as noOrography)
 \end{itemize}
 
+\TODO{should we just compare cubicUpwindCPCFit with Sch\"ar's 4th order?  We could also compare our skewCorrected linear with Sch\"ar's linear but I'm not sure what value it would have...}
+
 Analysis:
 \begin{itemize}
 	\item Upwind-biased cubic is qualitatively better than Sch\"ar's 4th order leapfrog on BTF grid (figure~\ref{fig:advection})
@@ -75,6 +78,9 @@ Analysis:
 	schaer-4thorder \\
 	\includegraphics[height=1.5in]{schaer-btf-4thorder.png}
 	\includegraphics[height=1.5in]{schaer-btf-4thorder-error.png}
+
+	\TODO{also include SnapCol results}
+	\TODO{check error contours are correct (0.01?)}
 %
 	\caption{Comparing our BTF cubicUpwindCPCFit result with Schaer's 4th order result}
 	\label{fig:advection}
@@ -82,8 +88,6 @@ Analysis:
 
 
 \subsection{Resting atmosphere}
-
-\TODO{do we want to discuss energy measures?  1. we can't compare our results with anybody else, 2. we'll have to explain how we calculate the energy measures 3. it could open a can of worms w.r.t. lack of conservation}
 
 \begin{itemize}
 	\item Motivation: challenge accuracy of H operator (\TODO{if we mention H op here we'll have to explain it beforehand})
@@ -93,8 +97,7 @@ Analysis:
 Analysis:
 \begin{itemize}
 	\item Spurious $w$ significantly less than those found by \citet{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
-	\item SnapCol $w$ (\SI{1e-3}{\meter\per\second}) significantly lower and energy conservation better than BTF or SLEVE
-	\item Formulation is not energy conserving
+	\item SnapCol $w$ (\SI{1e-3}{\meter\per\second}) significantly than BTF or SLEVE
 	\item \TODO{Could also compare with \textcite{zaengl2012}, \citet{good2014}?}
 	\item Conclusion: non-orthogonality is a significant cause of numerical error in this test but, again, satisfactory on all grids
 \end{itemize}
@@ -177,7 +180,6 @@ Analysis:
 Miscellany:
 \begin{itemize}
 	\item Advection accuracy depends on alignment of the flow with grid layers (\TODO{we kinda need wobblyTracerAdvection to reach this conclusion})
-	\item Formulation does not conserve energy (evidenced in resting atmosphere test, Fig 4.12d in MSc dissertation)
 \end{itemize}
 
 \section{Further work}
