@@ -61,6 +61,14 @@ We compare the following grids:
 
 \TODO{should we just compare cubicUpwindCPCFit with Sch\"ar's 4th order?  We could also compare our skewCorrected linear with Sch\"ar's linear but I'm not sure what value it would have...}
 
+\begin{figure}
+	\centering
+	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
+%
+	\caption{Horizontally advected tracer contours at $t = \SI{0}{\second}$, \SI{5000}{\second} and \SI{10000}{\second}.  \TODO{identify subfigures}  Contour intervals are every 0.1.}
+	\label{fig:advection-tracer}
+\end{figure}
+
 Analysis:
 \begin{itemize}
 	\item Upwind-biased cubic is qualitatively better than Sch\"ar's 4th order leapfrog on BTF grid (figure~\ref{fig:advection-tracer})
@@ -70,22 +78,11 @@ Analysis:
 	\item Conclusion: advection more accurate on more regular grids, but nevertheless satisfactory on all grids
 \end{itemize}
 
-\begin{figure}
-	\centering
-	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
-
-%	btf-cubicUpwindCPCFit-divFree \\
-%	\input{../advectTracer-horizontal-btf-cubicUpwindCPCFit-divFree/error-contour}
-
-%	schaer-4thorder \\
-%	\includegraphics[height=1.5in]{schaer-btf-4thorder-error.png}
-%
-	\caption{Horizontally advected tracer contours at $t = \SI{0}{\second}$, \SI{5000}{\second} and \SI{10000}{\second}.  \TODO{identify subfigures}  Contour intervals are every 0.1.}
-	\label{fig:advection-tracer}
-\end{figure}
 
 \begin{figure}
 	\centering
+	\includegraphics{../msc-publication-fig-advection-error/fig-advection-error.pdf}
+	%
 	\caption{Errors in horizontal tracer advection at $t = \SI{10000}{\second}$.  \TODO{identify subfigures}  Contour intervals are every 0.01 with negative contours denoted by dashed lines.}
 	\label{fig:advection-error}
 \end{figure}
