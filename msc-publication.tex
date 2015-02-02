@@ -63,7 +63,7 @@ We compare the following grids:
 
 Analysis:
 \begin{itemize}
-	\item Upwind-biased cubic is qualitatively better than Sch\"ar's 4th order leapfrog on BTF grid (figure~\ref{fig:advection})
+	\item Upwind-biased cubic is qualitatively better than Sch\"ar's 4th order leapfrog on BTF grid (figure~\ref{fig:advection-tracer})
 	\item SnapCol error, min and max is almost identical to noOrography (unsurprisingly) (table~\ref{tab:advection})  This agrees with \citet{good2014}
 	\item SLEVE error, min and max are part-way between BTF and noOrography (again, unsurprisingly)
 	\item noOrography, BTF and SLEVE min and max comparable to \citet{schaer2002}
@@ -71,19 +71,23 @@ Analysis:
 \end{itemize}
 
 \begin{figure}
-	btf-cubicUpwindCPCFit-divFree \\
-	\input{../advectTracer-horizontal-btf-cubicUpwindCPCFit-divFree/tracer-contour}
-	\input{../advectTracer-horizontal-btf-cubicUpwindCPCFit-divFree/error-contour}
+	\centering
+	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
 
-	schaer-4thorder \\
-	\includegraphics[height=1.5in]{schaer-btf-4thorder.png}
-	\includegraphics[height=1.5in]{schaer-btf-4thorder-error.png}
+%	btf-cubicUpwindCPCFit-divFree \\
+%	\input{../advectTracer-horizontal-btf-cubicUpwindCPCFit-divFree/error-contour}
 
-	\TODO{also include SnapCol results}
-	\TODO{check error contours are correct (0.01?)}
+%	schaer-4thorder \\
+%	\includegraphics[height=1.5in]{schaer-btf-4thorder-error.png}
 %
-	\caption{Comparing our BTF cubicUpwindCPCFit result with Schaer's 4th order result}
-	\label{fig:advection}
+	\caption{Horizontally advected tracer contours at $t = \SI{0}{\second}$, \SI{5000}{\second} and \SI{10000}{\second}.  \TODO{identify subfigures}  Contour intervals are every 0.1.}
+	\label{fig:advection-tracer}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\caption{Errors in horizontal tracer advection at $t = \SI{10000}{\second}$.  \TODO{identify subfigures}  Contour intervals are every 0.01 with negative contours denoted by dashed lines.}
+	\label{fig:advection-error}
 \end{figure}
 
 
@@ -158,7 +162,7 @@ Analysis:
 \begin{enumerate}
 	\item BTF grid isn't as bad as people say it is.  We found that:
 	\begin{itemize}
-		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection}, Table~\ref{tab:advection})
+		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection-tracer}, \ref{fig:advection-error}, Table~\ref{tab:advection})
 		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})
 		\item gravity waves results visually as good as reference solution from \citet{melvin2010} (figure~\ref{fig:gw-w})
 	\end{itemize}
