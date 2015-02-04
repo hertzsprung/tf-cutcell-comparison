@@ -17,27 +17,45 @@
 
 \begin{document}
 \newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
-\newcommand{\textcite}[1]{\textbf{#1}}
 
 \maketitle
 
-Builds on the work of \citet{schaer2002}, \citet{klemp2011}, \citet{weller-shahrokhi2014} (all MWR)
-
-Results also compared with \citet{melvin2010} (QRJ), maybe \textcite{zaengl2012} (MWR), \citet{good2014} (Atmos Sci Letters)
+\TODO{Builds on the work of \citet{schaer2002}, \citet{klemp2011}, \citet{weller-shahrokhi2014} (all MWR) \\
+Results also compared with \citet{melvin2010} (QRJ), maybe zaengl2012 (MWR), \citet{good2014} (Atmos Sci Letters)}
 
 \section{Introduction}
+Representing orography in numerical weather prediction systems is necessary to model downslope winds and local precipitation patterns.  Terrain also affects global circulation, giving rise to planetary and gravity waves.
+
+There are two main approaches to represent orography on a grid.  With terrain following (TF) layers the terrain's influence decays with height: the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  TF layers are usually implemented on a rectangular computational grid using transformed coordinates.
+
+It is well-known that TF coordinates perform badly in the presence of steep orography: as model resolution increases, steeper gradients lead to larger truncation errors in calculating the horizontal pressure gradientwhich result in spurious winds \citep{dempsey-davis1998} \TODO{or steppeler2002}.  Much work has been done to reduce error associated with TF coordinates: firstly by smoothing the effects of terrain with height \citep{schaer2002,klemp2011} and, secondly, by improving the accuracy in calculating the horizontal pressure gradient itself \citep{klemp2011} \TODO{and zaengl2012?}.
+
+Despite their associated numerical errors, TF coordinates are attractive because their rectangular structure is simple to process by computer, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}.
+
+Cut cells is an alternative method in which cells that lie entirely below the terrain are removed, and those that intersect the surface are modified in shape so that they more closely fit the terrain.  This modification means that some cells become very small, which can reduce computational efficiency \TODO{(klein2009)}, and several approaches have been tried to alleviate the problem \TODO{(steppeler2002 thin wall approx,yamazaki-satomura2010 cell combining, jebens2011 implicit method in cut cells)}.
+
+Several studies have found that cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present and errors do not increase with steeper terrain \citep{good2014}.  A comparison of TF and cut cells using real initial data by \TODO{steppeler2006} found that precipitation patterns, temperature and wind fields were forecast more accurately in the cut cell model.  
+
+\TODO{that's the high-level intro, now onto BTF/SLEVE grids...}  A variety of vertical decay functions have been formulated that make TF layers flatter with height.  \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as \(z = \left( H - h \right) \left( z^\star / H \right) + h\) where, in two dimensions, \(z(x, z^\star)\) is the height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.
+
+The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achieves a more regular TF grid in the middle and top of the domain.  The terrain height is split into large-scale and small-scale components, \(h_1\) and \(h_2\), such that \(h = h_1 + h_2\), with each component having a different exponential decay. The transformation is defined as \(z = z^\star + h_1 b_1 + h_2 b_2\), where the vertical decay functions are given by
+\begin{displaymath}
+	b_i = \frac{\sinh \left( \left( H - z^\star \right) / s_i \right)}{\sinh \left( H / s_i \right)}
+\end{displaymath}
+with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.
+
+\TODO{say what we're going to do in this paper}
+
+\TODO{final para of intro: in section 2, section 3 etc etc}
 
 \begin{itemize}
-	\item A sentence or two about why orography is important to represent in NWP
 	\item Comparing results BTF, SLEVE and cut cell style grid for three standard two-dimensional test cases
-	\item TF grids often shown to have lesser accuracy than cut cells in some test cases, often significantly so.  Our results demonstrate that accuracy need not be much reduced and can even be better than cut cells.
-	\item Small cell problem common in cut cell grids (\TODO{citations})
+	\item TF grids often shown to have lesser accuracy than cut cells in some test cases, often significantly so.  Our results demonstrate that accuracy need not be much reduced and can even be better than cut cells. \TODO{this is too confrontational!}
 \end{itemize}
 
 \section{Results}
 \begin{itemize}
 	\item \TODO{How much do I need to say about the model?  -- Give a summary: what equation set? finite volume with curl-free pressure grad; lorenz grid; advection scheme}
-	\item \TODO{Include BTF equations from \textcite{galchen-somerville1975} and SLEVE equations from \citet{schaer2002}?}
 	\item \TODO{Explain how SnapCol grid is constructed?}
 \end{itemize}
 
@@ -99,14 +117,15 @@ Analysis:
 \begin{itemize}
 	\item Spurious $w$ significantly less than those found by \citet{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
 	\item SnapCol $w$ (\SI{1e-3}{\meter\per\second}) significantly than BTF or SLEVE
-	\item \TODO{Could also compare with \textcite{zaengl2012}, \citet{good2014}?}
+	\item \TODO{Could also compare with zaengl2012, \citet{good2014}?}
 	\item Conclusion: non-orthogonality is a significant cause of numerical error in this test but, again, satisfactory on all grids
 \end{itemize}
 
 \begin{figure*}
+	\centering
 	\includegraphics{../msc-publication-fig-resting/fig-resting.pdf}
 %
-	\caption{Comparing our results with \citet{klemp2011}'s}
+	\caption{Maximum spurious vertical velocity $w$ in the resting atmosphere test \TODO{identify subfigures}.  Note that vertical scales differ.}
 	\label{fig:resting}
 \end{figure*}
 
