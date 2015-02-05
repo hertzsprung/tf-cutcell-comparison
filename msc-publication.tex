@@ -26,7 +26,7 @@ Results also compared with \citet{melvin2010} (QRJ), maybe zaengl2012 (MWR), \ci
 \section{Introduction}
 Representing orography in numerical weather prediction systems is necessary to model downslope winds and local precipitation patterns.  Terrain also affects global circulation, giving rise to planetary and gravity waves.
 
-There are two main approaches to represent orography on a grid.  With terrain following (TF) layers the terrain's influence decays with height: the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  TF layers are usually implemented on a rectangular computational grid using transformed coordinates.
+There are two main approaches to represent orography on a grid: terrain following layers, and cut cells.  With terrain following (TF) layers the terrain's influence decays with height so that the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  TF layers are usually implemented on a rectangular computational grid using transformed coordinates.
 
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
