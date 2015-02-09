@@ -1,12 +1,18 @@
 \documentclass{article}
-\usepackage[paperwidth=5.4in,paperheight=2.5in,margin=0in,showframe]{geometry}
+\usepackage[paperwidth=5.4in,paperheight=2.35in,margin=0in]{geometry}
 \usepackage{mathptmx}%{times}
 \usepackage{graphicx}
 \usepackage{siunitx}
 
 \setlength{\parindent}{0pt}
 \begin{document}
-\includegraphics[height=2in]{img/klemp-w.png}
-\footnotesize
-\input{../resting-diagnostics/w}
+\begin{minipage}{1.8in}
+	\vspace*{-0.13in}
+	\includegraphics[height=2in]{img/klemp-w.png}
+\end{minipage}
+\hspace{1em}
+\begin{minipage}{2.5in}
+	\footnotesize
+	\input{../resting-diagnostics/w}
+\end{minipage}
 \end{document}
