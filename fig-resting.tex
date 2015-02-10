@@ -3,9 +3,21 @@
 \usepackage{mathptmx}%{times}
 \usepackage{graphicx}
 \usepackage{siunitx}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{color}
 
 \setlength{\parindent}{0pt}
 \begin{document}
+\TPMargin{2pt}
+\textblockcolour{white}
+\begin{textblock}{0.5}(0.5,12.3)
+\normalsize
+(a)
+\end{textblock}
+\begin{textblock}{1}(8.3,12.3)
+\normalsize
+(b)
+\end{textblock}
 \begin{minipage}{1.8in}
 	\vspace*{-0.13in}
 	\includegraphics[height=2in]{img/klemp-w.png}

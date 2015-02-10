@@ -3,11 +3,20 @@
 \usepackage{mathptmx}%{times}
 \usepackage{graphicx}
 \usepackage{siunitx}
+\usepackage[absolute,overlay]{textpos}
 
 \setlength{\parindent}{0pt}
 \begin{document}
-\hspace{0.15in}\includegraphics[width=2.8in,height=1.32in]{img/schaer-btf-4thorder-error.png}
+\begin{textblock}{1}(2.5,0.4)
+\normalsize
+(a)
+\end{textblock}
+\begin{textblock}{1}(2.5,8.5)
+\normalsize
+(b)
+\end{textblock}
+\hspace{0.35in}\includegraphics[width=2.6in,height=1.32in]{img/schaer-btf-4thorder-error.png}
 
 \footnotesize
-\input{../advectTracer-horizontal-btf-cubicUpwindCPCFit-divFree/error-contour-x-only}
+\input{../advectTracer-horizontal-btf-cubicUpwindCPCFit-divFree/error-contour}
 \end{document}
