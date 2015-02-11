@@ -30,7 +30,7 @@ With terrain following (TF) layers the terrain's influence decays with height so
 
 It is well-known that TF coordinates perform badly in the presence of steep orography: as model resolution increases, steeper gradients lead to larger truncation errors in calculating the horizontal pressure gradient which result in spurious winds \citep{dempsey-davis1998,steppeler2002}.
 
-Much work has been done to reduce error associated with TF coordinates: firstly by smoothing the effects of terrain with height \citep{schaer2002,klemp2011} and, secondly, by improving the accuracy in calculating the horizontal pressure gradient itself \citep{klemp2011,zaengl2012}.
+Much work has been done to reduce error associated with TF coordinates: firstly by smoothing the effects of terrain with height \citep{schaer2002,leuenberger-2010,klemp2011} and, secondly, by improving the accuracy in calculating the horizontal pressure gradient itself \citep{klemp2011,zaengl2012}.
 
 Despite their associated numerical errors, TF coordinates are attractive because their rectangular structure is simple to process by computer, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}.
 
@@ -43,6 +43,7 @@ Many comparisons of TF and cut cell grids have made between different models.  O
 \TODO{TF grids often shown to have lesser accuracy than cut cells in some test cases, often significantly so.  Our results demonstrate that accuracy need not be much reduced and can even be better than cut cells.}
 
 \section{Grids}
+\TODO{introduce this section}
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
 	z = \left( H - h \right) \left( z^\star / H \right) + h
@@ -53,30 +54,31 @@ The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achi
 \begin{align}
 	z &= z^\star + h_1 b_1 + h_2 b_2
 \intertext{where the vertical decay functions are given by}
-	b_i &= \frac{\sinh \left( \left( H - z^\star \right) / s_i \right)}{\sinh \left( H / s_i \right)}
+	b_i &= \frac{\sinh \left( \left( H / s_i \right)^n - \left( z^\star / s_i \right)^n \right)}{\sinh \left( H / s_i \right)^n}
 \end{align}
-with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.
+with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps and permitting more accurate calculation of parameterised low-level heat and momentum fluxes.  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.
 
-\TODO{cut cell method}
+\TODO{Explain how SnapCol grid is constructed?}
 
 \section{Numerical method}
-We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation, an upwind-biased cubic advection scheme, and uses a Lorenz staggering of thermodynamic variables.
+\TODO{Hilary suggested adding this as a section but, if I'm not sure what to include.  For now, I've put a summary of the model in the opening para of Results}
 
 \section{Results}
-\begin{itemize}
-	\item \TODO{Give a summary of model: fully-compressible, finite volume with curl-free pressure grad; lorenz grid; advection scheme}
-	\item \TODO{Explain how SnapCol grid is constructed?}
-\end{itemize}
+A series of standard, two-dimensional tests were performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.
+We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation, an upwind-biased cubic advection scheme, and uses a Lorenz staggering of thermodynamic variables.
 
 \subsection{Advection}
-\begin{itemize}
-	\item Motivation: tests advection scheme accuracy, especially with grid distortions
-	\item Specify domain, terrain, discretisation in time and space, tracer
-	\item Specify wind field, projection method for non-divergence
-	\item Advection equation in flux form
-	\item Upwind-biased cubic advection scheme, non-monotonic, not flux corrected
-	\item d/dt scheme (RK2)
-\end{itemize}
+
+Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.  The spatial domain, terrain profile, wind field, tracer, SLEVE scale heights are given by \citet{schaer2002}.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.
+
+\TODO{define the continuous wind profile, say that wind is prescribed at cell faces, and explain how we make it discretely non-divergent}
+
+The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using an upwind-biased cubic advection scheme which is non-monotonic and not flux corrected.  The time derivative is solved using a second order Runge-Kutta scheme.  \TODO{I ought to understand this method myself!}
+
+%The tracer is positioned such that it is centred above the mountain at \(t = \SI{5000}{\second}\).
+
+Unlike \citet{schaer2002} who use periodic lateral boundaries, we use a fixed value of 0 at the inlet boundary and zero gradient boundaries elsewhere.
+Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
 
 We compare the following grids:
 \begin{itemize}
@@ -90,7 +92,7 @@ We compare the following grids:
 	\centering
 	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
 %
-	\caption{Horizontally advected tracer contours at $t = \SI{0}{\second}$, \SI{5000}{\second} and \SI{10000}{\second} using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, and the upwind-biased cubic scheme on (b) BTF grid, (c) cut cell grid.  Contour intervals are every 0.1.}
+	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, and the upwind-biased cubic scheme on (b) BTF grid, (c) cut cell grid.  Contour intervals are every 0.1.}
 	\label{fig:advection-tracer}
 \end{figure}
 
@@ -108,7 +110,7 @@ Analysis:
 	\centering
 	\includegraphics{../msc-publication-fig-advection-error/fig-advection-error.pdf}
 	%
-	\caption{Errors in horizontal tracer advection at $t = \SI{10000}{\second}$ using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, (b) the upwind-biased cubic scheme on a BTF grid.  Contour intervals are every 0.01 with negative contours denoted by dashed lines.}
+	\caption{Errors in horizontal tracer advection at \(t = \SI{10000}{\second}\) using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, (b) the upwind-biased cubic scheme on a BTF grid.  Contour intervals are every 0.01 with negative contours denoted by dashed lines.}
 	\label{fig:advection-error}
 \end{figure}
 
@@ -122,8 +124,8 @@ Analysis:
 
 Analysis:
 \begin{itemize}
-	\item Spurious $w$ significantly less than those found by \citet{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
-	\item SnapCol $w$ (\SI{1e-3}{\meter\per\second}) significantly than BTF or SLEVE
+	\item Spurious \(w\) significantly less than those found by \citet{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
+	\item SnapCol \(w\) (\SI{1e-3}{\meter\per\second}) significantly than BTF or SLEVE
 	\item \TODO{Could also compare with zaengl2012, \citet{good2014}?}
 	\item Conclusion: non-orthogonality is a significant cause of numerical error in this test but, again, \TODO{satisfactory?} on all grids
 \end{itemize}
@@ -132,7 +134,7 @@ Analysis:
 	\centering
 	\includegraphics{../msc-publication-fig-resting/fig-resting.pdf}
 %
-	\caption{Maximum spurious vertical velocity $w$ in the resting atmosphere test with results on (a) BTF, SLEVE, Hybrid Terrain Following (HTF) and Smoothed Terrain Following (STF) coordinates from \citet{klemp2011}, (b) BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014}.  Note that vertical scales differ.}
+	\caption{Maximum spurious vertical velocity \(w\) in the resting atmosphere test with results on (a) BTF, SLEVE, Hybrid Terrain Following (HTF) and Smoothed Terrain Following (STF) coordinates from \citet{klemp2011}, (b) BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014}.  Note that vertical scales differ.}
 	\label{fig:resting}
 \end{figure*}
 
@@ -146,9 +148,9 @@ Analysis:
 
 Analysis:
 \begin{itemize}
-	\item $w$ contours visually similar on all grids, agree with \citet{melvin2010} (Figure~\ref{fig:gw-w})
+	\item \(w\) contours visually similar on all grids, agree with \citet{melvin2010} (Figure~\ref{fig:gw-w})
 	\item \TODO{divergence might help explain computational mode -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
-	\item $\theta$ anomalies similar on all grids EXCEPT...
+	\item \(\theta\) anomalies similar on all grids EXCEPT...
 	\item ... on SnapCol grid in lee of mountain near the ground. (Figure~\ref{fig:gw-theta})
 	\item \TODO{worth mentioning implications of this?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 2. model has no viscosity so thermal mixing should not occur in theory}
 	\item Lorenz computation mode has been excited because Exner sample line at $x = \SI{50}{\kilo\meter}$ is in hydrostatic balance (Figure~\ref{fig:gw-exner-theta})
@@ -177,7 +179,7 @@ Analysis:
 	\centering
 	\includegraphics{../msc-publication-fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{Vertical profiles of the Exner function of pressure, $\Pi$, and potential temperature, $\theta$, in the gravity waves test.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid.  Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.}
+	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid.  Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.}
 	\label{fig:gw-exner-theta}
 \end{figure}
 
@@ -235,7 +237,7 @@ Start acknowledgments here.
 \begin{tabular}{ l l l l l l }
 \hline\hline
 & \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{2}{c}{Sch\"ar 4th order} \\
-& $\ell^2$ error & min & max & min & max \\
+& \(\ell^2\) error & min & max & min & max \\
 \hline
 Analytic  & 0 & 0 & 1 & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
 BTF 	  & TODO & TODO & TODO & \num{-0.058} & \num{1.001} \\
