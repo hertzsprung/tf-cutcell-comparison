@@ -50,6 +50,8 @@ Many comparisons of TF and cut cell grids have made between different models.  O
 \end{equation}
 where, in two dimensions, \(z(x, z^\star)\) is the height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.  Using this coordinate, the terrain's influence decays linearly with height but disappears only at the top of the domain.
 
+The sigma coordinate transform of \citet{phillips1957} is equivalent to the BTF coordinate transform since they both decay linearly.  However, since they decay with pressure rather than height, sigma coordinates also change with horizontal variations in pressure.
+
 The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achieves a more regular TF grid in the middle and top of the domain than the BTF coordinate.  The terrain height is split into large-scale and small-scale components, \(h_1\) and \(h_2\), such that \(h = h_1 + h_2\), with each component having a different exponential decay. The transformation is defined as 
 \begin{align}
 	z &= z^\star + h_1 b_1 + h_2 b_2
@@ -69,7 +71,7 @@ We use a finite volume discretisation of the fully-compressible Euler equations 
 
 \subsection{Advection}
 
-Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.  The spatial domain, terrain profile, wind field, tracer, SLEVE scale heights are given by \citet{schaer2002}.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.
+Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.  The spatial domain, terrain profile, wind field, tracer, SLEVE scale heights are given by \citet{schaer2002}.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.  A tracer is placed above and to the left of the mountain with a magnitude of 1 at its centre and 0 at the perimeter.
 
 \TODO{define the continuous wind profile, say that wind is prescribed at cell faces, and explain how we make it discretely non-divergent}
 
@@ -79,6 +81,8 @@ The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \
 
 Unlike \citet{schaer2002} who use periodic lateral boundaries, we use a fixed value of 0 at the inlet boundary and zero gradient boundaries elsewhere.
 Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
+
+The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain.  Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.  The result from \citet{schaer2002} using a fourth-order centred scheme with sigma coordinates (\ref{fig:advection-tracer}a) is compared with the upwind-biased cubic scheme on (\ref{fig:advection-tracer}b) the BTF grid, and (\ref{fig:advection-tracer}c) cut cell grid.
 
 We compare the following grids:
 \begin{itemize}
