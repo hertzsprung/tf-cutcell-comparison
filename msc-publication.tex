@@ -73,13 +73,16 @@ We use a finite volume discretisation of the fully-compressible Euler equations 
 
 Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.  The spatial domain, terrain profile, wind field, tracer, SLEVE scale heights are given by \citet{schaer2002}.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.  A tracer is placed above and to the left of the mountain with a magnitude of 1 at its centre and 0 at the perimeter.
 
-\TODO{define the continuous wind profile, say that wind is prescribed at cell faces, and explain how we make it discretely non-divergent}
+While the continuous wind field specified by \citet{schaer2002} is non-divergent, this is not true of the discrete wind field on non-orthogonal grids.  A potential, $p$, is used to correct the wind field, $\bm{u}$, so that is non-divergent such that
+\begin{align}
+	\nabla \cdot \left( \bm{u} + \nabla p \right) = 0,
+\intertext{which can be rearranged to give a Poisson equation}
+	\nabla^2 p = - \nabla \cdot \bm{u}.
+\end{align}
 
 The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using an upwind-biased cubic advection scheme which is non-monotonic and not flux corrected.  The time derivative is solved using a second order Runge-Kutta scheme.  \TODO{I ought to understand this method myself!}
 
-%The tracer is positioned such that it is centred above the mountain at \(t = \SI{5000}{\second}\).
-
-Unlike \citet{schaer2002} who use periodic lateral boundaries, we use a fixed value of 0 at the inlet boundary and zero gradient boundaries elsewhere.
+Unlike \citet{schaer2002} who use periodic lateral boundaries, a fixed value of 0 is used at the inlet boundary and all other boundaries have zero gradient.
 Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
 
 The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain.  Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.  The result from \citet{schaer2002} using a fourth-order centred scheme with sigma coordinates (\ref{fig:advection-tracer}a) is compared with the upwind-biased cubic scheme on (\ref{fig:advection-tracer}b) the BTF grid, and (\ref{fig:advection-tracer}c) cut cell grid.
@@ -99,6 +102,26 @@ We compare the following grids:
 	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, and the upwind-biased cubic scheme on (b) BTF grid, (c) cut cell grid.  Contour intervals are every 0.1.}
 	\label{fig:advection-tracer}
 \end{figure}
+
+\begin{table}[t]
+\caption{Min, max and error norms compared with \citet{schaer2002}}
+\label{tab:advection}
+%
+\centering
+\footnotesize
+\begin{tabular}{ l l l l l l }
+\hline\hline
+& \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{2}{c}{Sch\"ar 4th order} \\
+& \(\ell^2\) error & min & max & min & max \\
+\hline
+Analytic  & 0 & 0 & 1 & 0 & 1 \\
+BTF 	  & \num{0.00758} & \num{-0.034} & \num{0.928} & \num{-0.058} & \num{1.001} \\
+SLEVE 	  & \num{0.00110} & \num{-0.011} & \num{0.981} & \num{-0.002} & \num{0.984} \\
+SnapCol   & \num{0.00058} & \num{-0.007} & \num{0.982} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+noOrography & \num{0.00058} & \num{-0.007} & \num{0.982} & \num{-0.002} & \num{0.984} \\
+\hline
+\end{tabular}
+\end{table}
 
 Analysis:
 \begin{itemize}
@@ -233,25 +256,6 @@ Start acknowledgments here.
 
 % TABLES
 
-\begin{table}[t]
-\caption{Min, max and error norms compared with \citet{schaer2002}}
-\label{tab:advection}
-%
-\begin{center}
-\begin{tabular}{ l l l l l l }
-\hline\hline
-& \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{2}{c}{Sch\"ar 4th order} \\
-& \(\ell^2\) error & min & max & min & max \\
-\hline
-Analytic  & 0 & 0 & 1 & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
-BTF 	  & TODO & TODO & TODO & \num{-0.058} & \num{1.001} \\
-SLEVE 	  & TODO & TODO & TODO & TODO & TODO \\
-SnapCol   & TODO & TODO & TODO & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
-noOrography & TODO & TODO & TODO & \num{-0.002} & \num{0.984} \\
-\hline
-\end{tabular}
-\end{center}
-\end{table}
 
 % FIGURES
 
