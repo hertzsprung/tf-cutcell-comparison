@@ -64,7 +64,7 @@ with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale te
 
 \section{Results}
 A series of standard, two-dimensional tests were performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.
-We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation, an upwind-biased cubic advection scheme, and uses a Lorenz staggering of thermodynamic variables.
+We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation, an upwind-biased cubic advection scheme, and uses a Lorenz staggering of thermodynamic variables.  No explicit diffusion is used in any of the tests.
 
 \subsection{Advection}
 
@@ -128,25 +128,21 @@ No orography & \num{0.00058} & \num{-0.007} & \num{0.982} & \num{-0.002} & \num{
 
 
 \subsection{Resting atmosphere}
+An idealised terrain profile is defined along with a stratified atmosphere in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citet{klemp2011}.  The test setup follows the specification by \citet{klemp2011} but uses the smaller domain and rigid boundaries from \cite{weller-shahrokhi2014}.
 
-\begin{itemize}
-	\item Motivation: challenge curl-free pressure gradient formulation?
-	\item Cite weller-shahrokhi2014 for domain, thermodynamics, discretisation in time and space
-\end{itemize}
+The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are compared with the results from \citet{klemp2011} in figure~\ref{fig:resting} (note different vertical scales).  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}, with $w$ reaching a maximum of \(\sim \SI{0.35}{\meter\per\second}\) on the BTF grid in our test compared with a maximum of \(\sim \SI{10}{\meter\per\second}\) found by \citet{klemp2011}.
 
-Analysis:
-\begin{itemize}
-	\item Spurious \(w\) significantly less than those found by \citet{klemp2011} for BTF: \SI{0.35}{\meter\per\second} vs \SI{10}{\meter\per\second}
-	\item SnapCol \(w\) (\SI{1e-3}{\meter\per\second}) significantly than BTF or SLEVE
-	\item \TODO{Could also compare with zaengl2012, \citet{good2014}?}
-	\item Conclusion: non-orthogonality is a significant cause of numerical error in this test but, again, \TODO{satisfactory?} on all grids
-\end{itemize}
+Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.  However, errors are three orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-3}{\meter\per\second}\).  The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
+
+\citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained using the model by \citet{weller-shahrokhi2014}.  It is worth noting that \citet{good2014} used a timestep of \SI{1.01}{\second} instead of the \SI{100}{\second} timestep specified by \citet{klemp2011} that was used to obtain the results presented here.  In addition, in the model used by \citet{good2014}, cell centres are in the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  These two modelling decisions may account for the very small velocities found by \citet{good2014}.
+
+In summary, spurious velocities in the resting atmosphere test were similar on both terrain following grids, with much lower errors compared to those from \citet{klemp2011}.  The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality is a significant cause of numerical error in this test.
 
 \begin{figure*}
 	\centering
 	\includegraphics{../msc-publication-fig-resting/fig-resting.pdf}
 %
-	\caption{Maximum spurious vertical velocity \(w\) in the resting atmosphere test with results on (a) BTF, SLEVE, Hybrid Terrain Following (HTF) and Smoothed Terrain Following (STF) coordinates from \citet{klemp2011}, (b) BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014}.  Note that vertical scales differ.}
+	\caption{Maximum spurious vertical velocity, \(w\) (\si{\meter\per\second}), in the resting atmosphere test with results on (a) BTF, SLEVE, Hybrid Terrain Following (HTF) and Smoothed Terrain Following (STF) coordinates from \citet{klemp2011}, (b) BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014}.  Note that vertical scales differ.}
 	\label{fig:resting}
 \end{figure*}
 
