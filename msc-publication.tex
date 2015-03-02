@@ -30,7 +30,7 @@ With terrain following (TF) layers the terrain's influence decays with height so
 
 It is well-known that TF coordinates perform badly in the presence of steep orography: as model resolution increases, steeper gradients lead to larger truncation errors in calculating the horizontal pressure gradient which result in spurious winds \citep{dempsey-davis1998,steppeler2002}.
 
-Much work has been done to reduce error associated with TF coordinates: firstly by smoothing the effects of terrain with height \citep{schaer2002,leuenberger-2010,klemp2011} and, secondly, by improving the accuracy in calculating the horizontal pressure gradient itself \citep{klemp2011,zaengl2012}.
+Much work has been done to reduce error associated with TF coordinates: firstly by smoothing the effects of terrain with height \citep{schaer2002,leuenberger2010,klemp2011} and, secondly, by improving the accuracy in calculating the horizontal pressure gradient itself \citep{klemp2011,zaengl2012}.
 
 Despite their associated numerical errors, TF coordinates are attractive because their rectangular structure is simple to process by computer, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}.
 
@@ -43,6 +43,16 @@ Many comparisons of TF and cut cell grids have made between different models.  O
 \TODO{TF grids often shown to have lesser accuracy than cut cells in some test cases, often significantly so.  Our results demonstrate that accuracy need not be much reduced and can even be better than cut cells.}
 
 \section{Grids}
+\label{sec:grid}
+
+\begin{figure*}
+	\centering
+	TODO
+	%
+	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, all constructed with OpenFOAM.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{2}{\kilo\meter} high.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
+	\label{fig:grid}
+\end{figure*}
+
 \TODO{introduce this section}
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
@@ -60,7 +70,12 @@ The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achi
 \end{align}
 with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps and permitting more accurate calculation of parameterised low-level heat and momentum fluxes.  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.
 
-\TODO{Explain how SnapCol grid is constructed?}
+Most implementations of terrain following layers use a coordinate system that makes the domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and unstructured grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
+
+The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that approximates the cut cell method.  First, a custom utility was used to move points beneath the surface up to the surface creating small cells near mountain peaks.  Second, the surface faces were taken from the BTF grid and \texttt{snappyHexMesh} was used to intersect the surface with the grid.  The tool removes cells whose centres are below the surface.  An example of the resulting grid is shown in figure~\ref{fig:grid}c.
+
+There are two details of grid construction which mean that resulting cut cell grids can differ slightly from a typical cut cell grid created using a shaving method, as described by \citet{adcroft1997}.  First, when \texttt{snappyHexMesh} moves points along the surface according to its heuristics, some points are moved horizontally.  Second, the utility does not create new points necessary for pentagonal cells.
+
 
 \section{Results}
 A series of standard, two-dimensional tests were performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.
@@ -68,14 +83,57 @@ We use a finite volume discretisation of the fully-compressible Euler equations 
 
 \subsection{Advection}
 
-Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.  The spatial domain, terrain profile, wind field, tracer, SLEVE scale heights are given by \citet{schaer2002}.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.  A tracer is placed above and to the left of the mountain with a magnitude of 1 at its centre and 0 at the perimeter.
+Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.
 
-While the continuous wind field specified by \citet{schaer2002} is non-divergent, this is not true of the discrete wind field on non-orthogonal grids.  A potential, $p$, is used to correct the wind field, $\bm{u}$, so that is non-divergent such that
+The domain is \SI{300}{\kilo\meter} wide and \SI{25}{\kilo\meter} high which is discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The terrain is wave-shaped, specified by the surface height, \(h\), such that
+\begin{subequations}
+\begin{align}
+	h(x) &= \cos^2 \left( \frac{\pi x}{\lambda} \right) h^\star
+%
+	\intertext{where}
+%
+	h^\star(x) &= \left\{ \begin{array}{l l}
+		h_0 \cos^2 \left( \frac{\pi x}{2a} \right) & \quad \text{if $| x | < a$} \\
+		0 & \quad \text{otherwise}
+	\end{array} \right.
+\end{align}
+\end{subequations}
+where $a = \SI{25}{\kilo\meter}$ is the mountain half-width, $h_0 = \SI{3}{\kilo\meter}$ is the maximum mountain height, and $\lambda = \SI{8}{\kilo\meter}$ is the wavelength.  On the SLEVE grid, the large-scale component $h_1$ is given by \(h_1(x) = h^\star(x) / 2\)
+and $s_1 = \SI{15}{\kilo\meter}$ is the large scale height, and $s_2 = \SI{2.5}{\kilo\meter}$ is the small scale height.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.
+
+The wind is entirely horizontal and is prescribed as
+\begin{align}
+	u(z) = u_0 \left\{ \begin{array}{l l}
+		1 & \quad \text{if $z \geq z_2$} \\
+		\sin^2 \left( \frac{\pi}{2} \frac{z - z_1}{z_2 - z_1} \right) & \quad \text{if $z_1 < z < z_2$} \\
+		0 & \quad \text{otherwise}
+	\end{array} \right.	
+\end{align}
+where $u_0 = \SI{10}{\meter\per\second}$, $z_1 = \SI{4}{\kilo\meter}$ and $z_2 = \SI{5}{\kilo\meter}$.
+This results in a constant wind aloft, and zero flow at \SI{4}{\kilo\meter} and below.
+
+While the continuous wind field is non-divergent, this is not true of the discrete wind field on non-orthogonal grids.  A potential, $p$, is used to correct the wind field, $\bm{u}$, so that is non-divergent such that
 \begin{align}
 	\nabla \cdot \left( \bm{u} + \nabla p \right) = 0,
 \intertext{which can be rearranged to give a Poisson equation}
 	\nabla^2 p = - \nabla \cdot \bm{u}.
 \end{align}
+
+A tracer $\varphi$ is positioned upstream above the height of the terrain.  It has the shape
+\begin{align}
+	\varphi(x, z) &= \varphi_0 \left\{ \begin{array}{l l}
+		\cos^2 \left( \frac{\pi r}{2} \right) & \quad \text{if $r \leq 1$} \\
+		0 & \quad \text{otherwise}
+	\end{array} \right.
+%
+\intertext{having radius $r$ given by}
+%
+	r &= \sqrt{
+		\left( \frac{x - x_0}{A_x} \right)^2 + 
+		\left( \frac{z - z_0}{A_z} \right)^2
+	}
+\end{align}
+where $A_x = \SI{25}{\kilo\meter}$, $A_z = \SI{3}{\kilo\meter}$ are the horizontal and vertical half-widths respectively, and $\varphi_0 = 1$ is the maximum magnitude of the anomaly.  At $t = \SI{0}{\second}$, the anomaly is centred at $(x_0, z_0) = (\SI{-50}{\kilo\meter}, \SI{9}{\kilo\meter})$ so that the anomaly is upwind of the mountain and well above the maximum terrain height of \SI{3}{\kilo\meter}.  Analytic solutions can be found by adjusting the anomaly centre such that $x_0 = ut$.
 
 The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using an upwind-biased cubic advection scheme which is non-monotonic and not flux corrected.  The time derivative is solved using a second order Runge-Kutta scheme.  \TODO{I ought to understand this method myself!}
 
@@ -94,7 +152,7 @@ The results of the tracer advection test show that, given an advection scheme of
 	\centering
 	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
 %
-	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, and the upwind-biased cubic scheme on (b) BTF grid, (c) cut cell grid.  Contour intervals are every 0.1.}
+	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) the fourth-order centred difference scheme with sigma coordinates from \citet{schaer2002}, and the upwind-biased cubic scheme on (b) BTF grid, (c) cut cell grid.  Contour intervals are every 0.1.  The terrain profile is also shown immediately above the ground.}
 	\label{fig:advection-tracer}
 \end{figure}
 
@@ -118,17 +176,31 @@ The results of the tracer advection test show that, given an advection scheme of
 & \(\ell^2\) error & min & max & min & max \\
 \hline
 Analytic  & 0 & 0 & 1 & 0 & 1 \\
-BTF 	  & \num{0.00758} & \num{-0.034} & \num{0.928} & \num{-0.058} & \num{1.001} \\
-SLEVE 	  & \num{0.00110} & \num{-0.011} & \num{0.981} & \num{-0.002} & \num{0.984} \\
-Cut cell  & \num{0.00058} & \num{-0.007} & \num{0.982} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
-No orography & \num{0.00058} & \num{-0.007} & \num{0.982} & \num{-0.002} & \num{0.984} \\
+BTF 	  & \num{-1} & \num{-1} & \num{-1} & \num{-0.058} & \num{1.001} \\
+SLEVE 	  & \num{-1} & \num{-1} & \num{-1} & \num{-0.002} & \num{0.984} \\
+Cut cell  & \num{-1} & \num{-1} & \num{-1} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+No orography & \num{-1} & \num{-1} & \num{-1} & \num{-0.002} & \num{0.984} \\
 \hline
 \end{tabular}
 \end{table}
 
 
 \subsection{Resting atmosphere}
-An idealised terrain profile is defined along with a stratified atmosphere in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citet{klemp2011}.  The test setup follows the specification by \citet{klemp2011} but uses the smaller domain and rigid boundaries from \cite{weller-shahrokhi2014}.
+An idealised terrain profile is defined along with a stratified atmosphere at rest in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citet{klemp2011}.
+
+The test setup follows the specification by \cite{klemp2011}, but has a narrower domain that is \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high in order to reduce simulation time, as used by \citet{weller-shahrokhi2014}.  The grid resolution is \(\Delta x = \Delta z^\star = \SI{500}{\meter}\) as originally specified by \citet{klemp2011}.  All boundary conditions are no normal flow.
+
+The wave-shaped mountain profile has a surface height, $h$, given by
+\begin{align}
+	h(x) = h_0 \exp \left( - \left( \frac{x}{a} \right)^2 \right) \cos^2 \left( \frac{\pi x}{\lambda} \right) \label{eqn:resting:mountain}
+\end{align}
+where $a = \SI{5}{\kilo\meter}$ is the mountain half-width, $h_0 = \SI{1}{\kilo\meter}$ is the maximum mountain height and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  For the optimised SLEVE grid, the large-scale component $h_1$ is specified as
+\begin{align}
+h_1(x) = \frac{1}{2} h_0 \exp \left( - \left( \frac{x}{a} \right)^2 \right)
+\end{align}
+and, following \cite{leuenberger2010}, $s_1 = \SI{4}{\kilo\meter}$ is the large scale height, $s_2 = \SI{1}{\kilo\meter}$ is the small scale height, and the optimal exponent value of $n = 1.35$ is used.
+
+The initial thermodynamic conditions are in discrete hydrostatic balance, having a surface temperature of $\theta_0 = \SI{288}{\kelvin}$ and constant stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
 
 The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are compared with the results from \citet{klemp2011} in figure~\ref{fig:resting} (note different vertical scales).  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}, with $w$ reaching a maximum of \(\sim \SI{0.35}{\meter\per\second}\) on the BTF grid in our test compared with a maximum of \(\sim \SI{10}{\meter\per\second}\) found by \citet{klemp2011}.
 
@@ -147,14 +219,33 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 \end{figure*}
 
 \subsection{Gravity waves}
-\begin{itemize}
-	\item \TODO{Motivation: it models a real dynamic process?}
-	\item Specify domain, thermodynamics, prescribed inlet wind
-	\item Specify sponge layers, BCs
-	\item Compare BTF, SLEVE and SnapCol results (SLEVE only briefly as visually identical to BTF)
-\end{itemize}
+\TODO{introduce and motivate the test... it models a real dynamic process}
+
+Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.  The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
+
+The initial thermodynamic conditions have a surface temperature of $\theta_0 = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A constant horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
+
+Sponge layers are added to the upper \SI{10}{\kilo\meter} and leftmost \SI{10}{\kilo\meter} at the inlet boundary to damp the reflection of waves.
+The term $\mu \rho \bf{u}$ is subtracted from the momentum equation \TODO{include the equation set in this paper, or cite weller-shahrokhi2014 here?} where the damping function $\mu$ is adapted from \citet{melvin2010} such that
+\begin{align}
+	\mu(x, z) &= \mu_\mathrm{upper} + \mu_\mathrm{inlet} \\
+	\mu_\mathrm{upper}(z) &= \begin{cases}
+		\overline{\mu} \sin^2 \left( \frac{\pi}{2} \frac{z - z_B}{H - z_B} \right) & \text{if } z \geq z_B \\
+		0 & \text{otherwise} \\
+	\end{cases} \\
+	\mu_\mathrm{inlet}(x) &= \begin{cases}
+		\overline{\mu} \sin^2 \left( \frac{\pi}{2} \frac{x_I - x}{x_I - x_0} \right) & \text{if } x < x_I \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{align}
+where $\overline{\mu} = 1.2$ is the damping coefficient, $z_B = \SI{20}{\kilo\meter}$ is the bottom of the sponge layer, $H = \SI{30}{\kilo\meter}$ is the top of the domain, $x_0 = \SI{-150}{\kilo\meter}$ is the leftmost limit of the domain and $x_I = \SI{-140}{\kilo\meter}$ is the rightmost extent of the inlet sponge layer.  The sponge layer is only active on faces whose normal is vertical so that it damps vertical momentum only.
+
+Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the purposes of generating of BTF and SLEVE grids, the domain height is set to \SI{20}{\kilo\meter} because the sponge layer occupies the uppermost \SI{10}{\kilo\meter}.
+
+No normal flow is imposed at the top and bottom boundaries and the outlet is zero gradient.  For Exner, hydrostatic balance is prescribed on all boundaries.  The simulation is integrated forward by 5 hours with a timestep $\Delta t = \SI{8}{\second}$.
 
 Analysis:
+\TODO{We compare BTF, SLEVE and SnapCol results (SLEVE only briefly as visually identical to BTF)}
 \begin{itemize}
 	\item \(w\) contours visually similar on all grids, agree with \citet{melvin2010} (Figure~\ref{fig:gw-w})
 	\item \TODO{divergence might help explain computational mode -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
@@ -187,7 +278,7 @@ Analysis:
 	\centering
 	\includegraphics{../msc-publication-fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test.  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.  Doubling the mountain height from \SI{250}{\meter} to \SI{500}{\meter} increases the severity of the computational mode but has negligible effect on the BTF grid.  Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid for both mountain heights.}
+	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.}
 	\label{fig:gw-exner-theta}
 \end{figure}
 
