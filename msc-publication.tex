@@ -20,9 +20,6 @@
 
 \maketitle
 
-\TODO{Builds on the work of \citet{schaer2002}, \citet{klemp2011}, \citet{weller-shahrokhi2014} (all MWR) \\
-Results also compared with \citet{melvin2010} (QRJ), maybe zaengl2012 (MWR), \citet{good2014} (Atmos Sci Letters)}
-
 \section{Introduction}
 Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation patterns.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Existing studies of cut cells have compared results with tests on terrain following grids from previous studies that used different models.  On the contrary, this study uses a single model to enable a like-for-like comparison between terrain following and cut cell grids.
 
@@ -41,8 +38,6 @@ The cut cell method can create some very small cells which reduce computational 
 Several studies have found that cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present and errors do not increase with steeper terrain \citep{good2014}.  \TODO{anything else?}
 
 This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between BTF, SLEVE and cut cell grids for idealised, two-dimensional test cases from the literature.  \TODO{final bit of intro: in section 2, section 3 etc etc}
-
-\TODO{TF grids often shown to have lesser accuracy than cut cells in some test cases, often significantly so.  Our results demonstrate that accuracy need not be much reduced and can even be better than cut cells.}
 
 \section{Grids}
 \label{sec:grid}
@@ -246,13 +241,15 @@ Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the pu
 
 No normal flow is imposed at the top and bottom boundaries and the outlet is zero gradient.  For Exner, hydrostatic balance is prescribed on all boundaries.  The simulation is integrated forward by 5 hours with a timestep $\Delta t = \SI{8}{\second}$.
 
+Test results are compared between the BTF, SLEVE and cut cell grids.  Vertical velocities on the BTF grid are shown in figure~\ref{fig:gw-w}a, which have few visible differences from results on the SLEVE and cut cell grids (not shown).  Vertical velocities on all grids are in agreement with the high resolution solution from \citet{melvin2010}, shown in figure~\ref{fig:gw-w}b.
+
+The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  Once again, the results are similar on all three grids, and results are shown on the BTF and cut cell grids in figures~\ref{fig:gw-theta}a and \ref{fig:gw-theta}c respectively.  However, examining more closely the anomalies in the lee of the mountain, figure~\ref{fig:gw-theta}d shows that the bottommost layer is anomalously warm and the layer above it is anomalously cold.  This feature is not present on the BTF grid (figure~\ref{fig:gw-theta}b) or the SLEVE grid (not shown).  
+
+In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  
+
 Analysis:
-\TODO{We compare BTF, SLEVE and SnapCol results (SLEVE only briefly as visually identical to BTF)}
 \begin{itemize}
-	\item \(w\) contours visually similar on all grids, agree with \citet{melvin2010} (Figure~\ref{fig:gw-w})
 	\item \TODO{divergence might help explain computational mode -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
-	\item \(\theta\) anomalies similar on all grids EXCEPT...
-	\item ... on SnapCol grid in lee of mountain near the ground. (Figure~\ref{fig:gw-theta})
 	\item \TODO{worth mentioning implications of this?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 2. model has no viscosity so thermal mixing should not occur in theory}
 	\item Lorenz computation mode has been excited because Exner sample line at $x = \SI{50}{\kilo\meter}$ is in hydrostatic balance (Figure~\ref{fig:gw-exner-theta})
 	\item \TODO{We can speculate on what excites the computational mode, but perhaps better not to?}
@@ -272,7 +269,7 @@ Analysis:
 	\centering
 	\includegraphics{../msc-publication-fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours.  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.}
+	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.}
 	\label{fig:gw-theta}
 \end{figure*}
 
@@ -280,7 +277,7 @@ Analysis:
 	\centering
 	\includegraphics{../msc-publication-fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.}
+	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
 	\label{fig:gw-exner-theta}
 \end{figure}
 
