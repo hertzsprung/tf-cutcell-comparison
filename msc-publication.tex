@@ -216,7 +216,7 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 \end{figure*}
 
 \subsection{Gravity waves}
-\TODO{introduce and motivate the test... it models a real dynamic process}
+The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
 
 Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.  The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
 
@@ -245,7 +245,7 @@ Test results are compared between the BTF, SLEVE and cut cell grids.  Vertical v
 
 The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  Once again, the results are similar on all three grids, and results are shown on the BTF and cut cell grids in figures~\ref{fig:gw-theta}a and \ref{fig:gw-theta}c respectively.  However, examining more closely the anomalies in the lee of the mountain, figure~\ref{fig:gw-theta}d shows that the bottommost layer is anomalously warm and the layer above it is anomalously cold.  This feature is not present on the BTF grid (figure~\ref{fig:gw-theta}b) or the SLEVE grid (not shown).  
 
-In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  
+In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is again present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  
 
 Analysis:
 \begin{itemize}
