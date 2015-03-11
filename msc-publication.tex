@@ -23,7 +23,7 @@
 \section{Introduction}
 Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation patterns.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Existing studies of cut cells have compared results with tests on terrain following grids from previous studies that used different models.  On the contrary, this study uses a single model to enable a like-for-like comparison between terrain following and cut cell grids.
 
-With increasing model resolution, terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult \citep{steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Terrain following and cut cell methods seek to reduce the error that is associated with steep orography.
+With increasing model resolution, terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Terrain following and cut cell methods seek to reduce the error that is associated with steep orography.
 
 With terrain following (TF) layers the terrain's influence decays with height so that the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  There are two main approaches to minimizing errors associated with TF layers.  First, by smoothing the effects of terrain with height, the influence of the terrain is reduced, hence errors in the calculated horizontal pressure gradient are also reduced aloft \citep{schaer2002,leuenberger2010,klemp2011}.  However, the error is not reduced at the ground where steep terrain remains unmodified.
 
@@ -53,7 +53,7 @@ This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to en
 \TODO{introduce this section}
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
-	z = \left( H - h \right) \left( z^\star / H \right) + h
+	z = \left( H - h \right) \left( z^\star / H \right) + h \label{eqn:btf}
 \end{equation}
 where, in two dimensions, \(z(x, z^\star)\) is the height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.  Using this coordinate, the terrain's influence decays linearly with height but disappears only at the top of the domain.
 
@@ -78,24 +78,24 @@ There are two details of grid construction which mean that resulting cut cell gr
 A series of standard, two-dimensional tests were performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.
 We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation, an upwind-biased cubic advection scheme, and uses a Lorenz staggering of thermodynamic variables.  No explicit diffusion is used in any of the tests.
 
-\subsection{Advection}
+\subsection{Horizontal advection}
 
 Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.
 
 The domain is \SI{300}{\kilo\meter} wide and \SI{25}{\kilo\meter} high which is discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The terrain is wave-shaped, specified by the surface height, \(h\), such that
 \begin{subequations}
 \begin{align}
-	h(x) &= \cos^2 \left( \frac{\pi x}{\lambda} \right) h^\star
+	h(x) &= h^\star \cos^2 ( \alpha x )
 %
 	\intertext{where}
 %
 	h^\star(x) &= \left\{ \begin{array}{l l}
-		h_0 \cos^2 \left( \frac{\pi x}{2a} \right) & \quad \text{if $| x | < a$} \\
+	h_0 \cos^2 ( \beta x ) & \quad \text{if $| x | < a$} \\
 		0 & \quad \text{otherwise}
 	\end{array} \right.
 \end{align}
 \end{subequations}
-where $a = \SI{25}{\kilo\meter}$ is the mountain half-width, $h_0 = \SI{3}{\kilo\meter}$ is the maximum mountain height, and $\lambda = \SI{8}{\kilo\meter}$ is the wavelength.  On the SLEVE grid, the large-scale component $h_1$ is given by \(h_1(x) = h^\star(x) / 2\)
+where $a = \SI{25}{\kilo\meter}$ is the mountain half-width, $h_0 = \SI{3}{\kilo\meter}$ is the maximum mountain height, $\lambda = \SI{8}{\kilo\meter}$ is the wavelength, \(\alpha = \pi / \lambda\) and \(\beta = \pi / 2a\).  On the SLEVE grid, the large-scale component $h_1$ is given by \(h_1(x) = h^\star(x) / 2\)
 and $s_1 = \SI{15}{\kilo\meter}$ is the large scale height, and $s_2 = \SI{2.5}{\kilo\meter}$ is the small scale height.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.
 
 The wind is entirely horizontal and is prescribed as
@@ -162,7 +162,7 @@ The results of the tracer advection test show that, given an advection scheme of
 \end{figure}
 
 \begin{table}[t]
-	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
+	\caption{\TODO{add terrain-following results to this table} Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
 \label{tab:advection}
 %
 \centering
@@ -181,6 +181,35 @@ No orography & \num{-1} & \num{-1} & \num{-1} & \num{-0.002} & \num{0.984} \\
 \end{tabular}
 \end{table}
 
+\subsection{Terrain following advection}
+In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  We formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment with the SLEVE and cut cell grids is designed to challenge the advection scheme.
+
+The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
+\begin{equation}
+	\Psi(x,z) = H \frac{z - h}{H - h}
+\end{equation}
+The horizontal and vertical components of velocity, $u$ and $w$ are then given by
+\begin{align}
+	u &= \frac{\partial \Psi}{\partial z} = \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = H \frac{\partial h}{\partial x} \frac{H - z}{\left( H - h \right)^2}, \nonumber \\
+	\frac{\partial h}{\partial x} &= - h_0 \left[ 
+		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
+		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
+	\right]
+\end{align}
+Unlike the horizontal advection test, flow extends from the top of the domain all the way to the ground.
+
+At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horizontal position of the tracer centre can be calculated by integrating \(\mathrm{d}t = \mathrm{d}x / u\) to find
+\begin{multline}
+t = x_0 + \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha + \beta) x}{\alpha + \beta} \right.+ \\
+\left. \frac{\sin 2(\alpha - \beta) x}{\alpha - \beta} + 2 \left( \frac{\sin 2\alpha x}{\alpha} + \frac{\sin 2\beta x}{\beta} \right) \right]
+\end{multline}
+Solving numerically we find that \(x(t=\SI{10000}{\second}) = \SI{51.5}{\kilo\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1.5}{\kilo\meter} further compared to advection in the horizontal velocity field.  Tracer height is unchanged because advection is along the terrain following coordinate surface.
+
+\begin{itemize}
+	\item \TODO{should I run this test on the SLEVE grid as well for completeness?  I would expect results to be half-way between BTF and cut cell grids.}
+	\item Analysis
+	\item Conclusions/summary for this test
+\end{itemize}
 
 \subsection{Resting atmosphere}
 An idealised terrain profile is defined along with a stratified atmosphere at rest in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citet{klemp2011}.
