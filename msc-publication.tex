@@ -163,7 +163,7 @@ The results of the tracer advection test show that, given an advection scheme of
 \end{figure}
 
 \begin{table}[t]
-	\caption{\TODO{add terrain-following results to this table or put in separate table?} Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
+	\caption{\TODO{add terrain-following results to this table or put in separate table?  will add another three columns} Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
 \label{tab:advection}
 %
 \centering
@@ -183,13 +183,13 @@ No orography & \num{-1} & \num{-1} & \num{-1} & \num{-0.002} & \num{0.984} \\
 \end{table}
 
 \subsection{Terrain following advection}
-In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  We formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment with the SLEVE and cut cell grids is designed to challenge the advection scheme.
+In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  We formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
 	\Psi(x,z) = H \frac{z - h}{H - h}
 \end{equation}
-The horizontal and vertical components of velocity, $u$ and $w$ are then given by
+The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
 	u &= \frac{\partial \Psi}{\partial z} = \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = H \frac{\partial h}{\partial x} \frac{H - z}{\left( H - h \right)^2}, \nonumber \\
 	\frac{\partial h}{\partial x} &= - h_0 \left[ 
@@ -207,8 +207,8 @@ t = x_0 + \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha 
 Solving numerically we find that \(x(t=\SI{10000}{\second}) = \SI{51.5}{\kilo\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1.5}{\kilo\meter} further compared to advection in the horizontal velocity field.  Tracer height is unchanged because advection is along the terrain following coordinate surface.
 
 \begin{itemize}
-	\item \TODO{should I run this test on the SLEVE grid as well for completeness?  I would expect results to be half-way between BTF and cut cell grids.}
-	\item Analysis
+	\item l2 error is $\sim 10 \times$ worse on SLEVE compared to BTF
+	\item \TODO{find out what results are for cut cell grid}
 	\item Conclusions/summary for this test
 \end{itemize}
 
@@ -314,9 +314,10 @@ Analysis:
 
 \section{Conclusions}
 \begin{enumerate}
-	\item BTF grid isn't as bad as people say it is.  We found that:
+	\item Results can be accurate on a highly-distorted grid such as BTF.  We found that:
 	\begin{itemize}
 		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection-tracer}, \ref{fig:advection-error}, Table~\ref{tab:advection})
+		\item Advection accuracy depends on alignment of the flow with grid layers
 		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})
 		\item gravity waves results visually as good as reference solution from \citet{melvin2010} (figure~\ref{fig:gw-w})
 	\end{itemize}
@@ -333,12 +334,7 @@ Analysis:
 	\end{itemize}
 \end{enumerate}
 
-\textbf{With the exception of the Lorenz computational mode on the SnapCol grid in the gravity waves test, results were satisfactory across BTF, SLEVE and SnapCol grids in all three test cases.}
-
-Miscellany:
-\begin{itemize}
-	\item Advection accuracy depends on alignment of the flow with grid layers (\TODO{we kinda need wobblyTracerAdvection to reach this conclusion})
-\end{itemize}
+\textbf{With the exception of the Lorenz computational mode on the SnapCol grid in the gravity waves test, results were ``satisfactory'' across BTF, SLEVE and SnapCol grids in all three test cases.}
 
 \section{Further work}
 \begin{itemize}
@@ -348,7 +344,7 @@ Miscellany:
 \end{itemize}
 
 \acknowledgments
-Start acknowledgments here.
+Start acknowledgments here.  \TODO{John, Terry, S-J Lock.  Assuming only Hilary is co-author...?}
 
 % REFERENCES
 
