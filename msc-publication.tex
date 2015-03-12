@@ -75,7 +75,8 @@ There are two details of grid construction which mean that resulting cut cell gr
 
 
 \section{Results}
-A series of standard, two-dimensional tests were performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.
+A series of standard, two-dimensional tests are performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.  The first test from \citet{schaer2002} advects a tracer in a horizontal velocity field.  Second, a new tracer advection test is formulated employing a terrain following velocity field to challenge the advection scheme on more orthogonal grids.  The third test solves the Euler equations for a stably stratified atmosphere at rest, following \citet{klemp2011}.  Finally, as specified by \citet{schaer2002}, a test of orographically-induced gravity waves is performed.
+
 We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation, an upwind-biased cubic advection scheme, and uses a Lorenz staggering of thermodynamic variables.  No explicit diffusion is used in any of the tests.
 
 \subsection{Horizontal advection}
@@ -162,7 +163,7 @@ The results of the tracer advection test show that, given an advection scheme of
 \end{figure}
 
 \begin{table}[t]
-	\caption{\TODO{add terrain-following results to this table} Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
+	\caption{\TODO{add terrain-following results to this table or put in separate table?} Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
 \label{tab:advection}
 %
 \centering
