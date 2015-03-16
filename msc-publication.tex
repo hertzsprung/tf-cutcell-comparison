@@ -207,9 +207,8 @@ t = x_0 + \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha 
 Solving numerically we find that \(x(t=\SI{10000}{\second}) = \SI{51.5}{\kilo\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1.5}{\kilo\meter} further compared to advection in the horizontal velocity field.  Tracer height is unchanged because advection is along the terrain following coordinate surface.
 
 \begin{itemize}
-	\item l2 error is $\sim 10 \times$ worse on SLEVE compared to BTF
-	\item \TODO{find out what results are for cut cell grid}
-	\item Conclusions/summary for this test
+	\item l2 error is $\sim 10 \times$ worse on SLEVE compared to BTF, slightly worse again on cut cell grid
+	\item Conclusions/summary: Accuracy depends upon alignment of flow with grid.  Accuracy not reduced by grid distortions.  Accuracy on BTF grid comparable with accuracy on SLEVE grid in horizontal advection test.
 \end{itemize}
 
 \subsection{Resting atmosphere}
