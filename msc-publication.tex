@@ -37,7 +37,7 @@ The cut cell method can create some very small cells which reduce computational 
 
 Several studies have found that cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present and errors do not increase with steeper terrain \citep{good2014}.  \TODO{anything else?}
 
-This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between BTF, SLEVE and cut cell grids for idealised, two-dimensional test cases from the literature.  \TODO{final bit of intro: in section 2, section 3 etc etc}
+This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  Section 3 analyses the results from two tracer advection tests, a test of a stratified atmosphere at rest, and orographically induced gravity waves.  Concluding remarks are made in section 4.
 
 \section{Grids}
 \label{sec:grid}
@@ -50,7 +50,8 @@ This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to en
 	\label{fig:grid}
 \end{figure*}
 
-\TODO{introduce this section}
+In this section we describe the formulation of the terrain following grids and the method of cut cell grid construction.  The techniques presented here are used to define the grids for the experiments in the subsequent section.
+
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
 	z = \left( H - h \right) \left( z^\star / H \right) + h \label{eqn:btf}
@@ -268,13 +269,12 @@ Test results are compared between the BTF, SLEVE and cut cell grids.  Vertical v
 
 The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  Once again, the results are similar on all three grids, and results are shown on the BTF and cut cell grids in figures~\ref{fig:gw-theta}a and \ref{fig:gw-theta}c respectively.  However, examining more closely the anomalies in the lee of the mountain, figure~\ref{fig:gw-theta}d shows that the bottommost layer is anomalously warm and the layer above it is anomalously cold.  This feature is not present on the BTF grid (figure~\ref{fig:gw-theta}b) or the SLEVE grid (not shown).  
 
-In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is again present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  
+In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is again present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  We find that the Exner function of pressure decreases linearly with height on all grids.  The potential temperature increases linearly with height on the BTF and SLEVE grids.  On the cut cell grid, the potential temperature anomalies seen in figure~\ref{fig:gw-theta}d appear as a zig--zag in figure~\ref{fig:gw-exner-theta}.
 
-Analysis:
+The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables so that $\theta$ is stored at cell centres and velocity at cell faces.  The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode, which is a disadvantage of the Lorenz grid that has been widely discussed in the literature \citep{arakawa-konor1996,holdaway2013b}.
+
 \begin{itemize}
-	\item \TODO{divergence might help explain computational mode -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
 	\item \TODO{worth mentioning implications of this?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 2. model has no viscosity so thermal mixing should not occur in theory}
-	\item Lorenz computation mode has been excited because Exner sample line at $x = \SI{50}{\kilo\meter}$ is in hydrostatic balance (Figure~\ref{fig:gw-exner-theta})
 	\item Conclusion: results similar on all grids, agree with literature, except for Lorenz computational mode on SnapCol grid
 \end{itemize}
 
