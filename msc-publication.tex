@@ -108,14 +108,7 @@ The wind is entirely horizontal and is prescribed as
 	\end{array} \right.	
 \end{align}
 where $u_0 = \SI{10}{\meter\per\second}$, $z_1 = \SI{4}{\kilo\meter}$ and $z_2 = \SI{5}{\kilo\meter}$.
-This results in a constant wind aloft, and zero flow at \SI{4}{\kilo\meter} and below.
-
-While the continuous wind field is non-divergent, this is not true of the discrete wind field on non-orthogonal grids.  A potential, $p$, is used to correct the wind field, $\bm{u}$, so that is non-divergent such that
-\begin{align}
-	\nabla \cdot \left( \bm{u} + \nabla p \right) = 0,
-\intertext{which can be rearranged to give a Poisson equation}
-	\nabla^2 p = - \nabla \cdot \bm{u}.
-\end{align}
+This results in a constant wind aloft, and zero flow at \SI{4}{\kilo\meter} and below.  To ensure the discrete velocity field is non-divergent, velocities are prescribed at cell faces by summing the streamfunction at the centre of all face edges.
 
 A tracer $\varphi$ is positioned upstream above the height of the terrain.  It has the shape
 \begin{align}
@@ -133,7 +126,7 @@ A tracer $\varphi$ is positioned upstream above the height of the terrain.  It h
 \end{align}
 where $A_x = \SI{25}{\kilo\meter}$, $A_z = \SI{3}{\kilo\meter}$ are the horizontal and vertical half-widths respectively, and $\varphi_0 = 1$ is the maximum magnitude of the anomaly.  At $t = \SI{0}{\second}$, the anomaly is centred at $(x_0, z_0) = (\SI{-50}{\kilo\meter}, \SI{9}{\kilo\meter})$ so that the anomaly is upwind of the mountain and well above the maximum terrain height of \SI{3}{\kilo\meter}.  Analytic solutions can be found by adjusting the anomaly centre such that $x_0 = ut$.
 
-The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using an upwind-biased cubic advection scheme which is non-monotonic and not flux corrected.  The time derivative is solved using a second order Runge-Kutta scheme.  \TODO{I ought to understand this method myself!}
+The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using an upwind-biased cubic advection scheme which is non-monotonic and not flux corrected.  The time derivative is solved using a second order Runge-Kutta scheme.
 
 Unlike \citet{schaer2002} who use periodic lateral boundaries, a fixed value of 0 is used at the inlet boundary and all other boundaries have zero gradient.
 Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
@@ -162,57 +155,58 @@ The results of the tracer advection test show that, given an advection scheme of
 	\label{fig:advection-error}
 \end{figure}
 
-\begin{table}[t]
-	\caption{\TODO{add terrain-following results to this table or put in separate table?  will add another three columns} Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the tracer advection test.  Results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
-\label{tab:advection}
-%
-\centering
-\footnotesize
-\begin{tabular}{ l l l l l l }
-\hline\hline
-& \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{2}{c}{Sch\"ar 4th order} \\
-& \(\ell^2\) error & min & max & min & max \\
-\hline
-Analytic  & 0 & 0 & 1 & 0 & 1 \\
-BTF 	  & \num{-1} & \num{-1} & \num{-1} & \num{-0.058} & \num{1.001} \\
-SLEVE 	  & \num{-1} & \num{-1} & \num{-1} & \num{-0.002} & \num{0.984} \\
-Cut cell  & \num{-1} & \num{-1} & \num{-1} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
-No orography & \num{-1} & \num{-1} & \num{-1} & \num{-0.002} & \num{0.984} \\
-\hline
-\end{tabular}
-\end{table}
-
 \subsection{Terrain following advection}
 In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  We formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
-	\Psi(x,z) = H \frac{z - h}{H - h}
+	\Psi(x,z) = u_0 H \frac{z - h}{H - h}
 \end{equation}
+where $u_0 = \SI{10}{\meter\per\second}$, which is the horizontal wind speed where $h(x) = 0$.
 The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
-	u &= \frac{\partial \Psi}{\partial z} = \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = H \frac{\partial h}{\partial x} \frac{H - z}{\left( H - h \right)^2}, \nonumber \\
+	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{H - z}{\left( H - h \right)^2}, \nonumber \\
 	\frac{\partial h}{\partial x} &= - h_0 \left[ 
 		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
 		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
 	\right]
 \end{align}
-Unlike the horizontal advection test, flow extends from the top of the domain all the way to the ground.
+Unlike the horizontal advection test, flow extends from the top of the domain all the way to the ground.  The discrete velocity field is calculated using the streamfunction in the same way as the horizontal advection test.
 
-At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horizontal position of the tracer centre can be calculated by integrating \(\mathrm{d}t = \mathrm{d}x / u\) to find
+At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horizontal position of the tracer centre can be calculated by integrating along the trajectory to find $t$, the time taken to pass from one side of the mountain to the other:
 \begin{multline}
-t = x_0 + \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha + \beta) x}{\alpha + \beta} \right.+ \\
+t = \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha + \beta) x}{\alpha + \beta} \right.+ \\
 \left. \frac{\sin 2(\alpha - \beta) x}{\alpha - \beta} + 2 \left( \frac{\sin 2\alpha x}{\alpha} + \frac{\sin 2\beta x}{\beta} \right) \right]
 \end{multline}
-Solving numerically we find that \(x(t=\SI{10000}{\second}) = \SI{51.5}{\kilo\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1.5}{\kilo\meter} further compared to advection in the horizontal velocity field.  Tracer height is unchanged because advection is along the terrain following coordinate surface.
+Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the horizontal velocity field.  Tracer height is unchanged because advection is along the terrain following coordinate surface.
 
-\begin{itemize}
-	\item l2 error is $\sim 10 \times$ worse on SLEVE compared to BTF, slightly worse again on cut cell grid
-	\item Conclusions/summary: Accuracy depends upon alignment of flow with grid.  Accuracy not reduced by grid distortions.  Accuracy on BTF grid comparable with accuracy on SLEVE grid in horizontal advection test.
-\end{itemize}
+\begin{table*}[t]
+	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests.  In the horizontal advection test, results of the cubic upwind-biased scheme are compared with the fourth-order centred scheme from \citet{schaer2002}.}
+\label{tab:advection}
+%
+\centering
+\footnotesize
+\begin{tabular}{ l l l l l l l l l l }
+\hline\hline
+& \multicolumn{5}{c}{Horizontal advection} & \multicolumn{3}{c}{Terrain following advection} \\
+& \multicolumn{2}{c}{Sch\"ar 4th order} & \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{3}{c}{Cubic upwind-biased} \\
+& min & max & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max \\
+\hline
+Analytic  & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 1 \\
+BTF 	  & \num{-0.058} & \num{1.001} & \num{0.00767} & \num{-0.0433} & \num{0.928} & \num{0.00154} & \num{-0.0105} & \num{0.983} \\
+SLEVE 	  & \num{-0.002} & \num{0.984} & \num{0.00108} & \num{-0.0106} & \num{0.981} & \num{0.0122} & \num{-0.0273} & \num{0.864} \\
+Cut cell  & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \num{0.000579} & \num{-0.00670} & \num{0.982} & \num{0.0136} & \num{-0.0297} & \num{0.850} \\
+No orography & \num{-0.002} & \num{0.984} & \num{0.000577} & \num{-0.00670} & \num{0.982} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+\hline
+\end{tabular}
+\end{table*}
+
+$\ell^2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
+
+We conclude from this test that accuracy depends upon alignment of the flow with the grid, and accuracy is not significantly reduced by grid distortions.  Accuracy on the BTF grid is comparable with accuracy on the SLEVE grid in the horizontal advection test.
 
 \subsection{Resting atmosphere}
-An idealised terrain profile is defined along with a stratified atmosphere at rest in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citet{klemp2011}.
+An idealised terrain profile is defined along with a stratified atmosphere at rest in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citep{klemp2011}.
 
 The test setup follows the specification by \cite{klemp2011}, but has a narrower domain that is \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high in order to reduce simulation time, as used by \citet{weller-shahrokhi2014}.  The grid resolution is \(\Delta x = \Delta z^\star = \SI{500}{\meter}\) as originally specified by \citet{klemp2011}.  All boundary conditions are no normal flow.
 
@@ -232,7 +226,7 @@ The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids,
 
 Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.  However, errors are three orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-3}{\meter\per\second}\).  The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
 
-\citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained using the model by \citet{weller-shahrokhi2014}.  It is worth noting that \citet{good2014} used a timestep of \SI{1.01}{\second} instead of the \SI{100}{\second} timestep specified by \citet{klemp2011} that was used to obtain the results presented here.  In addition, in the model used by \citet{good2014}, cell centres are in the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  These two modelling decisions may account for the very small velocities found by \citet{good2014}.
+\citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained using the model by \citet{weller-shahrokhi2014}.  It is worth noting that, in the model used by \citet{good2014}, cell centres are in the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  This may account for the very small velocities found by \citet{good2014}.
 
 In summary, spurious velocities in the resting atmosphere test were similar on both terrain following grids, with much lower errors compared to those from \citet{klemp2011}.  The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality is a significant cause of numerical error in this test.
 
@@ -281,8 +275,6 @@ Analysis:
 	\item \TODO{divergence might help explain computational mode -- it's greater on the SnapCol grid (MSc dissertation Figure 4.15e)}
 	\item \TODO{worth mentioning implications of this?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 2. model has no viscosity so thermal mixing should not occur in theory}
 	\item Lorenz computation mode has been excited because Exner sample line at $x = \SI{50}{\kilo\meter}$ is in hydrostatic balance (Figure~\ref{fig:gw-exner-theta})
-	\item \TODO{We can speculate on what excites the computational mode, but perhaps better not to?}
-	\item No evidence of small cell problem -- \TODO{don't know that we can say much here without another vertical momentum test; our hypothesis about the quasi-horizontal flow isn't backed up with a test case}
 	\item Conclusion: results similar on all grids, agree with literature, except for Lorenz computational mode on SnapCol grid
 \end{itemize}
 
