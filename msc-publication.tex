@@ -39,9 +39,6 @@ Several studies have found that cut cells produce more accurate results when com
 
 This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  Section 3 analyses the results from two tracer advection tests, a test of a stratified atmosphere at rest, and orographically induced gravity waves.  Concluding remarks are made in section 4.
 
-\section{Grids}
-\label{sec:grid}
-
 \begin{figure*}
 	\centering
 	\includegraphics{../msc-publication-fig-meshes/fig-meshes.pdf}
@@ -50,7 +47,10 @@ This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to en
 	\label{fig:grid}
 \end{figure*}
 
-In this section we describe the formulation of the terrain following grids and the method of cut cell grid construction.  The techniques presented here are used to define the grids for the experiments in the subsequent section.
+\section{Grids}
+\label{sec:grid}
+
+Here we describe the formulation of the terrain following grids and the method of cut cell grid construction.  The techniques presented here are used to define the grids for the experiments in the subsequent section.
 
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
@@ -85,18 +85,12 @@ We use a finite volume discretisation of the fully-compressible Euler equations 
 Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This challenges the accuracy of the advection scheme in the presence of grid distortions.
 
 The domain is \SI{300}{\kilo\meter} wide and \SI{25}{\kilo\meter} high which is discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The terrain is wave-shaped, specified by the surface height, \(h\), such that
-\begin{subequations}
 \begin{align}
-	h(x) &= h^\star \cos^2 ( \alpha x )
-%
-	\intertext{where}
-%
-	h^\star(x) &= \left\{ \begin{array}{l l}
-	h_0 \cos^2 ( \beta x ) & \quad \text{if $| x | < a$} \\
+	h(x) &= \left\{ \begin{array}{l l}
+	h_0 \cos^2 ( \alpha x ) \cos^2 ( \beta x ) & \quad \text{if $| x | < a$} \\
 		0 & \quad \text{otherwise}
 	\end{array} \right.
 \end{align}
-\end{subequations}
 where $a = \SI{25}{\kilo\meter}$ is the mountain half-width, $h_0 = \SI{3}{\kilo\meter}$ is the maximum mountain height, $\lambda = \SI{8}{\kilo\meter}$ is the wavelength, \(\alpha = \pi / \lambda\) and \(\beta = \pi / 2a\).  On the SLEVE grid, the large-scale component $h_1$ is given by \(h_1(x) = h^\star(x) / 2\)
 and $s_1 = \SI{15}{\kilo\meter}$ is the large scale height, and $s_2 = \SI{2.5}{\kilo\meter}$ is the small scale height.  The optimisation of SLEVE by \citet{leuenberger2010} is not used, so the exponent $n = 1$.
 
@@ -271,12 +265,11 @@ The initial thermal profile is subtracted from the potential temperature field a
 
 In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is again present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  We find that the Exner function of pressure decreases linearly with height on all grids.  The potential temperature increases linearly with height on the BTF and SLEVE grids.  On the cut cell grid, the potential temperature anomalies seen in figure~\ref{fig:gw-theta}d appear as a zig--zag in figure~\ref{fig:gw-exner-theta}.
 
-The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables so that $\theta$ is stored at cell centres and velocity at cell faces.  The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode, which is a disadvantage of the Lorenz grid that has been widely discussed in the literature \citep{arakawa-konor1996,holdaway2013b}.
+The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables such that $\theta$ is stored at cell centres and velocity at cell faces.  The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode, which is a disadvantage of the Lorenz grid that has been widely discussed in the literature \citep{arakawa-konor1996,holdaway2013b}.
 
-\begin{itemize}
-	\item \TODO{worth mentioning implications of this?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 2. model has no viscosity so thermal mixing should not occur in theory}
-	\item Conclusion: results similar on all grids, agree with literature, except for Lorenz computational mode on SnapCol grid
-\end{itemize}
+\TODO{what might be the physical implications?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 3. model has no viscosity so thermal mixing should not occur in theory}
+
+To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The most prominent errors are found only on the cut cell grid, where the potential temperature errors near the ground are maintained by the Lorenz computational mode.
 
 \begin{figure}
 	\centering
@@ -302,17 +295,12 @@ The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables s
 	\label{fig:gw-exner-theta}
 \end{figure}
 
-
 \section{Conclusions}
-\begin{enumerate}
-	\item Results can be accurate on a highly-distorted grid such as BTF.  We found that:
-	\begin{itemize}
-		\item Upwind-biased cubic advection scheme accurately advects a tracer in non-divergent flows (Figure~\ref{fig:advection-tracer}, \ref{fig:advection-error}, Table~\ref{tab:advection})
-		\item Advection accuracy depends on alignment of the flow with grid layers
-		\item spurious vertical velocities are small in resting atmosphere (Figure~\ref{fig:resting})
-		\item gravity waves results visually as good as reference solution from \citet{melvin2010} (figure~\ref{fig:gw-w})
-	\end{itemize}
+We have presented a like-for-like comparison between terrain following and cut cell grids using a single model.  Accuracy on the BTF, SLEVE and cut cell grids was evaluated in a series of two-dimensional tests.
 
+Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which is often found to give poor results \citet{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected in horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid.  Spurious vertical velocities were small in the resting atmosphere test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{10}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
+
+\begin{enumerate}
 	\item Cut cell grids can be worse than TF grids:
 	\begin{itemize}
 		\item Lorenz computational mode found on SnapCol grid only (figure~\ref{fig:gw-theta}, \ref{fig:gw-exner-theta})
@@ -327,12 +315,7 @@ The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables s
 
 \textbf{With the exception of the Lorenz computational mode on the SnapCol grid in the gravity waves test, results were ``satisfactory'' across BTF, SLEVE and SnapCol grids in all three test cases.}
 
-\section{Further work}
-\begin{itemize}
-	\item Lorenz computational mode motivates formulation of C-P staggering for cut cell grids
-	\item Find out what excites the Lorenz computational mode
-	\item \TODO{anything else?}
-\end{itemize}
+\TODO{Further work: Lorenz computational mode motivates formulation of C-P staggering for cut cell grids}
 
 \acknowledgments
 Start acknowledgments here.  \TODO{John, Terry, S-J Lock.  Assuming only Hilary is co-author...?}
