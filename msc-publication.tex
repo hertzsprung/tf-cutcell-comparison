@@ -13,7 +13,12 @@
 \affiliation{}
 \email{j.shaw@pgr.reading.ac.uk}
 
-\abstract{Enter the text of your abstract here.}
+%but are known to suffer from horizontal pressure gradient errors near steep terrain.
+\abstract{Terrain following coordinates are widely used in operational models.
+More recently, the cut cell method has been proposed as an alternative that can more accurately represent orography.  In order to compare the accuracy of the different grids, it is typically necessary to use different models.  Instead, we use a single model to enable a like-for-like comparison of terrain following and cut cell grids.
+A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test of a stably stratified atmosphere at rest, and orographically induced gravity waves.  In addition, we formulate a new tracer advection test having a velocity field that is tangential to the basic terrain following coordinate surfaces.
+The results of the tracer advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is manifested as a vertical zig--zag in potential temperature only on the cut cell grid.
+Although errors do vary between grids, overall, a high degree of accuracy is obtained for all tests on all grids.}
 
 \begin{document}
 \newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
@@ -181,7 +186,7 @@ Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Becaus
 %
 \centering
 \footnotesize
-\begin{tabular}{ l l l l l l l l l l }
+\begin{tabular}{ r @{\hspace{2em}} l l @{\hspace{1.5em}} l l l @{\hspace{2em}} l l l }
 \hline\hline
 & \multicolumn{5}{c}{Horizontal advection} & \multicolumn{3}{c}{Terrain following advection} \\
 & \multicolumn{2}{c}{Sch\"ar 4th order} & \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{3}{c}{Cubic upwind-biased} \\
@@ -265,9 +270,7 @@ The initial thermal profile is subtracted from the potential temperature field a
 
 In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is again present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  We find that the Exner function of pressure decreases linearly with height on all grids.  The potential temperature increases linearly with height on the BTF and SLEVE grids.  On the cut cell grid, the potential temperature anomalies seen in figure~\ref{fig:gw-theta}d appear as a zig--zag in figure~\ref{fig:gw-exner-theta}.
 
-The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables such that $\theta$ is stored at cell centres and velocity at cell faces.  The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode, which is a disadvantage of the Lorenz grid that has been widely discussed in the literature \citep{arakawa-konor1996,holdaway2013b}.
-
-\TODO{what might be the physical implications?  1. reduced stability, although not enough to create vertical motion in this instance 2. would disrupt clouds 3. model has no viscosity so thermal mixing should not occur in theory}
+The model by \citet{weller-shahrokhi2014} has a Lorenz staggering of variables such that $\theta$ is stored at cell centres and velocity at cell faces.  The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode, which is a disadvantage of the Lorenz grid that has been widely discussed in the literature \citep{arakawa-konor1996,holdaway2013b}.  In models that include moist processes, the Lorenz computational mode can disrupt clouds and generate spurious precipitation \citep{hollingsworth1995}.
 
 To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The most prominent errors are found only on the cut cell grid, where the potential temperature errors near the ground are maintained by the Lorenz computational mode.
 
@@ -300,22 +303,9 @@ We have presented a like-for-like comparison between terrain following and cut c
 
 Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which is often found to give poor results \citet{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected in horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid.  Spurious vertical velocities were small in the resting atmosphere test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{10}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
-\begin{enumerate}
-	\item Cut cell grids can be worse than TF grids:
-	\begin{itemize}
-		\item Lorenz computational mode found on SnapCol grid only (figure~\ref{fig:gw-theta}, \ref{fig:gw-exner-theta})
-	\end{itemize}
+Cut cell grids reduced errors in two of the four tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
 
-	\item Cut cell grids can also be better than TF grids in more artificial test cases:
-	\begin{itemize}
-		\item SnapCol $w$ two orders of magnitude smaller in resting atmosphere test
-		\item SnapCol advection test as good as noOrography
-	\end{itemize}
-\end{enumerate}
-
-\textbf{With the exception of the Lorenz computational mode on the SnapCol grid in the gravity waves test, results were ``satisfactory'' across BTF, SLEVE and SnapCol grids in all three test cases.}
-
-\TODO{Further work: Lorenz computational mode motivates formulation of C-P staggering for cut cell grids}
+Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  In the gravity waves test, the Lorenz computational mode was manifested as a zig--zag in potential temperature in the lowest layers in the lee of the mountain.  This spurious error was excited only on the cut cell grid.  This test motivates further work to formulate a Charney--Phillips staggering of variables on cut cell grids.
 
 \acknowledgments
 Start acknowledgments here.  \TODO{John, Terry, S-J Lock.  Assuming only Hilary is co-author...?}
