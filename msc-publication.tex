@@ -14,10 +14,10 @@
 \email{j.shaw@pgr.reading.ac.uk}
 
 %but are known to suffer from horizontal pressure gradient errors near steep terrain.
-\abstract{Terrain following coordinates are widely used in operational models but, more recently, the cut cell method has been proposed as an alternative that can more accurately represent the orography and associated atmospheric dynamics.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  On the contrary, we use a single model to enable a like-for-like comparison of terrain following and cut cell grids.
-A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test of a stably stratified atmosphere at rest, and orographically induced gravity waves.  In addition, we formulate a new tracer advection test having a velocity field that is tangential to the basic terrain following coordinate surfaces.
-The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is manifested as a vertical zig--zag in potential temperature only on the cut cell grid.
-Although errors do vary between grids, overall, a high degree of accuracy is obtained for all tests on all grids.}
+\abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent the orography and associated atmospheric dynamics.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  On the contrary, we use a single C-grid finite volume model to enable a like-for-like comparison of terrain following and cut cell grids.
+A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test of a stably stratified atmosphere at rest, and orographically induced gravity waves.  In addition, we formulate a new tracer advection test having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.
+The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.
+\TODO{this last sentence is weak: Although errors do vary between grids, overall, a high degree of accuracy is obtained for all tests on all grids.}}
 
 \begin{document}
 \newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
@@ -25,9 +25,9 @@ Although errors do vary between grids, overall, a high degree of accuracy is obt
 \maketitle
 
 \section{Introduction}
-Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation patterns.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cells have compared results with terrain following grids using different models.  Instead, this study uses a single model to enable a like-for-like comparison between terrain following and cut cell grids.
+Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
 
-With increasing model resolution, terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Terrain following and cut cell methods seek to reduce the error that is associated with steep orography.
+With increasing horizontal model resolution, the discrete representation of terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Terrain following and cut cell methods seek to reduce the error that is associated with steep orography.
 
 With terrain following (TF) layers the terrain's influence decays with height so that the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  There are two main approaches to minimizing errors associated with TF layers.  First, by smoothing the effects of terrain with height, the influence of the terrain is reduced, hence errors in the calculated horizontal pressure gradient are also reduced aloft \citep{schaer2002,leuenberger2010,klemp2011}.  However, the error is not reduced at the ground where steep terrain remains unmodified.
 
@@ -47,7 +47,7 @@ This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to en
 	\centering
 	\includegraphics{../msc-publication-fig-meshes/fig-meshes.pdf}
 	%
-	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, all constructed with OpenFOAM.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{2}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
+	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, showing cell edges in the lowest four layers.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
 	\label{fig:grid}
 \end{figure*}
 
@@ -317,7 +317,7 @@ Cut cell grids reduced errors in two of the four tests.  First, in the horizonta
 Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  In the gravity waves test, the Lorenz computational mode was manifested as a zig--zag in potential temperature in the lowest layers in the lee of the mountain.  This spurious error was excited only on the cut cell grid.  This test motivates further work to formulate a Charney--Phillips staggering of variables on cut cell grids.
 
 \acknowledgments
-Start acknowledgments here.  \TODO{John, Terry, S-J Lock.  Assuming only Hilary is co-author...?}
+Start acknowledgments here.  \TODO{John, Terry.  Assuming only Hilary is co-author...?}
 
 % REFERENCES
 
