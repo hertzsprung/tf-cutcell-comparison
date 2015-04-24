@@ -24,17 +24,17 @@ The results of the advection tests demonstrate that tracer accuracy depends upon
 \maketitle
 
 \section{Introduction}
-Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
+Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
 
-With increasing horizontal model resolution, the discrete representation of terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Terrain following and cut cell methods seek to reduce the error that is associated with steep orography.
+With increasing horizontal model resolution, the discrete representation of terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult when using terrain following layers \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Cut cell methods seek to reduce the error that is associated with steep orography.
 
 With terrain following (TF) layers the terrain's influence decays with height so that the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  There are two main approaches to minimizing errors associated with TF layers.  First, by smoothing the effects of terrain with height, the influence of the terrain is reduced, hence errors in the calculated horizontal pressure gradient are also reduced aloft \citep{schaer2002,leuenberger2010,klemp2011}.  However, the error is not reduced at the ground where steep terrain remains unmodified.
 
-Second, numerical errors can also be reduced by improving the accuracy in calculating the horizontal pressure gradient itself.  TF layers are usually implemented using a coordinate transformation onto a rectangular computational domain, which introduces metric terms into the equations of motion.  The techniques proposed by \citet{klemp2011} and \cite{zaengl2012} both involve the calculation of the horizontal pressure gradient in the physical domain.  They found that, by avoiding the calculation of metric terms associated with the computational domain, numerical errors were reduced.
+Second, numerical errors can also be reduced by improving the accuracy in calculating the horizontal pressure gradient itself.  TF layers are usually implemented using a coordinate transformation onto a rectangular computational domain, which introduces metric terms into the equations of motion.  The techniques proposed by \citet{klemp2011} and \cite{zaengl2012} both involve the calculation of the horizontal pressure gradient in the physical domain.  This gave them the flexibility to design more accurate horizontal pressure gradient discretizations using more appropriate stencils.
 
 Despite their associated numerical errors, TF layers are in widespread operational use \citep{steppeler2003}.  They are attractive because their rectangular structure is simple to process by computer, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}.
 
-Cut cells is an alternative method in which cells that lie entirely below the terrain are removed, and those that intersect the surface are modified in shape so that they more closely fit the terrain.  The resulting grid is orthogonal everywhere except near cells that have been cut.  Hence, errors are still introduced when calculating the horizontal pressure gradient between cut and uncut cells.
+Cut cells is an alternative method in which the grid does not follow the terrain but, instead, cells that lie entirely below the terrain are removed, and those that intersect the surface are modified in shape so that they more closely fit the terrain.  The resulting grid is orthogonal everywhere except near cells that have been cut.  Hence, errors are still introduced when calculating the horizontal pressure gradient between cut and uncut cells.
 
 The cut cell method can create some very small cells which reduce computational efficiency \citep{klein2009}, and several approaches have been tried to alleviate the problem \citep{steppeler2002,yamazaki-satomura2010,jebens2011}.
 
@@ -78,10 +78,10 @@ The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that appro
 There are two details of grid construction which mean that resulting cut cell grids can differ slightly from a typical cut cell grid created using a shaving method, as described by \citet{adcroft1997}.  First, when \texttt{snappyHexMesh} moves points along the surface according to its heuristics, some points are moved horizontally.  Second, the utility does not create new points necessary for pentagonal cells.
 
 
-\section{Model equations}
+\section{Model}
 \label{sec:model}
 
-The C-grid finite volume model from \citet{weller-shahrokhi2014} discretises the fully-compressible Euler equations, given by
+We use the finite volume model from \citet{weller-shahrokhi2014} which details a C-grid discretisation of the fully-compressible Euler equations, given by
 \begin{subequations}
 \begin{align}
 	\text{Momentum} &\ &\  	\frac{\partial \rho \bm{u}}{\partial t} + \nabla \cdot \rho \bm{uu} &= \rho \bm{g} - c_p \rho \theta \nabla \Pi \label{eq:momentum} \\
@@ -93,13 +93,13 @@ The C-grid finite volume model from \citet{weller-shahrokhi2014} discretises the
 \end{subequations}
 where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the tempereature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.
 
+The mode has a curl-free pressure gradient formulation and an upwind-biased cubic advection scheme.  It uses a Lorenz staggering of thermodynamic variables such that $\theta$ is stored at cell centres and velocity at cell faces.
 
 \section{Results}
 \label{sec:results}
 
-A series of two-dimensional tests are performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.  The first test from \citet{schaer2002} advects a tracer in a horizontal velocity field.  Second, a new tracer advection test is formulated employing a terrain following velocity field to challenge the advection scheme on more orthogonal grids.  The third test solves the Euler equations for a stably stratified atmosphere initially at rest, following \citet{klemp2011}.  Finally, as specified by \citet{schaer2002}, a test of orographically-induced gravity waves is performed.
+A series of two-dimensional tests are performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.  The first test from \citet{schaer2002} advects a tracer in a horizontal velocity field.  Second, a new tracer advection test is formulated employing a terrain following velocity field to challenge the advection scheme on more orthogonal grids.  The third test solves the Euler equations for a stably stratified atmosphere initially at rest, following \citet{klemp2011}.  Finally, as specified by \citet{schaer2002}, a test of orographically-induced gravity waves is performed.  No explicit diffusion is used in any of the tests.
 
-We use a finite volume discretisation of the fully-compressible Euler equations described by \citet{weller-shahrokhi2014}.  The model has a curl-free pressure gradient formulation and an upwind-biased cubic advection scheme.  It uses a Lorenz staggering of thermodynamic variables such that $\theta$ is stored at cell centres and velocity at cell faces.  No explicit diffusion is used in any of the tests.
 
 \subsection{Horizontal advection}
 
@@ -259,9 +259,9 @@ The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids,
 
 Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.  However, errors are three orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-3}{\meter\per\second}\).  The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
 
-\citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained using the model by \citet{weller-shahrokhi2014}.  It is worth noting that, in the model used by \citet{good2014}, cell centres are in the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  This may account for the very small velocities found by \citet{good2014}.
+\citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained using the model by \citet{weller-shahrokhi2014}.  It is worth noting that, in the model used by \citet{good2014}, cell centres are in the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  This would account for the very small velocities found by \citet{good2014}.
 
-In summary, spurious velocities in the resting atmosphere test were similar on both terrain following grids, with much lower errors compared to those from \citet{klemp2011}.  The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality is a significant cause of numerical error in this test.
+In summary, spurious velocities in the resting atmosphere test were similar on both terrain following grids, with lower errors compared to those from \citet{klemp2011}.  The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality, or lack of alignment of the grid with sufaces of constant gravitational potential are a significant cause of numerical error in this test.
 
 \begin{figure*}
 	\centering
@@ -303,9 +303,9 @@ The initial thermal profile is subtracted from the potential temperature field a
 
 In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{500}{\meter} with all other parameter values unchanged.  The same spurious anomaly in potential temperature is again present on the cut cell grid but its amplitude increases.  Figure~\ref{fig:gw-exner-theta} shows vertical profiles of the Exner function of pressure and potential temperature in the lowest \SI{1}{\kilo\meter} in the lee of the mountain at \(x = \SI{50}{\kilo\meter}\).  We find that the Exner function of pressure decreases linearly with height on all grids.  The potential temperature increases linearly with height on the BTF and SLEVE grids.  On the cut cell grid, the potential temperature anomalies seen in figure~\ref{fig:gw-theta}d appear as a zig--zag in figure~\ref{fig:gw-exner-theta}.
 
-The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode, which is a disadvantage of the Lorenz grid that has been widely discussed in the literature \citep{arakawa-konor1996,holdaway2013b}.  In models that include moist processes, the Lorenz computational mode can disrupt clouds and generate spurious precipitation \citep{hollingsworth1995}.
+The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode \citep{arakawa-konor1996,holdaway2013b}.  In models that include moist processes, the Lorenz computational mode can disrupt clouds and generate spurious precipitation \citep{hollingsworth1995}.
 
-To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The most prominent errors are found only on the cut cell grid, where the potential temperature errors near the ground result from exciting the Lorenz computational mode.
+To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The most prominent errors are found only on the cut cell grid, where the potential temperature errors near the ground excite the Lorenz computational mode.
 
 \begin{figure}
 	\centering
@@ -334,7 +334,7 @@ To summarize, results of the gravity waves test on all grids are in good agreeme
 \section{Conclusions}
 We have presented a like-for-like comparison between terrain following and cut cell grids using a single model.  Accuracy on the BTF, SLEVE and cut cell grids was evaluated in a series of two-dimensional tests.
 
-Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which have previously been found to give poor results \citep{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected in horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid.
+Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which have previously been found to give poor results \citep{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected by horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid rather than on grid distortions.
 
 Spurious vertical velocities were small in the resting atmosphere test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{10}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
@@ -343,7 +343,7 @@ Cut cell grids reduced errors in two of the four tests.  First, in the horizonta
 Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  In the gravity waves test, the Lorenz computational mode was manifested as a zig--zag in potential temperature in the lowest layers in the lee of the mountain.  This spurious error was excited only on the cut cell grid.  This test motivates further work to formulate a Charney--Phillips staggering of variables on cut cell grids.
 
 \acknowledgments
-Start acknowledgments here.  \TODO{John, Terry.  NERC grant NE/H015698/1.  Assuming only Hilary is co-author...?}
+\TODO{John, Terry. Assuming only Hilary is co-author...?} Weller is funded by NERC grant NE/H015698/1.
 
 % REFERENCES
 
