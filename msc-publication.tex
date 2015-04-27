@@ -40,7 +40,7 @@ The cut cell method can create some very small cells which reduce computational 
 
 Several studies have shown examples where cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present and errors do not increase with steeper terrain \citep{good2014}.  A comparison of TF and cut cells using real initial data by \citet{steppeler2013} found that precipitation and wind forecasts were more accurately in the cut cell model.
 
-This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  \TODO{section 3} Section 4 analyses the results from two tracer advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
+This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we outline the model from \citet{weller-shahrokhi2014} and the governing equations.  Section 4 analyses the results from two tracer advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
 
 \begin{figure*}
 	\centering
@@ -166,7 +166,13 @@ The test was executed on the BTF, SLEVE and cut cell grids, and on a regular gri
 
 Tracer magnitude and shape are well-preserved on all grids, both above the mountain at \(t = \SI{5000}{\second}\) and past the mountain at \(t = \SI{10000}{\second}\).  In this test, advection is most accurate on the cut cell grid (figure~\ref{fig:advection-tracer}c) and regular grid (not shown).  As found by \citet{good2014}, the result is the same on both grids.  This is to be expected since the wind is zero in the region of the ground and flow aloft is aligned with the grids.  On the BTF grid, the tracer is less distorted by the cubic upwind-biased scheme (figure~\ref{fig:advection-tracer}b) compared to the fourth-order centred scheme from \citet{schaer2002} (figure~\ref{fig:advection-tracer}a).
 
-Minimum and maximum tracer values and \(\ell^2\) error norms on the BTF, SLEVE, cut cell and regular grids are summarised in table~\ref{tab:advection}.  The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell^2 = \num{0.00767}\) but significant reduced on the SLEVE grid with \(\ell^2 = \num{0.00108}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
+Minimum and maximum tracer values and \(\ell^2\) error norms on the BTF, SLEVE, cut cell and regular grids are summarised in table~\ref{tab:advection}, where the \(\ell^2\) error norm is defined as 
+\begin{align}
+	\ell^2 &= \sqrt{\frac{\sum_c \left( \varphi - \varphi_{T} \right)^2 \mathcal{V}_c}{\sum_c \left( \varphi_T^2 \mathcal{V}_c \right)}}
+\end{align}
+where $\varphi$ is the numerical tracer value, $\varphi_T$ is the analytic value and $\mathcal{V}_c$ is the cell volume.
+
+The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell^2 = \num{0.00767}\) but significant reduced on the SLEVE grid with \(\ell^2 = \num{0.00108}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
 
 The results of the tracer advection test show that, given an advection scheme of a sufficiently high order, distortions in the grid do not significantly distort the tracer.
 
