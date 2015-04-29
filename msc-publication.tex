@@ -62,7 +62,7 @@ where, in two dimensions, \(z(x, z^\star)\) is the physical height of the coordi
 
 The sigma coordinate transform of \citet{phillips1957} is equivalent to the BTF coordinate transform since they both decay linearly.  However, because \(\sigma = p/p_s\) decays with pressure rather than height, sigma coordinates also vary with surface pressure, \(p_s(x, t)\).
 
-The hybrid terrain following (HTF) coordinates of \citet{simmons-burridge1981} improve upon BTF coordinates by using a decay function that allows the influence of the terrain to be removed at a specified height, producing flat model layers aloft.  \TODO{include equation?}
+The hybrid terrain following (HTF) coordinates of \citet{simmons-burridge1981} improve upon BTF coordinates by using a decay function that allows the influence of the terrain to be removed at a specified height, producing flat model layers aloft.
 
 The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achieves a more regular TF grid in the middle and top of the domain than the BTF coordinate.  The terrain height is split into large-scale and small-scale components, \(h_1\) and \(h_2\), such that \(h = h_1 + h_2\), with each component having a different exponential decay. The transformation is defined as 
 \begin{align}
@@ -236,7 +236,7 @@ Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Becaus
 %
 \centering
 \footnotesize
-\begin{tabular}{ r @{\hspace{0.5em}} l l l | l l l | l l l | l l l}
+\begin{tabular}{ r @{\hspace{1.0em}} l @{\hspace{1.0em}} l @{\hspace{1.0em}} l | l @{\hspace{1.0em}} l @{\hspace{1.0em}} l | l @{\hspace{1.0em}} l @{\hspace{1.0em}} l | l @{\hspace{1.0em}} l @{\hspace{1.0em}} l}
 \hline\hline
 & \multicolumn{6}{c}{Horizontal advection} & \multicolumn{6}{c}{Terrain following advection} \\
 & \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} \\
