@@ -15,8 +15,7 @@
 
 \abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent the orography and associated atmospheric dynamics.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  On the contrary, we use a single C-grid finite volume model to enable a like-for-like comparison of terrain following and cut cell grids.
 A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test of a stably stratified atmosphere at rest, and orographically induced gravity waves.  In addition, we formulate a new tracer advection test having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.
-The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.
-\TODO{this last sentence is weak: Although errors do vary between grids, overall, a high degree of accuracy is obtained for all tests on all grids.}}
+The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.}
 
 \begin{document}
 \newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
@@ -59,11 +58,11 @@ Here we describe the formulation of the terrain following grids and the method o
 \begin{equation}
 	z = \left( H - h \right) \left( z^\star / H \right) + h \label{eqn:btf}
 \end{equation}
-where, in two dimensions, \(z(x, z^\star)\) is the physical height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.  Using this coordinate, the terrain's influence decays linearly with height but disappears only at the top of the domain.  An example is shown in figure~\ref{fig:grid}a.
+where, in two dimensions, \(z(x, z^\star)\) is the physical height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.  This formulation results in $z^\star/H$ ranging from 0 to 1.  Using this coordinate, the terrain's influence decays linearly with height but disappears only at the top of the domain.  An example is shown in figure~\ref{fig:grid}a.
 
 The sigma coordinate transform of \citet{phillips1957} is equivalent to the BTF coordinate transform since they both decay linearly.  However, because \(\sigma = p/p_s\) decays with pressure rather than height, sigma coordinates also vary with surface pressure, \(p_s(x, t)\).
 
-The hybrid terrain following (HTF) coordinates of \citet{simmons-burridge1981} improve upon BTF coordinates by using a decay function that allows the influence of the terrain to be removed at a specified height, producing flat model layers aloft.  \TODO{I could mention that this is used operationally in UK MO (davies et al 2005) and ECMWF (good citation needed)}
+The hybrid terrain following (HTF) coordinates of \citet{simmons-burridge1981} improve upon BTF coordinates by using a decay function that allows the influence of the terrain to be removed at a specified height, producing flat model layers aloft.  \TODO{include equation?}
 
 The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achieves a more regular TF grid in the middle and top of the domain than the BTF coordinate.  The terrain height is split into large-scale and small-scale components, \(h_1\) and \(h_2\), such that \(h = h_1 + h_2\), with each component having a different exponential decay. The transformation is defined as 
 \begin{align}
@@ -75,7 +74,7 @@ with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale te
 
 Most implementations of terrain following layers use a coordinate system that makes the domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and unstructured grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
 
-The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that approximates the cut cell method.  First, a custom utility was used to move points beneath the surface up to the surface creating small cells near mountain peaks.  Second, the surface faces were taken from the BTF grid and \texttt{snappyHexMesh} was used to intersect the surface with the grid.  The tool removes cells whose centres are below the surface and displaces boundary vertices so that they lie on the BTF surface.  An example of the resulting grid is shown in figure~\ref{fig:grid}c.
+The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that approximates the cut cell method.  First, a custom utility was used to move points beneath the surface up to the surface creating small cells near mountain peaks.  The utility is available at \url{https://github.com/hertzsprung/AtmosFOAM/tree/2386ffb/applications/utilities/mesh/add2dMountain}.  Second, the surface faces were taken from the BTF grid and \texttt{snappyHexMesh} was used to intersect the surface with the grid.  The tool removes cells whose centres are below the surface and displaces boundary vertices so that they are `snapped' to the BTF surface \citep{openfoam2015}.  An example of the resulting grid is shown in figure~\ref{fig:grid}c.
 
 There are two details of grid construction which mean that resulting cut cell grids can differ slightly from a typical cut cell grid created using a shaving method, as described by \citet{adcroft1997}.  First, when \texttt{snappyHexMesh} moves vertices onto the terrain surface, some points are moved horizontally.  Second, the utility does not create new points necessary for pentagonal cells.
 
@@ -159,7 +158,7 @@ A tracer, $\varphi$, is positioned upstream above the height of the terrain.  It
 \end{align}
 where $A_x = \SI{25}{\kilo\meter}$, $A_z = \SI{3}{\kilo\meter}$ are the horizontal and vertical half-widths respectively, and $\varphi_0 = 1$ is the maximum magnitude of the anomaly.  At $t = \SI{0}{\second}$, the anomaly is centred at $(x_0, z_0) = (\SI{-50}{\kilo\meter}, \SI{9}{\kilo\meter})$ so that the anomaly is upwind of the mountain and well above the maximum terrain height of \SI{3}{\kilo\meter}.  Analytic solutions can be found by setting the anomaly centre such that $x_0 = ut$.
 
-The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using an upwind-biased cubic advection scheme which is non-monotonic and not flux corrected.  The time derivative is solved using a three-stage, second order Runge-Kutta scheme:
+The flux form of the advection equation, \(\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0\), is solved using the upwind-biased cubic advection scheme described by \cite{weller-shahrokhi2014} which is non-monotonic and not flux corrected.  The time derivative is solved using a three-stage, second order Runge-Kutta scheme:
 \begin{align}
 	\varphi^\star &= \varphi^{(n)} + \Delta t f(\phi^{(n)}) \\
 	\varphi^{\star\star} &= \varphi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^\star) \right) \\
@@ -237,7 +236,7 @@ Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Becaus
 %
 \centering
 \footnotesize
-\begin{tabular}{ r @{\hspace{0.5em}} l l l | @{\hspace{0.2em}} l l l | @{\hspace{0.5em}} l l l | @{\hspace{0.2em}} l l l}
+\begin{tabular}{ r @{\hspace{0.5em}} l l l | l l l | l l l | l l l}
 \hline\hline
 & \multicolumn{6}{c}{Horizontal advection} & \multicolumn{6}{c}{Terrain following advection} \\
 & \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} \\
@@ -331,7 +330,7 @@ To summarize, results of the gravity waves test on all grids are in good agreeme
 	\centering
 	\includegraphics{../msc-publication-fig-gravityWaves/fig-gravityWaves.pdf}
 %
-	\caption{Vertical cross section of vertical velocity contours in the gravity waves test after 5 hours with mountain height $h_0 = \SI{250}{\meter}$ on (a) the BTF grid compared with (b) the mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.  Contours are every \SI{5e-2}{\meter\per\second} with solid lines denoting ascent and dashed lines descent.}
+	\caption{Vertical cross section of vertical velocity contours in the gravity waves test after 5 hours with mountain height $h_0 = \SI{250}{\meter}$ on (a) the BTF grid compared with (b) the mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.  Contours are every \SI{5e-2}{\meter\per\second} with solid lines denoting ascent and dashed lines descent.  Small oscillations in contour lines are due to contouring on an irregular grid.}
 	\label{fig:gw-w}
 \end{figure}
 
