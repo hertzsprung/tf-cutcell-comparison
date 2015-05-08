@@ -8,10 +8,10 @@
 
 \bibpunct{(}{)}{;}{a}{}{,}
 
-\title{Comparison of Terrain Following and Cut Cell Grids with a Non-Hydrostatic Model}
-\authors{James Shaw\correspondingauthor{Department of Meteorology, University of Reading, Earley Gate, PO Box 243, Reading, RG6 6BB, UK.}}
-\affiliation{}
-\email{j.shaw@pgr.reading.ac.uk}
+\title{Comparison of Terrain Following and Cut Cell Grids using a Non-Hydrostatic Model}
+\authors{James Shaw\correspondingauthor{Department of Meteorology, University of Reading, Earley Gate, PO Box 243, Reading, RG6 6BB, UK.} and Hilary Weller}
+\affiliation{Department of Meteorology, University of Reading, Reading, United Kingdom}
+\email{js102@zepler.net}
 
 \abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent the orography and associated atmospheric dynamics.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  On the contrary, we use a single C-grid finite volume model to enable a like-for-like comparison of terrain following and cut cell grids.
 A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test of a stably stratified atmosphere at rest, and orographically induced gravity waves.  In addition, we formulate a new tracer advection test having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.
@@ -106,7 +106,7 @@ A series of two-dimensional tests are performed over idealised orography.  For e
 
 Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This test challenges the accuracy of the advection scheme in the presence of grid distortions.
 
-The domain is \SI{300}{\kilo\meter} wide and \SI{25}{\kilo\meter} high, discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The terrain is wave-shaped, specified by the surface height, \(h\), such that
+\TODO{take care to explain domain and grid because of our previous differences with Schaer's results} The domain is \SI{300}{\kilo\meter} wide and \SI{25}{\kilo\meter} high, discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The terrain is wave-shaped, specified by the surface height, \(h\), such that
 \begin{subequations}
 \begin{align}
    h(x) &= h^\star \cos^2 ( \alpha x )
@@ -133,7 +133,7 @@ The wind is entirely horizontal and is prescribed as
 where $u_0 = \SI{10}{\meter\per\second}$, $z_1 = \SI{4}{\kilo\meter}$ and $z_2 = \SI{5}{\kilo\meter}$.
 This results in a constant wind aloft, and zero flow at \SI{4}{\kilo\meter} and below.
 
-To ensure the discrete velocity field is non-divergent, velocities are prescribed at cell faces by summing the streamfunction, \(\Psi\), at the centre of all face edges.  Since \(u = \partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
+To ensure the discrete velocity field is non-divergent, velocities are prescribed at cell faces by summing the streamfunction, \(\Psi\), at the centre of all face edges.  Since \(u = - \partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
 \begin{align}
 	\Psi(z) &= \frac{u_0}{2} \left\{ \begin{array}{l l}
 		\left( 2z - z_1 - z_2 \right) & \enskip \text{if $z > z_2$} \\
@@ -169,7 +169,7 @@ where \(f(\phi^{(n)}) = - \mathrm{div}(\bm{u} \varphi^{(n)})\) at time level \(n
 Unlike \citet{schaer2002} who use periodic lateral boundaries, a fixed value of 0 is used at the inlet boundary and all other boundaries have zero gradient.
 Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
 
-The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain using a centred linear scheme and the upwind-biased cubic scheme.  Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.  We do not compare with the results from \citet{schaer2002} because we were unable to reproduce their result using a centred linear scheme (their figure 6a), though similar results were obtained by halving the mountain height, \(h_0\).
+The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain using a centred linear scheme and the upwind-biased cubic scheme.  Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}. 
 
 The result of the centred linear scheme on the BTF grid (\ref{fig:advection-tracer}a) is compared with the upwind-biased cubic scheme on the BTF grid (\ref{fig:advection-tracer}b), and cut cell grid (\ref{fig:advection-tracer}c).
 
@@ -208,12 +208,12 @@ In the horizontal advection test, results were more accurate where the flow was 
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
-	\Psi(x,z) = u_0 H \frac{z - h}{H - h}
+	\Psi(x,z) = - u_0 H \frac{z - h}{H - h}
 \end{equation}
 where $u_0 = \SI{10}{\meter\per\second}$, which is the horizontal wind speed where $h(x) = 0$.
 The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
-	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{H - z}{\left( H - h \right)^2}, \nonumber \\
+	u &= - \frac{\partial \Psi}{\partial z} = - u_0 \frac{H}{H - h}, \quad w = \frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{z - H}{\left( H - h \right)^2}, \nonumber \\
 	\frac{\partial h}{\partial x} &= - h_0 \left[ 
 		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
 		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
@@ -243,10 +243,10 @@ Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Becaus
 & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max \\
 \hline
 Analytic  & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
-BTF 	  & \num{0.0318} & \num{-0.442} & \num{0.849} & \num{0.00767} & \num{-0.0433} & \num{0.928} & \num{0.00251} & \num{-0.0244} & \num{0.985} & \num{0.00154} & \num{-0.0105} & \num{0.983} \\
-SLEVE 	  & \num{0.00233} & \num{-0.0253} & \num{0.945} & \num{0.00108} & \num{-0.0106} & \num{0.981} & \num{0.0298} & \num{-0.258} & \num{0.865} & \num{0.0122} & \num{-0.0273} & \num{0.864} \\
-Cut cell  & \num{0.00224} & \num{-0.0253} & \num{0.985} & \num{0.000579} & \num{-0.00670} & \num{0.982} & \num{0.0318} & \num{-0.270} & \num{0.846} & \num{0.0136} & \num{-0.0297} & \num{0.850} \\
-No terrain & \num{0.00224} & \num{-0.0253} & \num{0.985} & \num{0.000577} & \num{-0.00670} & \num{0.982} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & {---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+BTF 	  & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{9999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} \\
+SLEVE & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{9999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} \\
+Cut cell & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{9999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} \\
+No terrain & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & {---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
 \hline
 \end{tabular}
 \end{table*}
@@ -362,7 +362,7 @@ Cut cell grids reduced errors in two of the four tests.  First, in the horizonta
 Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  In the gravity waves test, the Lorenz computational mode was manifested as a zig--zag in potential temperature in the lowest layers in the lee of the mountain.  This spurious error was excited only on the cut cell grid.  This test motivates further work to formulate a Charney--Phillips staggering of variables on cut cell grids.
 
 \acknowledgments
-\TODO{John, Terry. Assuming only Hilary is co-author...?} Weller is funded by NERC grant NE/H015698/1.
+I am grateful to my cosupervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
 
 % REFERENCES
 
