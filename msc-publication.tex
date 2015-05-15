@@ -106,7 +106,9 @@ A series of two-dimensional tests are performed over idealised orography.  For e
 
 Following \citet{schaer2002}, a tracer is transported above wave-shaped terrain by solving the advection equation for a prescribed horizontal wind.  This test challenges the accuracy of the advection scheme in the presence of grid distortions.
 
-\TODO{take care to explain domain and grid because of our previous differences with Schaer's results} The domain is \SI{300}{\kilo\meter} wide and \SI{25}{\kilo\meter} high, discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The terrain is wave-shaped, specified by the surface height, \(h\), such that
+The domain is \SI{301}{\kilo\meter} wide and \SI{25}{\kilo\meter} high, discretized onto a grid with \(\Delta x = \SI{1}{\kilo\meter}\) and \(\Delta z^\star = \SI{500}{\meter}\).  The domain specified by \citet{schaer2002} is \SI{300}{\kilo\meter} between the outermost cell centres.  In order to reproduce the result from \citet{schaer2002}, the domain has been extended horizontally by \(\Delta x/2\) \si{\meter} in both directions so that the distance between the outermost cell centres is still \SI{300}{\kilo\meter}.
+
+The terrain is wave-shaped, specified by the surface height, \(h\), such that
 \begin{subequations}
 \begin{align}
    h(x) &= h^\star \cos^2 ( \alpha x )
@@ -173,7 +175,7 @@ The test was executed on the BTF, SLEVE and cut cell grids, and on a regular gri
 
 The result of the centred linear scheme on the BTF grid (\ref{fig:advection-tracer}a) is compared with the upwind-biased cubic scheme on the BTF grid (\ref{fig:advection-tracer}b), and cut cell grid (\ref{fig:advection-tracer}c).
 
-By \(t = \SI{10000}{\second}\), the tracer suffers from diffusion and distortion on the BTF grid using the centred linear scheme.  Some artefacts remain above the mountain peak, and a computational mode is seen as a grid-scale oscillation that travels in the opposite direction to the wind.
+By \(t = \SI{10000}{\second}\), the tracer suffers from diffusion and distortion on the BTF grid using the centred linear scheme.  Some artefacts remain above the mountain peak, and the computational mode is seen as a grid-scale oscillation that travels in the opposite direction to the wind.
 
 Using the upwind-biased cubic scheme, tracer magnitude and shape are well-preserved on all grids, both above the mountain at \(t = \SI{5000}{\second}\) and past the mountain at \(t = \SI{10000}{\second}\).  In this test, advection is most accurate on the cut cell grid (figure~\ref{fig:advection-tracer}c) and regular grid (not shown).  As found by \citet{good2014}, the result is the same on both grids.  This is to be expected since the wind is zero in the region of the ground and flow aloft is aligned with the grids.  On the BTF grid, the tracer is less distorted by the cubic upwind-biased scheme (figure~\ref{fig:advection-tracer}b) compared to the centred linear scheme (figure~\ref{fig:advection-tracer}a).
 
@@ -183,7 +185,11 @@ Minimum and maximum tracer values and \(\ell^2\) error norms on the BTF, SLEVE, 
 \end{align}
 where $\varphi$ is the numerical tracer value, $\varphi_T$ is the analytic value and $\mathcal{V}_c$ is the cell volume.
 
-For the cubic upwind-biased scheme, error is largest on the BTF grid with \(\ell^2 = \num{0.00767}\) but significant reduced on the SLEVE grid with \(\ell^2 = \num{0.00108}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
+The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell^2 = \num{0.00791}\) but significant reduced on the SLEVE grid with \(\ell^2 = \num{0.00108}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
+
+Tracer minima and maxima are lower than values presented by \citet{schaer2002} because we do not interpolate the geometric height of cell faces from adjacent cell centres in order to calculate the streamfunction, \(\Psi(z)\).  Removing the interpolation from Sch\"{a}r's code results in minima and maxima that are equal to those obtained from the OpenFOAM advection solver presented here.
+
+The centred linear scheme is sensitive to changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell^2$ error on the BTF grid rises from \num{0.0210} to \num{0.0318}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell^2$ error decreasing from \num{0.00791} to \num{0.00767}.
 
 The results of the tracer advection test show that numerical errors are due to misalignment of the flow with the grid.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
 
@@ -242,11 +248,12 @@ Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Becaus
 & \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} & \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} \\
 & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max & \(\ell^2\) error & min & max \\
 \hline
-Analytic  & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
-BTF 	  & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{9999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} \\
-SLEVE & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{9999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} \\
-Cut cell & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{9999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} \\
-No terrain & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \num{999} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & {---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
+Analytic   & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
+% 	     l2		     min	     max	   l2		    min		     max           l2                        min                       max          l2                         min                       max
+BTF 	   & \num{0.0210}  & \num{-0.275}  & \num{0.925} & \num{0.00791}  & \num{-0.0446}  & \num{0.925} & \num{0.00251}           & \num{-0.0245}           & \num{0.985} & \num{0.00154}           & \num{-0.0110}           & \num{0.983} \\
+SLEVE      & \num{0.00233} & \num{-0.0252} & \num{0.985} & \num{0.00108}  & \num{-0.0106}  & \num{0.982} & \num{0.0173}            & \num{-0.120}            & \num{0.950} & \num{0.0120}            & \num{-0.0263}           & \num{0.865} \\
+Cut cell   & \num{0.00224} & \num{-0.0251} & \num{0.985} & \num{0.000577} & \num{-0.00674} & \num{0.983} & \num{13.6}              & \num{-623}              & \num{3480}  & \num{0.0134}            & \num{-0.028}            & \num{0.851} \\
+No terrain & \num{0.00223} & \num{-0.0251} & \num{0.985} & \num{0.000576} & \num{-0.00674} & \num{0.983} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & {---}       & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} & \multicolumn{1}{c}{---} \\
 \hline
 \end{tabular}
 \end{table*}
