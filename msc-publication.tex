@@ -201,26 +201,6 @@ The results of the tracer advection test show that numerical errors are due to m
 	\label{fig:advection-tracer}
 \end{figure*}
 
-\begin{table*}[t]
-	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal tracer advection tests using centred linear and cubic upwind-biased schemes, and the fourth order scheme from \citet{schaer2002}.}
-\label{tab:advection}
-%
-\centering
-\footnotesize
-\begin{tabular}{ r @{\hspace{1.0em}} l @{\hspace{1.0em}} l @{\hspace{1.0em}} l l @{\hspace{1.0em}} l @{\hspace{1.0em}} l}
-\hline\hline
-& \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} \\
-& \(\ell^2\) error & min & max & \(\ell^2\) error & min & max \\
-\hline
-Analytic   & 0 & 0 & 1 & 0 & 0 & 1 \\
-% 	     l2		     min	     max	   l2		    min		     max        
-BTF 	   & \num{0.0210}  & \num{-0.275}  & \num{0.925} & \num{0.00791}  & \num{-0.0446}  & \num{0.925} \\
-SLEVE      & \num{0.00233} & \num{-0.0252} & \num{0.985} & \num{0.00108}  & \num{-0.0106}  & \num{0.982} \\
-Cut cell   & \num{0.00224} & \num{-0.0251} & \num{0.985} & \num{0.000577} & \num{-0.00674} & \num{0.983} \\
-No terrain & \num{0.00223} & \num{-0.0251} & \num{0.985} & \num{0.000576} & \num{-0.00674} & \num{0.983} \\
-\hline
-\end{tabular}
-\end{table*}
 
 \subsection{Terrain following advection}
 In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  We formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
@@ -250,21 +230,31 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is along the terrain following coordinate surface.
 
 \begin{table*}[t]
-	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the terrain following tracer advection test using centred linear and cubic upwind-biased schemes.}
+	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes and, for the horizontal advection test, the fourth order scheme from \citet{schaer2002}.}
 \label{tab:advection}
 %
 \centering
 \footnotesize
-\begin{tabular}{ r @{\hspace{1.0em}} l @{\hspace{1.0em}} l @{\hspace{1.0em}} l l @{\hspace{1.0em}} l @{\hspace{1.0em}} l}
+\begin{tabular}{l l l l S S S S}
 \hline\hline
-& \multicolumn{3}{c}{Centred linear} & \multicolumn{3}{c}{Cubic upwind-biased} \\
-& \(\ell^2\) error & min & max & \(\ell^2\) error & min & max \\
+                  &                     &                  & Analytic & {BTF}   & {SLEVE}         & {Cut cell}     & {No terrain} \\
 \hline
-Analytic   & 0 & 0 & 1 & 0 & 0 & 1 \\
-% 	     l2                        min                       max          l2                         min                       max
-BTF 	   & \num{0.00251}           & \num{-0.0245}           & \num{0.985} & \num{0.00154}           & \num{-0.0110}           & \num{0.983} \\
-SLEVE      & \num{0.0173}            & \num{-0.120}            & \num{0.950} & \num{0.0120}            & \num{-0.0263}           & \num{0.865} \\
-Cut cell   & \num{13.6}              & \num{-623}              & \num{3480}  & \num{0.0134}            & \num{-0.028}            & \num{0.851} \\
+Horizontal        & Centred linear      & \(\ell^2\) error & 0        & 0.0210  & 0.00233         & 0.00224        & 0.00223     \\
+                  &                     & min              & 0        & -0.275  & -0.0252         & -0.0251        & -0.0251     \\
+                  &                     & max              & 1        & 0.925   & 0.985           & 0.985          & 0.985       \\
+                  & Fourth order        & \(\ell^2\) error & 0        & 999     & 999             & {---}          & 999         \\
+                  &                     & min              & 0        & 999     & 999             & {---}          & 999         \\
+                  &                     & max              & 1        & 999     & 999             & {---}          & 999         \\
+                  & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00791 & 0.00108         & 0.000577       & 0.000576    \\
+                  &                     & min              & 0        & -0.0446 & -0.0106         & -0.000674      & -0.00674    \\
+                  &                     & max              & 1        & 0.925   & 0.982           & 0.983          & 0.983       \\
+\hline
+Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 & 0.0173          & 13.6           & {---}        \\
+		  &                     & min              & 0        & -0.0245 & -0.120          & -623           & {---}        \\
+                  &                     & max              & 1        & 0.985   & 0.950           & 3480           & {---}        \\
+		  & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00154 & 0.0120          & 0.0134         & {---}        \\
+                  &                     & min              & 0        & -0.0110 & -0.0263         & -0.028         & {---}        \\
+                  &                     & max              & 1        & 0.983   & 0.865           & 0.851          & {---}        \\
 \hline
 \end{tabular}
 \end{table*}
