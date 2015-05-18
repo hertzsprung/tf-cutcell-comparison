@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage[paperwidth=3in,paperheight=4.6in,margin=0in]{geometry}
+\usepackage[paperwidth=6.4in,paperheight=4.6in,margin=0in]{geometry}
 \usepackage{mathptmx}%{times}
 \usepackage{graphicx}
 \usepackage{siunitx}
@@ -7,29 +7,5 @@
 
 \setlength{\parindent}{0pt}
 \begin{document}
-\begin{textblock}{1}(2.5,0.4)
-\normalsize
-(a)
-\end{textblock}
-\footnotesize
-\vspace*{-2.2em}
-\input{../advection-horizontal-linear-btf/tracer-contour}
-
-\begin{textblock}{1}(2.5,5.5)
-\normalsize
-(b)
-\end{textblock}
-\input{../advection-horizontal-cubicUpwind-btf/tracer-contour}
-
-\begin{textblock}{1}(2.5,10.3)
-\normalsize
-(c)
-\end{textblock}
-\input{../advection-horizontal-cubicUpwind-cutCell/tracer-contour}
-
-\input{../advection-horizontal-fourth-btf/tracer-contour}
-
-\input{../advection-horizontal-fourth-btf/error-contour}
-
-\input{../advection-horizontal-cubicUpwind-btf/error-contour}
+\input{../advection-horizontal-contours/contours}
 \end{document}
