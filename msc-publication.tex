@@ -171,13 +171,14 @@ where \(f(\phi^{(n)}) = - \mathrm{div}(\bm{u} \varphi^{(n)})\) at time level \(n
 Unlike \citet{schaer2002} who use periodic lateral boundaries, a fixed value of 0 is used at the inlet boundary and all other boundaries have zero gradient.
 Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
 
-The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain using a centred linear scheme and the upwind-biased cubic scheme.  Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}. 
+The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain using a centred linear scheme and the upwind-biased cubic scheme.   Results were also obtained on BTF and SLEVE grids with the fourth order scheme from \citet{schaer2002} using a modified version of their Fortran code.  The original version of the code interpolated the geometric height at cell vertices from values at adjacent half levels in order to calculate the streamfunction, \(\Psi(z)\).  The modified version used here directly calculates the height at vertices to enable comparisons with the finite volume model solutions.
 
-The result of the centred linear scheme on the BTF grid (\ref{fig:advection-tracer}a) is compared with the upwind-biased cubic scheme on the BTF grid (\ref{fig:advection-tracer}b), and cut cell grid (\ref{fig:advection-tracer}c).
+Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.
+The results are compared on the BTF grid for the centred linear scheme (\ref{fig:advection-tracer}a) and the fourth order scheme from \citet{schaer2002} (\ref{fig:advection-tracer}c), and the upwind-biased cubic scheme on the cut cell grid (\ref{fig:advection-tracer}b), and BTF grid (\ref{fig:advection-tracer}d).  Tracer errors at \(t = \SI{10000}{\second}\) are shown for the fourth order and upwind-biased cubic schemes in figures \ref{fig:advection-tracer}e and \ref{fig:advection-tracer}f respectively.
 
-By \(t = \SI{10000}{\second}\), the tracer suffers from diffusion and distortion on the BTF grid using the centred linear scheme.  Some artefacts remain above the mountain peak, and the computational mode is seen as a grid-scale oscillation that travels in the opposite direction to the wind.
+By \(t = \SI{10000}{\second}\), the tracer suffers from diffusion and distortion on the BTF grid using the centred linear scheme and some artefacts remain above the mountain peak.  Distortions are reduced by using the fourth order scheme from \citet{schaer2002} (figure~\ref{fig:advection-tracer}c), but the computational mode is seen as a grid-scale oscillation that travels in the opposite direction to the wind (figure~\ref{fig:advection-tracer}e).  The results from the centred linear and fourth order schemes are slightly worse than the respective results from \citet{schaer2002} (their figure 6a and figure 8) because gradients in $\Psi$ have not been removed by interpolation.
 
-Using the upwind-biased cubic scheme, tracer magnitude and shape are well-preserved on all grids, both above the mountain at \(t = \SI{5000}{\second}\) and past the mountain at \(t = \SI{10000}{\second}\).  In this test, advection is most accurate on the cut cell grid (figure~\ref{fig:advection-tracer}c) and regular grid (not shown).  As found by \citet{good2014}, the result is the same on both grids.  This is to be expected since the wind is zero in the region of the ground and flow aloft is aligned with the grids.  On the BTF grid, the tracer is less distorted by the cubic upwind-biased scheme (figure~\ref{fig:advection-tracer}b) compared to the centred linear scheme (figure~\ref{fig:advection-tracer}a).
+Using the upwind-biased cubic scheme, tracer magnitude and shape are well-preserved on all grids, both above the mountain at \(t = \SI{5000}{\second}\) and past the mountain at \(t = \SI{10000}{\second}\).  In this test, advection is most accurate on the cut cell grid (figure~\ref{fig:advection-tracer}b) and regular grid (not shown).  As found by \citet{good2014}, the result is the same on both grids.  This is to be expected since the wind is zero in the region of the ground and flow aloft is aligned with the grids.  On the BTF grid, the tracer is less distorted by the cubic upwind-biased scheme (figure~\ref{fig:advection-tracer}d) compared to the centred linear scheme (figure~\ref{fig:advection-tracer}a) or fourth order scheme (figure~\ref{fig:advection-tracer}c).
 
 Minimum and maximum tracer values and \(\ell^2\) error norms on the BTF, SLEVE, cut cell and regular grids are summarised in table~\ref{tab:advection}, where the \(\ell^2\) error norm is defined as 
 \begin{align}
@@ -186,8 +187,7 @@ Minimum and maximum tracer values and \(\ell^2\) error norms on the BTF, SLEVE, 
 where $\varphi$ is the numerical tracer value, $\varphi_T$ is the analytic value and $\mathcal{V}_c$ is the cell volume.
 
 The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell^2 = \num{0.00791}\) but significant reduced on the SLEVE grid with \(\ell^2 = \num{0.00108}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
-
-Tracer minima and maxima are lower than values presented by \citet{schaer2002} because we do not interpolate the geometric height of cell faces from adjacent cell centres in order to calculate the streamfunction, \(\Psi(z)\).  Removing the interpolation from Sch\"{a}r's code results in minima and maxima that are equal to those obtained from the OpenFOAM advection solver presented here.
+Tracer minima and maxima for the centred linear and fourth order schemes are lower than those presented by \citet{schaer2002} because no interpolation is used to calculate the streamfunction.
 
 The centred linear scheme is sensitive to changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell^2$ error on the BTF grid rises from \num{0.0210} to \num{0.0318}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell^2$ error decreasing from \num{0.00791} to \num{0.00767}.
 
@@ -242,8 +242,8 @@ Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Becaus
 Horizontal        & Centred linear      & \(\ell^2\) error & 0        & 0.0210  & 0.00233         & 0.00224        & 0.00223     \\
                   &                     & min              & 0        & -0.275  & -0.0252         & -0.0251        & -0.0251     \\
                   &                     & max              & 1        & 0.925   & 0.985           & 0.985          & 0.985       \\
-                  & Fourth order        & min              & 0        & -0.0926 & -0.00174        & {---}          & {---}       \\
-                  &                     & max              & 1        & 1.00    & 0.984           & {---}          & {---}       \\
+                  & Fourth order        & min              & 0        & -0.0926 & -0.00174        & {---}          & -0.00178    \\
+                  &                     & max              & 1        & 1.00    & 0.984           & {---}          & 0.983       \\
                   & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00791 & 0.00108         & 0.000577       & 0.000576    \\
                   &                     & min              & 0        & -0.0446 & -0.0106         & -0.000674      & -0.00674    \\
                   &                     & max              & 1        & 0.925   & 0.982           & 0.983          & 0.983       \\
