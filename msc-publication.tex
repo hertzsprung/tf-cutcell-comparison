@@ -70,7 +70,7 @@ The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achi
 \intertext{where the vertical decay functions are given by}
 	b_i &= \frac{\sinh \left( \left( H / s_i \right)^n - \left( z^\star / s_i \right)^n \right)}{\sinh \left( H / s_i \right)^n}
 \end{align}
-with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps and permitting more accurate calculation of parameterised low-level heat and momentum fluxes.  \TODO{how do thicker cells allow more accurate calculations?}  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.  An example of the SLEVE grid can be seen in figure~\ref{fig:grid}b.
+with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps.  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.  An example of the SLEVE grid can be seen in figure~\ref{fig:grid}b.
 
 Most implementations of terrain following layers use a coordinate system that makes the domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and unstructured grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
 
@@ -273,7 +273,7 @@ We conclude from this test that accuracy depends upon alignment of the flow with
 
 An idealised terrain profile is defined along with a stably stratified atmosphere at rest in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citep{klemp2011}.
 
-The test setup follows the specification by \cite{klemp2011}, but has a narrower domain that is \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high in order to reduce simulation time, as used by \citet{weller-shahrokhi2014}.  The grid resolution is \(\Delta x = \Delta z^\star = \SI{500}{\meter}\) as originally specified by \citet{klemp2011}.  All boundary conditions are no normal flow.
+The test setup follows the specification by \cite{klemp2011}.  The grid resolution is \(\Delta x = \Delta z^\star = \SI{500}{\meter}\).  All boundary conditions are no normal flow.
 
 The wave-shaped mountain profile has a surface height, $h$, given by
 \begin{align}
