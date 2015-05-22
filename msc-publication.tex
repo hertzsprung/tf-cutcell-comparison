@@ -23,7 +23,7 @@ The results of the advection tests demonstrate that tracer accuracy depends upon
 \maketitle
 
 \section{Introduction}
-Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
+Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences from the heat release due to convection and by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
 
 With increasing horizontal model resolution, the discrete representation of terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult when using terrain following layers \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Cut cell methods seek to reduce the error that is associated with steep orography.
 
@@ -74,7 +74,7 @@ with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale te
 
 Most implementations of terrain following layers use a coordinate system that makes the domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and unstructured grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
 
-The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that approximates the cut cell method.  First, a custom utility was used to move points beneath the surface up to the surface creating small cells near mountain peaks.  The utility is available at \url{https://github.com/hertzsprung/AtmosFOAM/tree/2386ffb/applications/utilities/mesh/add2dMountain}.  \TODO{could just link to the whole of ExnerFoam/AtmosTests} Second, the surface faces were taken from the BTF grid and \texttt{snappyHexMesh} was used to intersect the surface with the grid.  This tool removes cells whose centres are below the surface and displaces boundary vertices so that they are `snapped' to the BTF surface \citep{openfoam2015}.  An example of the resulting grid is shown in figure~\ref{fig:grid}c.
+The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that approximates the cut cell method.  First, a custom utility was used to move points beneath the surface up to the surface creating small cells near mountain peaks.  Second, the surface faces were taken from the BTF grid and \texttt{snappyHexMesh} was used to intersect the surface with the grid.  This tool removes cells whose centres are below the surface and displaces boundary vertices so that they are `snapped' to the BTF surface \citep{openfoam2015}.  An example of the resulting grid is shown in figure~\ref{fig:grid}c.
 
 There are two details of grid construction which mean that resulting cut cell grids can differ slightly from a typical cut cell grid created using a shaving method, as described by \citet{adcroft1997}.  First, when \texttt{snappyHexMesh} moves vertices onto the terrain surface, some points are moved horizontally.  Second, the utility does not create new points necessary for pentagonal cells.
 
@@ -93,7 +93,19 @@ We use the finite volume model from \citet{weller-shahrokhi2014} which details a
 \end{subequations}
 where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the tempereature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.
 
-The model has a curl-free pressure gradient formulation and an upwind-biased cubic advection scheme.  It uses a Lorenz C-grid staggering of thermodynamic variables such that $\theta$, $\rho$ and $\Pi$ are stored at cell centres and velocities at cell faces.
+The model uses a Lorenz C-grid staggering of thermodynamic variables such that $\theta$, $\rho$ and $\Pi$ are stored at cell centres and velocities at cell faces.
+
+A minor change has been made to the curl-free, non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grids.  \citet{weller-shahrokhi2014} use a Hodge dual operator, \(H\), to map from co-variant to contra-variant velocity components:
+\begin{align}
+	U = HV
+\end{align}
+where \(U = \rho\bm{u}\cdot\bm{S}_f\) and \(V=\rho\bm{u}\cdot\bm{d}_f\).  \(\bm{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\bm{d}_f\) is the vector between neighbouring cell centres.
+
+In order to create a semi-implicit formulation, \(H\) is split into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation.  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
+\begin{align}
+	H = H_c + H_\mathrm{corr}
+\end{align}
+where the diagonal matrix \(H_c=\frac{|\bm{S}_f|}{|\bm{d}_f|}\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
 
 For tracer advection tests, the advection equation in flux form, given by
 \begin{align}
@@ -114,6 +126,8 @@ where \(f(\phi^{(n)}) = - \nabla \cdot (\bm{u} \varphi^{(n)})\) at time level \(
 \label{sec:results}
 
 A series of two-dimensional tests are performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.  The first test from \citet{schaer2002} advects a tracer in a horizontal velocity field.  Second, a new tracer advection test is formulated employing a terrain following velocity field to challenge the advection scheme on cut cell grids.  The third test solves the Euler equations for a stably stratified atmosphere initially at rest, following \citet{klemp2011}.  Finally, as specified by \citet{schaer2002}, a test of orographically-induced gravity waves is performed.  No explicit diffusion is used in any of the tests.
+
+The OpenFOAM implementation of the numerical model and grid generation utilities are available at \url{https://github.com/hertzsprung/AtmosFOAM/tree/shaw-weller-2015-mwr}.  The test cases are located at \url{https://github.com/hertzsprung/AtmosTests/tree/shaw-weller-2015-mwr}.
 
 
 \subsection{Horizontal advection}
@@ -182,7 +196,7 @@ The test was executed on the BTF, SLEVE and cut cell grids, and on a regular gri
 Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.
 The results are compared on the BTF grid for the centred linear scheme (\ref{fig:advection-tracer}a) and the fourth order scheme from \citet{schaer2002} (\ref{fig:advection-tracer}c), and the upwind-biased cubic scheme on the cut cell grid (\ref{fig:advection-tracer}b), and BTF grid (\ref{fig:advection-tracer}d).  Tracer errors at \(t = \SI{10000}{\second}\) are shown for the fourth order and upwind-biased cubic schemes in figures \ref{fig:advection-tracer}e and \ref{fig:advection-tracer}f respectively.
 
-By \(t = \SI{10000}{\second}\), the tracer suffers from distortion on the BTF grid using the centred linear scheme and some artefacts remain about the mountain peak.  The tracer has spread vertically due to increased numerical errors when the tracer is transported between layers.  Distortions are reduced by using the fourth order scheme from \citet{schaer2002} (figure~\ref{fig:advection-tracer}c), but the computational mode is seen as a grid-scale oscillation that travels in the opposite direction to the wind (figure~\ref{fig:advection-tracer}e).  The results from the centred linear and fourth order schemes are slightly worse than the respective results from \citet{schaer2002} (their figure 6a and figure 8) because gradients in $\Psi$ have not been removed by interpolation.
+By \(t = \SI{10000}{\second}\), the tracer suffers from distortion on the BTF grid using the centred linear scheme and some artefacts remain about the mountain peak.  The tracer has spread vertically due to increased numerical errors when the tracer is transported between layers.  Distortions are reduced by using the fourth order scheme from \citet{schaer2002} (figure~\ref{fig:advection-tracer}c), but the computational mode is seen as a grid-scale oscillation that travels in the opposite direction to the wind (figure~\ref{fig:advection-tracer}e).  The results from the centred linear and fourth order schemes are slightly worse than the respective results from \citet{schaer2002} (their figure 6a and figure 8) because of the difference in the discretisation of $\Psi$.
 
 Using the upwind-biased cubic scheme, tracer magnitude and shape are well-preserved on all grids, both above the mountain at \(t = \SI{5000}{\second}\) and past the mountain at \(t = \SI{10000}{\second}\).  In this test, advection is most accurate on the cut cell grid (figure~\ref{fig:advection-tracer}b) and regular grid (not shown).  As found by \citet{good2014}, the result is the same on both grids.  This is to be expected since the wind is zero in the region of the ground and flow aloft is aligned with the grids.  On the BTF grid, the tracer is less distorted by the cubic upwind-biased scheme (figure~\ref{fig:advection-tracer}d) compared to the centred linear scheme (figure~\ref{fig:advection-tracer}a) or fourth order scheme (figure~\ref{fig:advection-tracer}c).
 
@@ -197,19 +211,19 @@ Tracer minima and maxima for the centred linear and fourth order schemes are low
 
 The centred linear scheme is sensitive to changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell^2$ error on the BTF grid rises from \num{0.0210} to \num{0.0318}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell^2$ error decreasing from \num{0.00791} to \num{0.00767}.
 
-The results of the tracer advection test show that numerical errors are due primary to misalignment of the flow with the grid.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
+The results of the horizontal advection test show that numerical errors are due either to misalignment of the flow with the grid, or to grid distortions.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
 
 \begin{figure*}
 	\centering
 	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
 %
-	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on a BTF grid, the upwind-biased cubic scheme on (b) the cut cell grid, (d) the BTF grid, and (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.}
+	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on a BTF grid, the upwind-biased cubic scheme on (b) the cut cell grid, (d) the BTF grid, and (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.  Subfigures (c) and (e) produced using the modified version of the code from \citet{schaer2002}.}
 	\label{fig:advection-tracer}
 \end{figure*}
 
 
 \subsection{Terrain following advection}
-In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  We formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
+In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  To determine the primary source of numerical error, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
@@ -236,7 +250,7 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is along the terrain following coordinate surface.
 
 \begin{table*}[t]
-	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes and, for the horizontal advection test, the fourth order scheme from \citet{schaer2002}.}
+	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
 \label{tab:advection}
 %
 \centering
@@ -287,9 +301,9 @@ and, following \cite{leuenberger2010}, $s_1 = \SI{4}{\kilo\meter}$ is the large 
 
 The initial thermodynamic conditions are in discrete hydrostatic balance, having a reference potential temperature of $\theta(z = 0) = \SI{288}{\kelvin}$ and constant stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
 
-The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  Using the model from \citet{weller-shahrokhi2014}, which includes a curl-free pressure gradient formulation, $w$ reaches a maximum of \(\sim \SI{0.35}{\meter\per\second}\) on the BTF grid, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
+The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  Using the model from \citet{weller-shahrokhi2014}, which includes a curl-free pressure gradient formulation, $w$ reaches a maximum of \SI{0.33}{\meter\per\second} on the BTF grid, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
 
-Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.  However, errors are three orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-3}{\meter\per\second}\).  The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
+Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.  However, errors are two orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-4}{\meter\per\second}\).  The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
 
 \citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained using the model by \citet{weller-shahrokhi2014}.  It is worth noting that, in the model used by \citet{good2014}, cell centres are in the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  This would account for the very small velocities found by \citet{good2014}.
 
@@ -329,7 +343,7 @@ Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the pu
 
 No normal flow is imposed at the top and bottom boundaries and the outlet has a zero gradient boundary condition.  For the Exner function of pressure, hydrostatic balance is prescribed on all boundaries.  The simulation is integrated forward by 5 hours with a timestep $\Delta t = \SI{8}{\second}$.
 
-Test results are compared between the BTF, SLEVE and cut cell grids.  Vertical velocities on the BTF grid are shown in figure~\ref{fig:gw-w}a, which have few visible differences from results on the SLEVE and cut cell grids (not shown).  Vertical velocities on all grids are in agreement with the high resolution solution from \citet{melvin2010}, shown in figure~\ref{fig:gw-w}b.
+Test results are compared between the BTF, SLEVE and cut cell grids.  Vertical velocities on the BTF, SLEVE and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
 
 The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  Once again, the results are similar on all three grids, and results are shown on the BTF and cut cell grids in figures~\ref{fig:gw-theta}a and \ref{fig:gw-theta}c respectively.  However, examining more closely the anomalies in the lee of the mountain for the cut cell grid, figure~\ref{fig:gw-theta}d shows that the bottommost layer is anomalously warm and the layer above it is anomalously cold.  This feature is not present on the BTF grid (figure~\ref{fig:gw-theta}b) or the SLEVE grid (not shown).  
 
@@ -338,14 +352,6 @@ In a further test, the mountain height is doubled from \SI{250}{\meter} to \SI{5
 The inaccuracies in potential temperature become invisible when calculating momentum because $\theta$ is interpolated onto cell faces, so discrete hydrostatic balance is maintained.  This is a manifestation of the Lorenz computational mode \citep{arakawa-konor1996,holdaway2013b}.  In models that include moist processes, the Lorenz computational mode can disrupt clouds and generate spurious precipitation \citep{hollingsworth1995}.
 
 To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The most prominent errors are found only on the cut cell grid, where the potential temperature errors near the ground excite the Lorenz computational mode.
-
-\begin{figure}
-	\centering
-	\includegraphics{../msc-publication-fig-gravityWaves/fig-gravityWaves.pdf}
-%
-	\caption{Vertical cross section of vertical velocity contours in the gravity waves test after 5 hours with mountain height $h_0 = \SI{250}{\meter}$ on (a) the BTF grid compared with (b) the mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.  Contours are every \SI{5e-2}{\meter\per\second} with solid lines denoting ascent and dashed lines descent.  Small oscillations in contour lines are due to contouring on an irregular grid.}
-	\label{fig:gw-w}
-\end{figure}
 
 \begin{figure*}
 	\centering
