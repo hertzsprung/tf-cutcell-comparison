@@ -1,0 +1,2 @@
+bibtex := bibtex
+pdflatex := pdflatex
