@@ -24,4 +24,5 @@ include $(MAKE_COMMON)/templates/Makefile-FileSystem
 include make/templates/Makefile-Gnuplot
 include make/templates/Makefile-LaTeX
 include make/Makefile-AdvectionTracer
+include make/Makefile-Resting
 include make/Makefile-TF-CutCell-Comparison
