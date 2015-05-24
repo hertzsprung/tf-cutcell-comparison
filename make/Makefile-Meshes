@@ -1,0 +1,22 @@
+$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-meshes,fig-meshes))
+
+build/fig-meshes/fig-meshes.pdf: \
+  build/resting-mesh-btf/constant/mesh.pdf \
+  build/resting-mesh-sleve/constant/mesh.pdf \
+  build/resting-mesh-cutCell/constant/mesh.pdf
+
+$(eval $(call PlotMesh,build/resting-mesh-btf))
+$(eval $(call PlotMesh,build/resting-mesh-sleve))
+$(eval $(call PlotMesh,build/resting-mesh-cutCell))
+
+$(eval $(call CopyNamedFiles,$(ATMOSTESTS_DIR)/build/resting-mesh-btf,$(meshFiles) $(systemFiles),build/resting-mesh-btf))
+$(eval $(call CopyNamedFiles,$(ATMOSTESTS_DIR)/build/resting-mesh-sleve,$(meshFiles) $(systemFiles),build/resting-mesh-sleve))
+$(eval $(call CopyNamedFiles,$(ATMOSTESTS_DIR)/build/resting-mesh-cutCell,$(meshFiles) $(systemFiles),build/resting-mesh-cutCell))
+
+$(eval $(call MakeDir,build/resting-mesh-btf/$(polyMesh)))
+$(eval $(call MakeDir,build/resting-mesh-sleve/$(polyMesh)))
+$(eval $(call MakeDir,build/resting-mesh-cutCell/$(polyMesh)))
+
+$(eval $(call MakeDir,build/resting-mesh-btf/system))
+$(eval $(call MakeDir,build/resting-mesh-sleve/system))
+$(eval $(call MakeDir,build/resting-mesh-cutCell/system))

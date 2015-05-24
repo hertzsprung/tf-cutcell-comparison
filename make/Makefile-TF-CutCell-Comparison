@@ -5,5 +5,7 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   src/tf-cutcell-comparison/ametsoc2014.bst \
   src/tf-cutcell-comparison/references.bib \
   build/fig-advection-tracer/fig-advection-tracer.pdf \
-  build/fig-resting/fig-resting.pdf
+  build/fig-meshes/fig-meshes.pdf \
+  build/fig-resting/fig-resting.pdf \
+  build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf
 

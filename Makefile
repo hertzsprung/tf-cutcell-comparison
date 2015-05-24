@@ -20,9 +20,15 @@ $(SCHAER_ADVECTION_DIR)/%:
 	$(MAKE) -C $(SCHAER_ADVECTION_DIR) $*
 
 include $(MAKE_COMMON)/executables/Makefile
+include $(MAKE_COMMON)/executables/Makefile-OpenFOAM
+include $(MAKE_COMMON)/globals/Makefile-OpenFOAM
 include $(MAKE_COMMON)/templates/Makefile-FileSystem
+include make/globals/Makefile-OpenFOAM
 include make/templates/Makefile-Gnuplot
+include make/templates/Makefile-PlotMesh
 include make/templates/Makefile-LaTeX
-include make/Makefile-AdvectionTracer
+include make/Makefile-Meshes
+include make/Makefile-Advection
 include make/Makefile-Resting
+include make/Makefile-GravityWaves
 include make/Makefile-TF-CutCell-Comparison
