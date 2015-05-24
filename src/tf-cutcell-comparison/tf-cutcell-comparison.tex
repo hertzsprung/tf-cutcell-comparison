@@ -18,7 +18,6 @@ A series of standard two-dimensional tests using idealised terrain are performed
 The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  As expected, the cut cell grid maintains greater accuracy in the test of stationary, stratified flow.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.}
 
 \begin{document}
-\newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
 
 \maketitle
 
@@ -43,7 +42,7 @@ This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to en
 
 \begin{figure*}
 	\centering
-	\includegraphics{../msc-publication-fig-meshes/fig-meshes.pdf}
+%	\includegraphics{../msc-publication-fig-meshes/fig-meshes.pdf}
 	%
 	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, showing cell edges in the lowest four layers.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
 	\label{fig:grid}
@@ -215,7 +214,7 @@ The results of the horizontal advection test show that numerical errors are due 
 
 \begin{figure*}
 	\centering
-	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
+%	\includegraphics{../msc-publication-fig-advection-tracer/fig-advection-tracer.pdf}
 %
 	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on a BTF grid, the upwind-biased cubic scheme on (b) the cut cell grid, (d) the BTF grid, and (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.  Subfigures (c) and (e) produced using the modified version of the code from \citet{schaer2002}.}
 	\label{fig:advection-tracer}
@@ -311,7 +310,7 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 
 \begin{figure}
 	\centering
-	\includegraphics{../msc-publication-fig-resting/fig-resting.pdf}
+%	\includegraphics{../msc-publication-fig-resting/fig-resting.pdf}
 %
 	\caption{Maximum spurious vertical velocity, \(w\) (\si{\meter\per\second}), in the resting atmosphere test with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.}
 	\label{fig:resting}
@@ -355,7 +354,7 @@ To summarize, results of the gravity waves test on all grids are in good agreeme
 
 \begin{figure*}
 	\centering
-	\includegraphics{../msc-publication-fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
+%	\includegraphics{../msc-publication-fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
 	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.}
 	\label{fig:gw-theta}
@@ -363,7 +362,7 @@ To summarize, results of the gravity waves test on all grids are in good agreeme
 
 \begin{figure}
 	\centering
-	\includegraphics{../msc-publication-fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
+%	\includegraphics{../msc-publication-fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
 	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
 	\label{fig:gw-exner-theta}
