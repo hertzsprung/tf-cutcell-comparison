@@ -11,3 +11,20 @@ build/gravityWaves-diagnostics/exnerTheta-sampleLine.tex: \
   | build/gravityWaves-diagnostics
 
 $(eval $(call MakeDir,build/gravityWaves-diagnostics))
+
+$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-theta,fig-gravityWaves-theta))
+
+build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf: \
+  build/gravityWaves-btf-250m/18000/thetaDiff.pdf \
+  build/gravityWaves-cutCell-250m/18000/thetaDiff.pdf \
+  build/gravityWaves-btf-250m/18000/thetaDiffZoom.pdf \
+  build/gravityWaves-cutCell-250m/18000/thetaDiffZoom.pdf \
+  build/gravityWaves-diagnostics/thetaDiffLegend.eps \
+  build/gravityWaves-diagnostics/thetaDiffZoomLegend.eps
+
+$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m))
+$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m))
+
+$(eval $(call PlotGmtLegend,build/gravityWaves-diagnostics,thetaDiffLegend.eps,src/gmt/colours/red_white_blue.cpt,-1.0/1.0/0.1,1i/0i/2.0i/0.1ih,0.5))
+
+$(eval $(call PlotGmtLegend,build/gravityWaves-diagnostics,thetaDiffZoomLegend.eps,src/gmt/colours/red_white_blue.cpt,-0.5/0.5/0.05,1i/0i/3.7i/0.1ih,0.1))

@@ -23,9 +23,12 @@ include $(MAKE_COMMON)/executables/Makefile
 include $(MAKE_COMMON)/executables/Makefile-OpenFOAM
 include $(MAKE_COMMON)/globals/Makefile-OpenFOAM
 include $(MAKE_COMMON)/templates/Makefile-FileSystem
+include make/executables/Makefile-Gmt
 include make/globals/Makefile-OpenFOAM
 include make/templates/Makefile-Gnuplot
+include make/templates/Makefile-GmtPlot
 include make/templates/Makefile-PlotMesh
+include make/templates/Makefile-GravityWaves
 include make/templates/Makefile-LaTeX
 include make/Makefile-Meshes
 include make/Makefile-Advection
