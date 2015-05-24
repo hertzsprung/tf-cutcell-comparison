@@ -21,5 +21,7 @@ $(SCHAER_ADVECTION_DIR)/%:
 
 include $(MAKE_COMMON)/executables/Makefile
 include $(MAKE_COMMON)/templates/Makefile-FileSystem
+include make/templates/Makefile-Gnuplot
 include make/templates/Makefile-LaTeX
+include make/Makefile-AdvectionTracer
 include make/Makefile-TF-CutCell-Comparison

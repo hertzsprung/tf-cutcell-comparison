@@ -3,4 +3,6 @@ $(eval $(call LaTeXWithBibTeX,src/tf-cutcell-comparison,build,tf-cutcell-compari
 build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   src/tf-cutcell-comparison/ametsoc.cls \
   src/tf-cutcell-comparison/ametsoc2014.bst \
-  src/tf-cutcell-comparison/references.bib
+  src/tf-cutcell-comparison/references.bib \
+  build/fig-advection-tracer/fig-advection-tracer.pdf
+

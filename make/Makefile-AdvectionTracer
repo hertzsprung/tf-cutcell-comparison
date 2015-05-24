@@ -1,0 +1,37 @@
+$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-advection-tracer,fig-advection-tracer))
+
+build/fig-advection-tracer/fig-advection-tracer.pdf: \
+  build/advection-horizontal-contours/contours.tex
+
+$(eval $(call MakeDir,build/advection-horizontal-contours))
+
+$(eval $(call Gnuplot,build/advection-horizontal-contours,contours.tex,src/tf-cutcell-comparison/advection-horizontal-contours.plt))
+build/advection-horizontal-contours/contours.tex: \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T_diff.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.negative \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/0/T.contour.positive \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/0/T.contour.negative \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/5000/T.contour.positive \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/5000/T.contour.negative \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T.contour.positive \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T.contour.negative \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T_diff.contour.positive \
+  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T_diff.contour.negative
