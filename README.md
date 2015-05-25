@@ -18,3 +18,5 @@ AtmosFOAM will need to be installed, see its README for instructions.
 
 From the root directory of `tf-cutcell-comparison`, issue `make` to compile the document.
 Note that the resting atmosphere tests may take several minutes and the gravity waves test several hours.
+
+To exactly reproduce the results, use the `shaw-weller-2015-mwr` tag for all repositories.
