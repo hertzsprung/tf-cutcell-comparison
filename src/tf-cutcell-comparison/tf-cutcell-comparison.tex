@@ -1,5 +1,4 @@
-\documentclass[twocol]{ametsoc}
-\journal{mwr}
+\documentclass{ametsoc}
 
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -40,13 +39,6 @@ Several studies have shown examples where cut cells produce more accurate result
 
 This study uses the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we outline the model from \citet{weller-shahrokhi2014} and the governing equations.  Section 4 analyses the results from two tracer advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
 
-\begin{figure*}
-	\centering
-	\includegraphics{../fig-meshes/fig-meshes.pdf}
-	%
-	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, showing cell edges in the lowest four layers.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
-	\label{fig:grid}
-\end{figure*}
 
 \section{Grids}
 \label{sec:grid}
@@ -212,13 +204,6 @@ The centred linear scheme is sensitive to changes in the terrain profile: when t
 
 The results of the horizontal advection test show that numerical errors are due either to misalignment of the flow with the grid, or to grid distortions.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
 
-\begin{figure*}
-	\centering
-	\includegraphics{../fig-advection-tracer/fig-advection-tracer.pdf}
-%
-	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on a BTF grid, the upwind-biased cubic scheme on (b) the cut cell grid, (d) the BTF grid, and (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.  Subfigures (c) and (e) produced using the modified version of the code from \citet{schaer2002}.}
-	\label{fig:advection-tracer}
-\end{figure*}
 
 
 \subsection{Terrain following advection}
@@ -248,34 +233,6 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 \end{align}
 Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is along the terrain following coordinate surface.
 
-\begin{table*}[t]
-	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
-\label{tab:advection}
-%
-\centering
-\footnotesize
-\begin{tabular}{l l l l S S S S}
-\hline\hline
-                  &                     &                  & Analytic & {BTF}   & {SLEVE}         & {Cut cell}     & {No terrain} \\
-\hline
-Horizontal        & Centred linear      & \(\ell^2\) error & 0        & 0.0210  & 0.00233         & 0.00224        & 0.00223     \\
-                  &                     & min              & 0        & -0.275  & -0.0252         & -0.0251        & -0.0251     \\
-                  &                     & max              & 1        & 0.925   & 0.985           & 0.985          & 0.985       \\
-                  & Fourth order        & min              & 0        & -0.0926 & -0.00174        & {---}          & -0.00178    \\
-                  &                     & max              & 1        & 1.00    & 0.984           & {---}          & 0.983       \\
-                  & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00791 & 0.00108         & 0.000577       & 0.000576    \\
-                  &                     & min              & 0        & -0.0446 & -0.0106         & -0.000674      & -0.00674    \\
-                  &                     & max              & 1        & 0.925   & 0.982           & 0.983          & 0.983       \\
-\hline
-Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 & 0.0173          & 13.6           & {---}        \\
-		  &                     & min              & 0        & -0.0245 & -0.120          & -623           & {---}        \\
-                  &                     & max              & 1        & 0.985   & 0.950           & 3480           & {---}        \\
-		  & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00154 & 0.0120          & 0.0134         & {---}        \\
-                  &                     & min              & 0        & -0.0110 & -0.0263         & -0.028         & {---}        \\
-                  &                     & max              & 1        & 0.983   & 0.865           & 0.851          & {---}        \\
-\hline
-\end{tabular}
-\end{table*}
 
 $\ell^2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
 
@@ -308,13 +265,6 @@ Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly 
 
 In summary, spurious velocities in the resting atmosphere test were similar on both terrain following grids, with lower errors compared to those from \citet{klemp2011}.  The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality, or lack of alignment of the grid with sufaces of constant gravitational potential are a significant cause of numerical error in this test.
 
-\begin{figure}
-	\centering
-	\includegraphics{../fig-resting/fig-resting.pdf}
-%
-	\caption{Maximum spurious vertical velocity, \(w\) (\si{\meter\per\second}), in the resting atmosphere test with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.}
-	\label{fig:resting}
-\end{figure}
 
 \subsection{Gravity waves}
 The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
@@ -352,21 +302,6 @@ The inaccuracies in potential temperature become invisible when calculating mome
 
 To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The most prominent errors are found only on the cut cell grid, where the potential temperature errors near the ground excite the Lorenz computational mode.
 
-\begin{figure*}
-	\centering
-	\includegraphics{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
-%
-	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.}
-	\label{fig:gw-theta}
-\end{figure*}
-
-\begin{figure}
-	\centering
-	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
-%
-	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
-	\label{fig:gw-exner-theta}
-\end{figure}
 
 \section{Conclusions}
 We have presented a like-for-like comparison between terrain following and cut cell grids using a single model.  Accuracy on the BTF, SLEVE and cut cell grids was evaluated in a series of two-dimensional tests.
@@ -388,8 +323,75 @@ I am grateful to my cosupervisors John Methven and Terry Davies for their valuab
 \bibliography{references}
 
 % TABLES
+\begin{table*}
+	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
+\label{tab:advection}
+%
+\centering
+\footnotesize
+\begin{tabular}{l l l l S S S S}
+\hline\hline
+                  &                     &                  & Analytic & {BTF}   & {SLEVE}         & {Cut cell}     & {No terrain} \\
+\hline
+Horizontal        & Centred linear      & \(\ell^2\) error & 0        & 0.0210  & 0.00233         & 0.00224        & 0.00223     \\
+                  &                     & min              & 0        & -0.275  & -0.0252         & -0.0251        & -0.0251     \\
+                  &                     & max              & 1        & 0.925   & 0.985           & 0.985          & 0.985       \\
+                  & Fourth order        & min              & 0        & -0.0926 & -0.00174        & {---}          & -0.00178    \\
+                  &                     & max              & 1        & 1.00    & 0.984           & {---}          & 0.983       \\
+                  & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00791 & 0.00108         & 0.000577       & 0.000576    \\
+                  &                     & min              & 0        & -0.0446 & -0.0106         & -0.000674      & -0.00674    \\
+                  &                     & max              & 1        & 0.925   & 0.982           & 0.983          & 0.983       \\
+\hline
+Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 & 0.0173          & 13.6           & {---}        \\
+		  &                     & min              & 0        & -0.0245 & -0.120          & -623           & {---}        \\
+                  &                     & max              & 1        & 0.985   & 0.950           & 3480           & {---}        \\
+		  & Cubic upwind-biased & \(\ell^2\) error & 0        & 0.00154 & 0.0120          & 0.0134         & {---}        \\
+                  &                     & min              & 0        & -0.0110 & -0.0263         & -0.028         & {---}        \\
+                  &                     & max              & 1        & 0.983   & 0.865           & 0.851          & {---}        \\
+\hline
+\end{tabular}
+\end{table*}
 
 
 % FIGURES
+\begin{figure*}
+	\centering
+	\includegraphics{../fig-meshes/fig-meshes.pdf}
+	%
+	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, showing cell edges in the lowest four layers.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
+	\label{fig:grid}
+\end{figure*}
+
+\begin{figure*}
+	\centering
+	\includegraphics{../fig-advection-tracer/fig-advection-tracer.pdf}
+%
+	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on a BTF grid, the upwind-biased cubic scheme on (b) the cut cell grid, (d) the BTF grid, and (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.  Subfigures (c) and (e) produced using the modified version of the code from \citet{schaer2002}.}
+	\label{fig:advection-tracer}
+\end{figure*}
+
+\begin{figure}
+	\centering
+	\includegraphics{../fig-resting/fig-resting.pdf}
+%
+	\caption{Maximum spurious vertical velocity, \(w\) (\si{\meter\per\second}), in the resting atmosphere test with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.}
+	\label{fig:resting}
+\end{figure}
+
+\begin{figure*}
+	\centering
+	\includegraphics{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
+%
+	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.}
+	\label{fig:gw-theta}
+\end{figure*}
+
+\begin{figure}
+	\centering
+	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
+%
+	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
+	\label{fig:gw-exner-theta}
+\end{figure}
 
 \end{document}
