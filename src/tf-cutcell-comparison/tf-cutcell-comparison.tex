@@ -12,9 +12,9 @@
 \affiliation{Department of Meteorology, University of Reading, Reading, United Kingdom}
 \email{js102@zepler.net}
 
-\abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent the orography and associated atmospheric dynamics.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  On the contrary, we use a single C-grid finite volume model to enable a like-for-like comparison of terrain following and cut cell grids.
-A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test of a stably stratified atmosphere at rest, and orographically induced gravity waves.  In addition, we formulate a new tracer advection test having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.  This new test presents a challenge to cut cells in situations with a large Froude number and large Scorer parameter.
-The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  As expected, the cut cell grid maintains greater accuracy in the test of stationary, stratified flow.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, we find that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.}
+\abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent atmospheric dynamics over steep orography.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  In contrast, here a single C-grid finite volume model is used to enable a like-for-like comparison of terrain following and cut cell grids.
+A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test starting from stably stratified initial conditions, and orographically induced gravity waves described by nonhydrostatic dynamics.  In addition, a new tracer advection test is formulated having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.  This new test presents a challenge to cut cells in situations with a large Froude number and large Scorer parameter.
+The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  As expected, the cut cell grid maintains greater accuracy in the test of stationary, stratified flow.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, it is found that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.}
 
 \begin{document}
 
@@ -29,15 +29,15 @@ With terrain following (TF) layers the terrain's influence decays with height so
 
 Second, numerical errors can also be reduced by improving the accuracy in calculating the horizontal pressure gradient itself.  TF layers are usually implemented using a coordinate transformation onto a rectangular computational domain, which introduces metric terms into the equations of motion.  The techniques proposed by \citet{klemp2011} and \cite{zaengl2012} both involve the calculation of the horizontal pressure gradient in the physical domain.  This gave them the flexibility to design more accurate horizontal pressure gradient discretizations using more appropriate stencils.
 
-Despite their associated numerical errors, TF layers are in widespread operational use \citep{steppeler2003}.  They are attractive because their rectangular structure is simple to process by computer, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}.
+Despite their associated numerical errors, TF layers are in widespread operational use \citep{steppeler2003}.  They are attractive because their rectangular structure is simple to process by computer and link with parameterisations, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}.
 
 Cut cells is an alternative method in which the grid does not follow the terrain but, instead, cells that lie entirely below the terrain are removed, and those that intersect the surface are modified in shape so that they more closely fit the terrain.  The resulting grid is orthogonal everywhere except near cells that have been cut.  Hence, errors are still introduced when calculating the horizontal pressure gradient between cut and uncut cells.
 
 The cut cell method can create some very small cells which reduce computational efficiency \citep{klein2009}, and several approaches have been tried to alleviate the problem \citep{steppeler2002,yamazaki-satomura2010,jebens2011}.
 
-Several studies have shown examples where cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present and errors do not increase with steeper terrain \citep{good2014}.  A comparison of TF and cut cells using real initial data by \citet{steppeler2013} found that precipitation and wind forecasts were more accurately in the cut cell model.
+Several studies have shown examples where cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present with cut cells and errors do not increase with steeper terrain \citep{good2014}.  A comparison of TF and cut cells using real initial data by \citet{steppeler2013} found that five-day forecasts of precipitation and wind over Asia in January 1989 were more accurate in the cut cell model.
 
-This study uses a modification of the nonhydrostatic model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we give the governing equations, outline the model from \citet{weller-shahrokhi2014} and describe the modification which improves stability for long timesteps in the presence of steep orography.  Section 4 analyses the results from two tracer advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
+This study uses a modification of the fully-compressible model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we give the governing equations, outline the model from \citet{weller-shahrokhi2014} and describe the modification which improves stability for long timesteps in the presence of steep orography.  Section 4 analyses the results from two tracer advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
 
 
 \section{Grids}
@@ -49,11 +49,11 @@ Here we describe the formulation of the terrain following grids and the method o
 \begin{equation}
 	z = \left( H - h \right) \left( z^\star / H \right) + h \label{eqn:btf}
 \end{equation}
-where, in two dimensions, \(z(x, z^\star)\) is the physical height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.  This formulation results in $z^\star/H$ ranging from 0 to 1.  Using this coordinate, the terrain's influence decays linearly with height but disappears only at the top of the domain.  An example is shown in figure~\ref{fig:grid}a.
+where, in two dimensions, \(z(x, z^\star)\) is the physical height of the coordinate surface at level \(z^\star\), \(H\) is the height of the domain, and \(h(x)\) is the height of the terrain surface.  In this formulation $z^\star/H$ ranges from 0 to 1.  Using this coordinate, the terrain's influence decays linearly with height but disappears only at the top of the domain.  An example is shown in figure~\ref{fig:grid}a.
 
 The sigma coordinate transform of \citet{phillips1957} is equivalent to the BTF coordinate transform since they both decay linearly.  However, because \(\sigma = p/p_s\) decays with pressure rather than height, sigma coordinates also vary with surface pressure, \(p_s(x, t)\).
 
-The hybrid terrain following (HTF) coordinates of \citet{simmons-burridge1981} improve upon BTF coordinates by using a decay function that allows the influence of the terrain to be removed at a specified height, producing flat model layers aloft.
+The hybrid terrain following (HTF) coordinates of \citet{simmons-burridge1981} improve upon BTF coordinates by using a decay function that allows the influence of the terrain to be removed at a specified height, producing model layers aloft that have constant pressure.
 
 The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achieves a more regular TF grid in the middle and top of the domain than the BTF coordinate.  The terrain height is split into large-scale and small-scale components, \(h_1\) and \(h_2\), such that \(h = h_1 + h_2\), with each component having a different exponential decay. The transformation is defined as 
 \begin{align}
@@ -78,8 +78,8 @@ We use the finite volume model from \citet{weller-shahrokhi2014} which details a
 \begin{align}
 	\text{Momentum} &\ &\  	\frac{\partial \rho \bm{u}}{\partial t} + \nabla \cdot \rho \bm{uu} &= \rho \bm{g} - c_p \rho \theta \nabla \Pi \label{eq:momentum} \\
 	\text{Continuity} &\ &\	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \bm{u} &= 0 \\
-	\text{\(\rho \theta\) advection} &\ &\ \frac{\partial \rho \theta}{\partial t} + \nabla \cdot \rho \bm{u} \theta &= 0 \\
-	\text{Equation of state} &\ &\ \Pi^{(1 - \kappa)/\kappa} &= \frac{R \rho \theta}{p_0}
+	\text{Thermodynamic equation} &\ &\ \frac{\partial \rho \theta}{\partial t} + \nabla \cdot \rho \bm{u} \theta &= 0 \\
+	\text{Ideal gas law} &\ &\ \Pi^{(1 - \kappa)/\kappa} &= \frac{R \rho \theta}{p_0}
 \end{align}
 \end{subequations}
 where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the tempereature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.
@@ -92,7 +92,7 @@ A minor change has been made to the curl-free, non-orthogonal formulation as des
 \end{align}
 where \(U = \rho\bm{u}\cdot\bm{S}_f\) and \(V=\rho\bm{u}\cdot\bm{d}_f\).  \(\bm{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\bm{d}_f\) is the vector between neighbouring cell centres.
 
-In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation.  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
+In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation for \(\Pi\).  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
 \begin{align}
 	H = H_c + H_\mathrm{corr}
 \end{align}
@@ -193,7 +193,7 @@ Using the upwind-biased cubic scheme, tracer magnitude and shape are well-preser
 
 Minimum and maximum tracer values and \(\ell^2\) error norms on the BTF, SLEVE, cut cell and regular grids are summarised in table~\ref{tab:advection}, where the \(\ell^2\) error norm is defined as 
 \begin{align}
-	\ell^2 &= \sqrt{\frac{\sum_c \left( \varphi - \varphi_{T} \right)^2 \mathcal{V}_c}{\sum_c \left( \varphi_T^2 \mathcal{V}_c \right)}}
+	\ell^2 &= \sqrt{\frac{\sum_c \left( \varphi - \varphi_{T} \right)^2 \mathcal{V}_c}{\sum_c \left( \varphi_T^2 \mathcal{V}_c \right)}} \label{eqn:l2-error}
 \end{align}
 where $\varphi$ is the numerical tracer value, $\varphi_T$ is the analytic value and $\mathcal{V}_c$ is the cell volume.
 
@@ -211,13 +211,13 @@ In the horizontal advection test, results were more accurate where the flow was 
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
-	\Psi(x,z) = - u_0 H \frac{z - h}{H - h}
+	\Psi(x,z) = u_0 H \frac{z - h}{H - h}
 \end{equation}
 where $u_0 = \SI{10}{\meter\per\second}$, which is the horizontal wind speed where $h(x) = 0$.
 The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
-	u &= - \frac{\partial \Psi}{\partial z} = - u_0 \frac{H}{H - h}, \quad w = \frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{z - H}{\left( H - h \right)^2}, \nonumber \\
-	\frac{\partial h}{\partial x} &= - h_0 \left[ 
+	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{z - h}{\left( H - h \right)^2}, \nonumber \\
+	\frac{\mathrm{d} h}{\mathrm{d} x} &= - h_0 \left[ 
 		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
 		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
 	\right]
@@ -234,7 +234,7 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is along the terrain following coordinate surface.
 
 
-$\ell^2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
+$\ell^2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.  Large errors are generated using the centred linear scheme on the cut cell grid due to large courant numbers near the ground.
 
 We conclude from this test that accuracy depends upon alignment of the flow with the grid, and accuracy is not significantly reduced by grid distortions.  Error on the BTF grid in the terrain following advection test is comparable with the error on the SLEVE grid in the horizontal advection test.
 
@@ -273,7 +273,7 @@ The test originally specified by \citet{schaer2002} prescribes flow over terrain
 
 Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.  The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
 
-The initial thermodynamic conditions have a surface temperature of $\theta(z=0) = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A constant horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
+The initial thermodynamic conditions have a surface temperature of $\theta(z=0) = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
 
 Sponge layers are added to the upper \SI{10}{\kilo\meter} and leftmost \SI{10}{\kilo\meter} at the inlet boundary to damp the reflection of waves.
 The term $\mu \rho \bm{u}$ is subtracted from the momentum (equation \ref{eq:momentum}) where the damping function, \(\mu\), is adapted from \citet{melvin2010} such that
@@ -310,14 +310,14 @@ We have presented a like-for-like comparison between terrain following and cut c
 
 Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which have previously been found to give poor results \citep{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected by horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid rather than on grid distortions.
 
-Spurious vertical velocities were small in the resting atmosphere test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{7}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
+Spurious vertical velocities were small in the resting initial state test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{7}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
 Cut cell grids reduced errors in two of the four tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
 
 Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  In the gravity waves test, the Lorenz computational mode was manifested as a zig--zag in potential temperature in the lowest layers in the lee of the mountain.  This spurious error was excited only on the cut cell grid.  This test motivates further work to formulate a Charney--Phillips staggering of variables on cut cell grids.
 
 \acknowledgments
-I am grateful to my cosupervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
+I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
 
 % REFERENCES
 
@@ -326,7 +326,7 @@ I am grateful to my cosupervisors John Methven and Terry Davies for their valuab
 
 % TABLES
 \begin{table*}
-	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
+	\caption{Minimum and maximum tracer magnitudes and \(\ell^2\) error norms (defined by equation~\ref{eqn:l2-error}) at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.  \(\ell^2\) error norms were not calculated by this code.}
 \label{tab:advection}
 %
 \centering
@@ -360,7 +360,7 @@ Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 
 	\centering
 	\includegraphics{../fig-meshes/fig-meshes.pdf}
 	%
-	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, showing cell edges in the lowest four layers.  The two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.}
+	\caption{Examples of (a) BTF, (b) SLEVE, and (c) a cut cell grid, showing cell edges in the lowest four layers.  The full two dimensional grids are \SI{20}{\kilo\meter} wide and \SI{20}{\kilo\meter} high.  SLEVE parameters are specified in the resting atmosphere test in section~\ref{sec:results}\ref{sec:resting}.  The cut cell grid was created by intersecting the terrain surface with a regular grid as described in section~\ref{sec:grid}.  Axes are in units of \si{\meter}.}
 	\label{fig:grid}
 \end{figure*}
 
@@ -368,7 +368,7 @@ Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 
 	\centering
 	\includegraphics{../fig-advection-tracer/fig-advection-tracer.pdf}
 %
-	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on a BTF grid, the upwind-biased cubic scheme on (b) the cut cell grid, (d) the BTF grid, and (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.  Subfigures (c) and (e) produced using the modified version of the code from \citet{schaer2002}.}
+	\caption{Horizontally advected tracer contours at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) centred linear scheme on the BTF grid, (b) the upwind-biased cubic scheme on the cut cell grid, (c) the fourth order scheme from \citet{schaer2002} on the BTF grid, and (d) the upwind-biased cubic scheme on the BTF grid with contour intervals every 0.1.  Errors on the BTF grid at \(t = \SI{10000}{\second}\) are shown for (e) the fourth order scheme from \citet{schaer2002}, and (f) the upwind-biased cubic scheme, with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.  Subfigures (c) and (e) produced using the modified version of the code from \citet{schaer2002}.}
 	\label{fig:advection-tracer}
 \end{figure*}
 
@@ -384,7 +384,7 @@ Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 
 	\centering
 	\includegraphics{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.}
+	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.  Axes are in units of \si{\meter}.}
 	\label{fig:gw-theta}
 \end{figure*}
 
@@ -392,7 +392,7 @@ Terrain following & Centred linear      & \(\ell^2\) error & 0        & 0.00251 
 	\centering
 	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The computational mode is manifested as a zig-zag in potential temperature on the cut cell grid which.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
+	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  The Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The Lorenz computational mode is manifested as a zig-zag in potential temperature on the cut cell grid.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
 	\label{fig:gw-exner-theta}
 \end{figure}
 
