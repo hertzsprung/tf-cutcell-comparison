@@ -1,0 +1,38 @@
+1st paragraph of Intro:
+Orography directly forces planetary waves. This is the largest non-local influence. This influence occurs even in the absence of heat release and drag.
+-- TODO: yes.  I think you suggested in an earlier review that we need not mention this because of the target audience
+
+Final paragraph of intro: -- DONE
+This study uses A MODIFICATION OF the nonhydrostatic model from Weller
+and Shahrokhi (2014) to enable a like-for-like comparison
+between terrain following and cut cell grids for idealised,
+two-dimensional test cases from the literature.
+...
+-- DONE
+In section 3 we give the governing equations, outline the model from Weller and Shahrokhi (2014) and describe the modification which improves stability for long time-steps in the precence of steep orogroaphy.
+
+Section 3:
+The model uses a Lorenz C-grid staggering ...
+and THE CO-VARIANT COMPONENT OF VELOCITY at cell faces. -- DONE
+
+In order to create a semi-implicit formulation, Weller and Shahrokhi (2014) split H into diagonal and off-diagonal component ...
+
+where the diagonal matrix $H_c = |\mathbf{S}_f|/|\mathbf{d}_f|$ ... 
+-- TODO: what needs to change here?
+
+Section 4c: -- DONE
+The test was integrated forward by 5 hours on the BTF,
+SLEVE and cut cell grids, and a regular grid with flat terrain.
+Maximum vertical velocities are presented in figure
+3. In agreement with Klemp (2011), vertical velocities
+are larger on more distorted grids. However, magnitudes
+are smaller comparing results on the terrain following
+grids with those from Klemp (2011). THE RESULTS PRESENTED IN FIGURE 3 WHICH USE A CURL-FREE PRESSURE GRADIENT HAVE MAXIMUM SPURIOUS VALUES OF $w$ OF $0.33ms^{-1}$ ON THE BTF GRID, 
+compared with a maximum of $~7ms^{-1}$ found by Klemp (2011) using their improved
+horizontal pressure gradient formulation. THE RESULTS IN FIGURE 3 HAVE THE SAME MAXIMUM ERRORS AS WELLER AND SHAHROKHI (2014) BUT, DUE TO THE MORE STABLE SPLIT INTO IMPLICITLY AND EXPLICITLY TREATED TERMS, THE ERRORS DECAY OVER TIME DUE TO THE DISSIPITAVE NATURE OF THE ADVECTION SCHEME.
+
+5. Conclusions
+Spurious vertical velocities were small in the resting atmosphere
+test, reaching a maximum of 0:35ms/1 on
+the BTF grid, compared to a maximum of 7ms/1
+found by Klemp (2011).
