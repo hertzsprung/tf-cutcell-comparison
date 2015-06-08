@@ -21,7 +21,7 @@ The results of the advection tests demonstrate that tracer accuracy depends upon
 \maketitle
 
 \section{Introduction}
-Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences from the heat release due to convection and by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
+Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences: from the latent heat release due to convection, by directly forcing planetary waves, and by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to represent orography on a grid: terrain following layers and cut cells.  Both methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
 
 With increasing horizontal model resolution, the discrete representation of terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult when using terrain following layers \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Cut cell methods seek to reduce the error that is associated with steep orography.
 
@@ -92,11 +92,11 @@ A minor change has been made to the curl-free, non-orthogonal formulation as des
 \end{align}
 where \(U = \rho\bm{u}\cdot\bm{S}_f\) and \(V=\rho\bm{u}\cdot\bm{d}_f\).  \(\bm{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\bm{d}_f\) is the vector between neighbouring cell centres.
 
-In order to create a semi-implicit formulation, \(H\) is split into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation.  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
+In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation.  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
 \begin{align}
 	H = H_c + H_\mathrm{corr}
 \end{align}
-where the diagonal matrix \(H_c=\frac{|\bm{S}_f|}{|\bm{d}_f|}\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
+where the diagonal matrix \(H_c=|\bm{S}_f|/|\bm{d}_f|\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
 
 For tracer advection tests, the advection equation in flux form, given by
 \begin{align}
@@ -310,7 +310,7 @@ We have presented a like-for-like comparison between terrain following and cut c
 
 Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which have previously been found to give poor results \citep{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected by horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid rather than on grid distortions.
 
-Spurious vertical velocities were small in the resting atmosphere test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{10}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
+Spurious vertical velocities were small in the resting atmosphere test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{7}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
 Cut cell grids reduced errors in two of the four tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
 
