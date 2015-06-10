@@ -39,7 +39,7 @@ Several studies have shown examples where cut cells produce more accurate result
 
 Another alternative method is the eta coordinate, described by \citet{mesinger1988}.  This transformation, expressed in pressure coordinates, quantises the surface pressure at each grid box using prescribed geometric heights.  This results in terrain profiles having a staircase pattern which is known as `step' orography.  The eta coordinate improves the accuracy of the horizontal pressure gradient calculation compared to the sigma coordinate \citep{mesinger1988}.
 
-In an experiment of orographically induced gravity waves, \citet{gallus-klemp2000} found that horizontal flow along the lee slope was artificially weak.  \citet{mesinger2012} offers an explanation for this behaviour: air flowing along the lee slope cannot travel diagonally downwards but must first travel horizontally, then vertically downward.  However, lee slope winds are weakened because some of the air continues to be transported horizontally aloft.
+In an experiment of orographically induced gravity waves, \citet{gallus-klemp2000} found that horizontal flow along the lee slope was artificially weak.  \citet{mesinger2012} offer an explanation for this behaviour: air flowing along the lee slope cannot travel diagonally downwards but must first travel horizontally, then vertically downward.  However, lee slope winds are weakened because some of the air continues to be transported horizontally aloft.
 
 \citet{mesinger2012} refined the formulation to allow diagonal transport of momentum and temperature immediately above sloping terrain.  This arrangement is similar to the finite volume cut cell method.  The new method improved test results, increasing lee slope winds by \SIrange{4}{5}{\meter\per\second} \citep{mesinger2012}.
 
@@ -213,7 +213,7 @@ The results of the horizontal advection test show that numerical errors are due 
 
 
 \subsection{Terrain following advection}
-In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  To determine the primary source of numerical error, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  In this new test, flow is aligned with the BTF grid layers.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
+In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  To determine the primary source of numerical error, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
