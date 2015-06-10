@@ -1,4 +1,5 @@
-\documentclass{ametsoc}
+\documentclass[twocol]{ametsoc}
+\journal{mwr}
 
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -36,6 +37,12 @@ Cut cells is an alternative method in which the grid does not follow the terrain
 The cut cell method can create some very small cells which reduce computational efficiency \citep{klein2009}, and several approaches have been tried to alleviate the problem \citep{steppeler2002,yamazaki-satomura2010,jebens2011}.
 
 Several studies have shown examples where cut cells produce more accurate results when compared to TF coordinates.  Spurious winds seen in TF coordinates are not present with cut cells and errors do not increase with steeper terrain \citep{good2014}.  A comparison of TF and cut cells using real initial data by \citet{steppeler2013} found that five-day forecasts of precipitation and wind over Asia in January 1989 were more accurate in the cut cell model.
+
+Another alternative method is the eta coordinate, described by \citet{mesinger1988}.  This transformation, expressed in pressure coordinates, quantises the surface pressure at each grid box using prescribed geometric heights.  This results in terrain profiles having a staircase pattern which is known as `step' orography.  The eta coordinate improves the accuracy of the horizontal pressure gradient calculation compared to the sigma coordinate \citep{mesinger1988}.
+
+In an experiment of orographically induced gravity waves, \citet{gallus-klemp2000} found that horizontal flow along the lee slope was artificially weak.  \citet{mesinger2012} offers an explanation for this behaviour: air flowing along the lee slope cannot travel diagonally downwards but must first travel horizontally, then vertically downward.  However, lee slope winds are weakened because some of the air continues to be transported horizontally aloft.
+
+\citet{mesinger2012} refined the formulation to allow diagonal transport of momentum and temperature immediately above sloping terrain.  This arrangement is similar to the finite volume cut cell method.  The new method improved test results, increasing lee slope winds by \SIrange{4}{5}{\meter\per\second} \citep{mesinger2012}.
 
 This study uses a modification of the fully-compressible model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we give the governing equations, outline the model from \citet{weller-shahrokhi2014} and describe the modification which improves stability for long timesteps in the presence of steep orography.  Section 4 analyses the results from two tracer advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
 
@@ -216,7 +223,7 @@ The spatial domain, mountain profile, initial tracer profile and discretisation 
 where $u_0 = \SI{10}{\meter\per\second}$, which is the horizontal wind speed where $h(x) = 0$.
 The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
-	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{z - h}{\left( H - h \right)^2}, \nonumber \\
+	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{z - H}{\left( H - h \right)^2}, \nonumber \\
 	\frac{\mathrm{d} h}{\mathrm{d} x} &= - h_0 \left[ 
 		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
 		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
@@ -233,8 +240,9 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 \end{align}
 Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is along the terrain following coordinate surface.
 
+$\ell^2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
 
-$\ell^2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.  Large errors are generated using the centred linear scheme on the cut cell grid due to large courant numbers near the ground.
+Using the centred linear scheme on the cut cell grid, numerical instability is generated by flow through small cells: when interpolating \(\phi\) onto faces, flux from a large cell into a small cell means that the downwind cell is given greater weighting.  The maximum courant number is less than one in all of the advection tests, hence it is not the source of this instability.
 
 We conclude from this test that accuracy depends upon alignment of the flow with the grid, and accuracy is not significantly reduced by grid distortions.  Error on the BTF grid in the terrain following advection test is comparable with the error on the SLEVE grid in the horizontal advection test.
 
