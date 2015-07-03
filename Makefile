@@ -20,14 +20,13 @@ $(SCHAER_ADVECTION_DIR)/%:
 	$(MAKE) -C $(SCHAER_ADVECTION_DIR) $*
 
 include $(MAKE_COMMON)/executables/Makefile
+include $(MAKE_COMMON)/executables/Makefile-Gmt
 include $(MAKE_COMMON)/executables/Makefile-OpenFOAM
 include $(MAKE_COMMON)/globals/Makefile-OpenFOAM
 include $(MAKE_COMMON)/templates/Makefile-FileSystem
 include $(MAKE_COMMON)/templates/Makefile-LaTeX
 include $(MAKE_COMMON)/templates/Makefile-Gnuplot
-include make/executables/Makefile-Gmt
-include make/globals/Makefile-OpenFOAM
-include make/templates/Makefile-GmtPlot
+include $(MAKE_COMMON)/templates/Makefile-GmtPlot
 include make/templates/Makefile-PlotMesh
 include make/templates/Makefile-GravityWaves
 include make/Makefile-Meshes

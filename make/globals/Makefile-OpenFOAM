@@ -1,2 +1,0 @@
-gmtDicts := constant/gmtDicts
-export GMTU := $(abspath src/gmt)
