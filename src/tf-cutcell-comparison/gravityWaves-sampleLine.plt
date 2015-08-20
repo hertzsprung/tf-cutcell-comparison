@@ -15,6 +15,6 @@ set xtics nomirror
 set x2tics
 set key at 292,860 right top samplen 3
 
-plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-500m/18000/exnerTheta-sampleLine.dat" using 2:1 axes x2y1 title 'BTF $\Pi$' lt 1 lc rgbcolor '#75c050', \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-500m/18000/exnerTheta-sampleLine.dat" using 3:1 title 'BTF $\theta$' dt 3 pt 7 lc rgbcolor '#75c050', \
+plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-500m/18000/exnerTheta-sampleLine.dat" using 2:1 axes x2y1 title 'BTF $\Pi$' lt 1 lc rgbcolor '#000000', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-500m/18000/exnerTheta-sampleLine.dat" using 3:1 title 'BTF $\theta$' dt 2 pt 7 lw 1.5 lc rgbcolor '#000000', \
      "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-500m/18000/exnerTheta-sampleLine.dat" using 3:1 title 'Cut cell $\theta$' dt 6 pt 4 lc rgbcolor '#e66101'
