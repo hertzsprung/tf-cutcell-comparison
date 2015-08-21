@@ -22,7 +22,7 @@ The results of the advection tests demonstrate that tracer accuracy depends upon
 \maketitle
 
 \section{Introduction}
-Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences: from the latent heat release due to convection, by directly forcing planetary waves, and by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to representing orography on a grid: terrain following layers and cut cells.  \TODO{another way of treating orography are 'immersed boundary methods' or 'embedded boundary methods'}  Both \TODO{all?} methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
+Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences: from the latent heat release due to convection, by directly forcing planetary waves, and by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to representing orography on a grid: terrain following layers and cut cells.  Another way of treating orography is the immersed (or embedded) boundary method \citep{simon2012}.  All methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
 
 With increasing horizontal model resolution, the discrete representation of terrain can become steeper, making accurate calculation of the horizontal pressure gradient more difficult when using terrain following layers \citep{gary1973,steppeler2002}.  Numerical errors in this calculation result in spurious winds and can cause numerical instability \citep{fast2003,webster2003}.  Cut cell methods seek to reduce the error that is associated with steep orography.
 
@@ -81,28 +81,16 @@ There are two details of grid construction which mean that resulting cut cell gr
 We use the finite volume model from \citet{weller-shahrokhi2014} which details a discretisation of the fully-compressible Euler equations, given by
 \begin{subequations}
 \begin{align}
-	\text{Momentum} &\ &\  	\frac{\partial \rho \bm{u}}{\partial t} + \nabla \cdot \rho \bm{uu} &= \rho \bm{g} - c_p \rho \theta \nabla \Pi \label{eq:momentum} \\
+	\text{Momentum} &\ &\  	\frac{\partial \rho \bm{u}}{\partial t} + \nabla \cdot \rho \bm{uu} &= \rho \bm{g} - c_p \rho \theta \nabla \Pi - \mu \rho \bm{u} \label{eq:momentum} \\
 	\text{Continuity} &\ &\	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \bm{u} &= 0 \\
 	\text{Thermodynamic equation} &\ &\ \frac{\partial \rho \theta}{\partial t} + \nabla \cdot \rho \bm{u} \theta &= 0 \\
 	\text{Ideal gas law} &\ &\ \Pi^{(1 - \kappa)/\kappa} &= \frac{R \rho \theta}{p_0}
 \end{align}
 \end{subequations}
-where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.
+where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.  \(\mu\) is a dimensionless damping function used for the sponge layer in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.
 
 The model uses C-grid staggering in the horizontal and Lorenz staggering in the vertical such that $\theta$, $\rho$ and $\Pi$ are stored at cell centres and the covariant component of velocity at cell faces.
-
-\TODO{move this to appendix and clarify}
-A minor change has been made to the curl-free, non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grids.  \citet{weller-shahrokhi2014} use a Hodge dual operator, \(H\), to map from co-variant to contra-variant velocity components:
-\begin{align}
-	U = HV
-\end{align}
-where \(U = \rho\bm{u}\cdot\bm{S}_f\) and \(V=\rho\bm{u}\cdot\bm{d}_f\).  \(\bm{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\bm{d}_f\) is the vector between neighbouring cell centres.
-
-In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation for \(\Pi\).  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
-\begin{align}
-	H = H_c + H_\mathrm{corr}
-\end{align}
-where the diagonal matrix \(H_c=|\bm{S}_f|/|\bm{d}_f|\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
+A minor change has been made to the non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grid, and this is detailed in appendix A.
 
 For tracer advection tests, the advection equation is solved in flux form, given by
 \begin{align}
@@ -263,7 +251,7 @@ h_1(x) = \frac{1}{2} h_0 \exp \left( - \left( \frac{x}{a} \right)^2 \right)
 \end{align}
 and, following \cite{leuenberger2010}, $s_1 = \SI{4}{\kilo\meter}$ is the large scale height, $s_2 = \SI{1}{\kilo\meter}$ is the small scale height, and the optimal exponent value of $n = 1.35$ is used.
 
-The initial thermodynamic conditions are in discrete hydrostatic balance, having a reference potential temperature of $\theta(z = 0) = \SI{288}{\kelvin}$ and constant stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
+The initial thermodynamic conditions are in discrete hydrostatic balance, having a reference potential temperature of $\theta(z = 0) = \SI{288}{\kelvin}$ and constant stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  The damping function, \(\mu\), is set to zero.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
 
 The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  
 The results presented in figure~\ref{fig:resting}, which use a curl-free pressure gradient, have maximum spurious values of $w$ of \SI{0.33}{\meter\per\second} on the BTF grid, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
@@ -277,6 +265,7 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 
 
 \subsection{Gravity waves}
+\label{sec:gw}
 The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
 
 Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.  \TODO{state grid spacing} The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
@@ -284,7 +273,7 @@ Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{3
 The initial thermodynamic conditions have a surface temperature of $\theta(z=0) = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
 
 Sponge layers are added to the upper \SI{10}{\kilo\meter} and leftmost \SI{10}{\kilo\meter} at the inlet boundary to damp the reflection of waves.
-The term $\mu \rho \bm{u}$ is subtracted from the momentum (equation \ref{eq:momentum}) where the damping function, \(\mu\), is adapted from \citet{melvin2010} such that
+The damping function, \(\mu\), is adapted from \citet{melvin2010} such that
 \begin{align}
 	\mu(x, z) &= \mu_\mathrm{upper} + \mu_\mathrm{inlet} \\
 	\mu_\mathrm{upper}(z) &= \begin{cases}
@@ -326,6 +315,24 @@ Conversely, in the terrain following advection test, errors were large on the SL
 
 \acknowledgments
 I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
+
+% APPENDICES
+\appendix[A]
+\appendixtitle{Non-orthogonal formulation}
+
+\TODO{Hilary will redraft this appendix}
+A minor change has been made to the curl-free, non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grids.  \citet{weller-shahrokhi2014} use a Hodge dual operator, \(H\), to map from co-variant to contra-variant velocity components:
+\begin{align}
+	U = HV
+\end{align}
+where \(U = \rho\bm{u}\cdot\bm{S}_f\) and \(V=\rho\bm{u}\cdot\bm{d}_f\).  \(\bm{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\bm{d}_f\) is the vector between neighbouring cell centres.
+
+In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation for \(\Pi\).  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
+\begin{align}
+	H = H_c + H_\mathrm{corr}
+\end{align}
+where the diagonal matrix \(H_c=|\bm{S}_f|/|\bm{d}_f|\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
+
 
 % REFERENCES
 
@@ -404,5 +411,6 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\caption{Vertical profiles of the Exner function of pressure, \(\Pi\), and potential temperature, \(\theta\), in the gravity waves test with a mountain height of \(h_0 = \SI{500}{\meter}\).  The Exner profile is visually identical on all grids for both mountain heights; for clarity, the Exner profile is only plotted for the BTF grid.  The Lorenz computational mode is manifested as a zig-zag in potential temperature on the cut cell grid.   Results on the SLEVE grid (not shown) are qualitatively the same as those on the BTF grid.  The thermal profile with a lesser mountain height of \(h_0 = \SI{250}{\meter}\) (not shown) exhibits a computational mode with smaller amplitude.}
 	\label{fig:gw-exner-theta}
 \end{figure}
+
 
 \end{document}
