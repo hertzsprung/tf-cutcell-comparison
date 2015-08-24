@@ -28,9 +28,9 @@ With increasing horizontal model resolution, the discrete representation of terr
 
 With terrain following (TF) layers the terrain's influence decays with height so that the bottommost layers follow the underlying surface closely while the uppermost layers are flat.  There are two main approaches to minimizing errors associated with TF layers.  First, by smoothing the effects of terrain with height, the influence of the terrain is reduced, hence errors in the calculated horizontal pressure gradient are also reduced aloft \citep{schaer2002,leuenberger2010,klemp2011}.  However, the error is not reduced at the ground where steep terrain remains unmodified.
 
-Second, numerical errors can also be reduced by improving the accuracy in calculating the horizontal pressure gradient itself.  TF layers are usually implemented using a coordinate transformation onto a rectangular computational domain, which introduces metric terms into the equations of motion.  The techniques proposed by \citet{klemp2011} and \cite{zaengl2012} both involve the calculation of the horizontal pressure gradient in the physical domain \TODO{interpolate to z-levels in order to compute the horizontal pressure gradient}.  This gave them the flexibility to design more accurate horizontal pressure gradient discretizations using more appropriate stencils.
+Second, numerical errors can also be reduced by improving the accuracy in calculating the horizontal pressure gradient itself.  TF layers are usually implemented using a coordinate transformation onto a rectangular computational domain, which introduces metric terms into the equations of motion.  The techniques proposed by \citet{klemp2011} and \cite{zaengl2012} both involve interpolation onto $z$-levels in order to calculate the horizontal pressure gradient.  This gave them the flexibility to design more accurate horizontal pressure gradient discretizations using more appropriate stencils.
 
-Despite their associated numerical errors, TF layers are in widespread operational use \citep{steppeler2003}.  They are attractive because their rectangular structure is simple to process by computer and link with parameterisations, boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}, and cell sizes remain almost constant \citep{jebens2011}. \TODO{clarify; constant cell sizes but variable spacing of vertical layers}
+Despite their associated numerical errors, TF layers are in widespread operational use \citep{steppeler2003}.  They are attractive because their rectangular structure is simple to process by computer and link with parameterisations, and boundary layer resolution can be increased with variable spacing of vertical layers \citep{schaer2002}.
 
 Cut cells is an alternative method in which the grid does not follow the terrain but, instead, cells that lie entirely below the terrain are removed, and those that intersect the surface are modified in shape so that they more closely fit the terrain.  The resulting grid is orthogonal everywhere except near cells that have been cut.  Hence, errors are still introduced when calculating the horizontal pressure gradient between cut and uncut cells.
 
@@ -66,7 +66,7 @@ The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achi
 \end{align}
 with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps.  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.  An example of the SLEVE grid can be seen in figure~\ref{fig:grid}b.
 
-Most implementations of terrain following layers use a coordinate system that makes the domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and unstructured grids \TODO{they're very structured!}.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
+Most implementations of terrain following layers use a coordinate system that makes the computational domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and non-orthogonal grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
 
 The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that approximates the cut cell method.  First, a custom utility was used to move points beneath the surface up to the surface creating small cells near mountain peaks.  Second, the surface faces were taken from the BTF grid and \texttt{snappyHexMesh} was used to intersect the surface with the grid.  This tool removes cells whose centres are below the surface and displaces boundary vertices so that they are `snapped' to the BTF surface \citep{openfoam2015}.  An example of the resulting grid is shown in figure~\ref{fig:grid}c.
 
@@ -148,7 +148,6 @@ The wind is entirely horizontal and is prescribed as
 where $u_0 = \SI{10}{\meter\per\second}$, $z_1 = \SI{4}{\kilo\meter}$ and $z_2 = \SI{5}{\kilo\meter}$.
 This results in a constant wind above $z_2$, and zero flow at \SI{4}{\kilo\meter} and below.
 
-\TODO{double check signs of all streamfunctions (in horizontal and TF advection test cases)}
 To ensure that the discrete velocity field is non-divergent, velocities are prescribed at cell faces by differencing the streamfunction, \(\Psi\), along the edges from \(\Psi\) stored at cell vertices.  Since \(u = \partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
 \begin{align}
 	\Psi(z) &= \frac{u_0}{2} \left\{ \begin{array}{l l}
@@ -211,7 +210,7 @@ The spatial domain, mountain profile, initial tracer profile and discretisation 
 where $u_0 = \SI{10}{\meter\per\second}$, which is the horizontal wind speed where $h(x) = 0$.
 The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
-	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{z - H}{\left( H - h \right)^2}, \nonumber \\
+	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{H - z}{\left( H - h \right)^2}, \nonumber \\
 	\frac{\mathrm{d} h}{\mathrm{d} x} &= - h_0 \left[ 
 		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
 		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
@@ -239,7 +238,7 @@ We conclude from this test that accuracy depends upon alignment of the flow with
 
 An idealised terrain profile is defined along with a stably stratified atmosphere at rest in hydrostatic balance.  The analytic solution is time-invariant, but numerical errors in calculating the horizontal pressure gradient can give rise to spurious velocities which become more severe over steeper terrain \citep{klemp2011}.
 
-The test setup follows the specification by \cite{klemp2011}.  \TODO{how large is the domain? do I say this elsewhere? if not, say it here} The grid resolution is \(\Delta x = \Delta z^\star = \SI{500}{\meter}\).  All boundary conditions are no normal flow.
+The test setup follows the specification by \cite{klemp2011}.  The domain is \SI{200}{\kilo\meter} wide and \SI{20}{\kilo\meter} high, and the grid resolution is \(\Delta x = \Delta z^\star = \SI{500}{\meter}\).  All boundary conditions are no normal flow.
 
 The wave-shaped mountain profile has a surface height, $h$, given by
 \begin{align}
@@ -268,7 +267,7 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 \label{sec:gw}
 The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
 
-Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.  \TODO{state grid spacing} The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
+Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high with a grid resolution of \(\Delta x = \SI{500}{\meter}\) and \(\Delta z^\star = \SI{300}{\meter}\).  \TODO{we want to consider dz=250m and dz=200m, too} The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
 
 The initial thermodynamic conditions have a surface temperature of $\theta(z=0) = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
 
