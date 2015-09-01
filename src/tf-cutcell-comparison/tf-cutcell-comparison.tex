@@ -75,7 +75,6 @@ There are two details of grid construction which mean that resulting cut cell gr
 
 \section{Model}
 \label{sec:model}
-\TODO{Use model in 2D x-z slice configuration without Coriolis forces}
 \TODO{Add info about the different numerical options that are assessed in combination with the orography treatment}
 
 We use the finite volume model from \citet{weller-shahrokhi2014} which details a discretisation of the fully-compressible Euler equations, given by
@@ -89,7 +88,7 @@ We use the finite volume model from \citet{weller-shahrokhi2014} which details a
 \end{subequations}
 where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.  \(\mu\) is a dimensionless damping function used for the sponge layer in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.
 
-The model uses C-grid staggering in the horizontal and Lorenz staggering in the vertical such that $\theta$, $\rho$ and $\Pi$ are stored at cell centres and the covariant component of velocity at cell faces.
+The model is operated in a two-dimensional $x$--$z$ slice configuration without Coriolis forces.  The model uses the C-grid staggering in the horizontal and the Lorenz staggering in the vertical such that $\theta$, $\rho$ and $\Pi$ are stored at cell centres and the covariant component of velocity at cell faces.
 A minor change has been made to the non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grid, and this is detailed in appendix A.
 
 For tracer advection tests, the advection equation is solved in flux form, given by
