@@ -1,15 +1,3 @@
-$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-sampleLine,fig-gravityWaves-sampleLine))
-
-build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf: \
-  build/gravityWaves-diagnostics/exnerTheta-sampleLine.tex
-
-$(eval $(call Gnuplot,build/gravityWaves-diagnostics,exnerTheta-sampleLine.tex,src/tf-cutcell-comparison/gravityWaves-sampleLine.plt))
-
-build/gravityWaves-diagnostics/exnerTheta-sampleLine.tex: \
-  $(ATMOSTESTS_DIR)/build/gravityWaves-btf-500m/18000/exnerTheta-sampleLine.dat \
-  $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-500m/18000/exnerTheta-sampleLine.dat \
-  | build/gravityWaves-diagnostics
-
 $(eval $(call MakeDir,build/gravityWaves-diagnostics))
 
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-theta,fig-gravityWaves-theta))
