@@ -90,9 +90,9 @@ We use the finite volume model from \citet{weller-shahrokhi2014} which details a
 \begin{subequations}
 \begin{align}
 	\text{Momentum} &\ &\  	\frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \rho \mathbf{u}\otimes\mathbf{u} &= \rho \mathbf{g} - c_p \rho \theta \nabla \Pi - \mu \rho \mathbf{u} \label{eq:momentum} \\
-	\text{Continuity} &\ &\	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \mathbf{u} &= 0 \\
+	\text{Continuity} &\ &\	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \mathbf{u} &= 0 \label{eq:cont} \\
 	\text{Thermodynamic equation} &\ &\ \frac{\partial \rho \theta}{\partial t} + \nabla \cdot \rho \mathbf{u} \theta &= 0 \label{eq:theta} \\
-	\text{Ideal gas law} &\ &\ \Pi^{(1 - \kappa)/\kappa} &= \frac{R \rho \theta}{p_0}
+	\text{Ideal gas law} &\ &\ \Pi^{(1 - \kappa)/\kappa} &= \frac{R \rho \theta}{p_0} \label{eq:state}
 \end{align}
 \end{subequations}
 where \(\rho\) is the density, \(\mathbf{u}\) is the velocity field, \(\mathbf{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.  \(\mu\) is a dimensionless damping function used for the sponge layer in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.

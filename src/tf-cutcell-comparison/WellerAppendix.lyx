@@ -104,12 +104,13 @@ name "appx:SI"
 In order to ensure curl-free pressure gradients, following 
 \begin_inset CommandInset citation
 LatexCommand citet
-key "WS14"
+key "weller-shahrokhi2014"
 
 \end_inset
 
-, the momentum at the cell face in the direction between cell centres is
- used as the prognostic variable for velocity:
+, the co-variant momentum component, that is the momentum at the cell face
+ in the direction between cell centres is used as the prognostic variable
+ for velocity:
 \begin_inset Formula 
 \begin{equation}
 V_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{d}_{f}
@@ -138,7 +139,7 @@ at face
 \end_inset
 
 .
- Fluxes across faces are diagnostic variables:
+ Fluxes across faces, or the contravariant component, are diagnostic variables:
 \begin_inset Formula 
 \begin{equation}
 U_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{S}_{f}
@@ -232,7 +233,8 @@ where
 \begin_inset Formula $c$
 \end_inset
 
- and where 
+.
+ 
 \begin_inset Formula $(\rho\mathbf{u})_{C}$
 \end_inset
 
@@ -262,833 +264,212 @@ where
 
  tensor and so the inversion of the tensor sum is a local operation which
  can be calculated once for each cell of the grid before time-stepping begins.
+ The 
+\begin_inset Formula $H$
+\end_inset
+
+ implied by this reconstruction of 
+\begin_inset Formula $U$
+\end_inset
+
+ is likely to be positive definite for meshes with sufficiently low non-orthogon
+ality.
+ However this has not been proved.
  
 \end_layout
 
-\begin_layout Subsubsection
-Gradients
-\end_layout
-
 \begin_layout Standard
-For a cell centred, scalar field, 
-\begin_inset Formula $\Psi_{c}$
+The semi-implicit technique involves combining the momentum (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:momentum"
+
 \end_inset
 
-, two different types of gradients are defined.
- For the C-grid-staggered method with 
-\begin_inset Formula $V=\rho\mathbf{u}\cdot\mathbf{d}$
+), continuity (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:cont"
+
 \end_inset
 
- as the prognostic variable, the gradient at the face in direction 
-\begin_inset Formula $\mathbf{d}$
+) and 
+\begin_inset Formula $\theta$
 \end_inset
 
- is required:
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:theta"
+
+\end_inset
+
+) equations and the equation of state (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:state"
+
+\end_inset
+
+) to form a Helmholtz equation to be solved implicitly (see 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "weller-shahrokhi2014"
+
+\end_inset
+
+).
+ The semi-implicit solution technique with a Hodge operator can be defined
+ by considering only a discretised from of the continuity equation:
 \begin_inset Formula 
 \begin{equation}
-\nabla_{d}\Psi=\frac{1}{|\mathbf{d}|}\sum_{c\in f}-n_{f}\Psi_{c}
+\frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(HV)^{(n+1)}\right\} =0.\label{eq:contD}
+\end{equation}
+
+\end_inset
+
+The divergence is discretised using Gauss' divergence theorem so that:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot\left(HV\right)=\frac{1}{V_{c}}\sum_{f\in c}n_{f}(HV)_{f}\label{eq:GaussDiv}
 \end{equation}
 
 \end_inset
 
 where 
+\begin_inset Formula $V_{c}$
+\end_inset
+
+ is the volume of cell 
+\begin_inset Formula $c$
+\end_inset
+
+ and 
 \begin_inset Formula $n_{f}=1$
 \end_inset
 
  if 
-\begin_inset Formula $\mathbf{S}_{f}$
-\end_inset
-
- points outward from the cell and 
-\begin_inset Formula $-1$
-\end_inset
-
- otherwise.
- This simple two-point gradient leads to curl free pressure gradients.
- For the solution of the advective form potential temperature equation,
- the gradient at the cell-centre is also needed and is defined using Gauss's
- theorem:
-\begin_inset Formula 
-\begin{equation}
-\nabla_{c}\Psi=\frac{1}{V_{c}}\sum_{f\in c}n_{f}\Psi_{F}\mathbf{S}_{f}\label{eq:gradc}
-\end{equation}
-
-\end_inset
-
-where the cell has volume 
-\begin_inset Formula $V_{c}$
-\end_inset
-
-.
- The interpolation of 
-\begin_inset Formula $\Psi$
-\end_inset
-
- from cell centres onto faces to calculate 
-\begin_inset Formula $\Psi_{F}$
-\end_inset
-
- in eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:gradc"
-
-\end_inset
-
-) uses an arithmetic mean interpolation.
- For solving the potential temperature equation in advective form, the potential
- temperature gradient at the face in the plane normal to 
-\begin_inset Formula $\mathbf{d}$
-\end_inset
-
- is needed.
- This is interpolated from the cell centred potential temperature gradient
- using arithmetic mean interpolation: 
-\begin_inset Formula $\left(\nabla_{c}\theta\right)_{F}=\frac{1}{2}\sum_{c\in f}\nabla_{c}\theta$
-\end_inset
-
- and the component parallel to 
-\begin_inset Formula $\mathbf{d}$
-\end_inset
-
- is not used.
- In general 
-\begin_inset Formula $\mathbf{d}_{f}\cdot\left(\nabla_{c}\Psi\right)_{F}\ne|\mathbf{d}_{f}|\nabla_{d}\Psi$
-\end_inset
-
- but changes to equality for linearly varying fields, for which this discretisat
-ion would be perfect.
- 
-\end_layout
-
-\begin_layout Subsubsection
-Divergence
-\end_layout
-
-\begin_layout Standard
-Divergences are calculated at cell centres using Gauss's divergence theorem,
- eg for scalar field 
-\begin_inset Formula $\Psi$
-\end_inset
-
- and vector field, 
-\begin_inset Formula $\mathbf{v}$
-\end_inset
-
-, both defined at cell centres:
-\begin_inset Formula 
-\begin{equation}
-\nabla_{c}\cdot\left(\Psi\mathbf{v}\right)=\frac{1}{V_{c}}\sum_{f\in c}n_{f}\Psi_{F}\mathbf{v}_{F}\cdot\mathbf{S}_{f}
-\end{equation}
-
-\end_inset
-
-or, since momentum component 
-\begin_inset Formula $U=\rho\mathbf{u}\cdot\mathbf{S}$
-\end_inset
-
- is defined at the face then 
-\begin_inset Formula $\nabla\cdot\rho\mathbf{u}=\frac{1}{V}\sum_{f\in c}n_{f}U_{f}$
-\end_inset
-
- which is simply denoted 
-\begin_inset Formula $\nabla\cdot U$
-\end_inset
-
-.
- Similarly, 
-\begin_inset Formula $\nabla\cdot\rho\mathbf{u}\Psi=\frac{1}{V}\sum_{f\in c}n_{f}\Psi_{F}U_{f}$
-\end_inset
-
- which is denoted 
-\begin_inset Formula $\nabla\cdot U\Psi$
-\end_inset
-
-.
- A multi-dimensional cubic least squares fit over an upwind biased stencil
- of cells is used to calculate 
-\begin_inset Formula $\Psi_{F}$
-\end_inset
-
- which is described in section 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "par:advectionSchemes"
-
-\end_inset
-
-.
- For solving the momentum equation on the face, the non-linear advection
- term is needed on the face.
- This is interpolated from the cell centred values using arithmetic mean
- interpolation: 
-\begin_inset Formula $\left(\nabla\cdot U\mathbf{u}\right)_{F}=\frac{1}{2}\sum_{c\in f}\nabla_{c}\cdot U\mathbf{u}$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsubsection
-Perpendicular component of velocity
-\end_layout
-
-\begin_layout Standard
-For the implicit treatment of gravity waves using the advective form of
- the potential temperature equation, the component of the velocity perpendicular
- to 
 \begin_inset Formula $\mathbf{d}_{f}$
 \end_inset
 
- will be needed:
-\begin_inset Formula 
-\[
-\mathbf{u}_{f}^{\perp}=\mathbf{u}_{F}-\frac{\mathbf{u}_{F}\cdot\mathbf{d}_{f}}{|\mathbf{d}_{f}|^{2}}\mathbf{d}_{f}
-\]
-
+ points outwards from the cell and 
+\begin_inset Formula $n_{f}=$
 \end_inset
 
-where 
-\begin_inset Formula $\mathbf{u}_{F}$
-\end_inset
-
- is calculated using arithmetic mean interpolation from 
-\begin_inset Formula $\mathbf{u}_{C}$
-\end_inset
-
-, which is reconstructed from 
-\begin_inset Formula $V/\rho_{F}$
-\end_inset
-
- as in eqn (
+-1 otherwise.
+ Equation (
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:recond"
+reference "eq:GaussDiv"
 
 \end_inset
 
-).
-\end_layout
-
-\begin_layout Subsection
-Semi-implicit solution technique
-\end_layout
-
-\begin_layout Standard
-Terms involving acoustic and gravity waves are solved using Crank-Nicholson
- (trapezoidal) time-stepping with no off centering.
- Advection is treated explicitly with no splitting between explicit and
- implicit terms (details below).
- Two outer iterations are performed for each time-step so that terms treated
- explicitly are updated for the second iteration.
- We will first describe the advection of 
-\begin_inset Formula $\rho$
-\end_inset
-
- and 
-\begin_inset Formula $\theta$
-\end_inset
-
-, then the derivation of the discretised Helmholtz equation and then give
- a summary of the whole solution procedure.
-\end_layout
-
-\begin_layout Subsubsection
-Derivation of the discretised Helmholtz equation
-\begin_inset CommandInset label
-LatexCommand label
-name "sub:helm"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-A simultaneous solution in all of the prognostic variables together is needed
- in order to treat acoustic and gravity waves implicitly.
- To construct a Helmholtz equation in just one variable (
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
-) , the momentum, continuity and potential temperature equations are combined
- by hand.
- First, the potential temperature equation is substituted into the momentum
- equation to replace 
-\begin_inset Formula $\theta$
-\end_inset
-
- in the 
-\begin_inset Formula $c_{p}\rho\theta\nabla\Pi$
-\end_inset
-
- term with 
-\begin_inset Formula $V^{n+1}$
-\end_inset
-
- and then the momentum equation is substituted into the continuity equation
- to replace 
-\begin_inset Formula $V^{n+1}$
-\end_inset
-
- with 
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
-.
- Finally, 
-\begin_inset Formula $\rho^{n+1}$
-\end_inset
-
- must be replaced by 
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
- on the left hand side of the continuity equation using a linearisation
- of the equation of state in order to create a Helmholtz equation for 
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-First we take the dot product of the the momentum equation (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:M"
-
-\end_inset
-
-) with 
-\begin_inset Formula $\mathbf{d}$
-\end_inset
-
- and discretise in time to get an equation for 
-\begin_inset Formula $V^{n+1}$
-\end_inset
-
-:
-\begin_inset Formula 
-\begin{eqnarray}
-\frac{V^{n+1}-V^{n}}{\Delta t} & = & \left(1-\alpha\right)\left(\frac{\partial V}{\partial t}\right)^{n}\label{eq:V}\\
- & + & \alpha\left\{ -\left(\nabla\cdot\left(U^{\ell}\mathbf{u}^{\ell}\right)\right)_{F}\cdot\mathbf{d}+\rho_{f}^{\ell}\mathbf{g}\cdot\mathbf{d}-c_{p}\rho_{f}^{\ell}\theta_{f}^{n+1}|\mathbf{d}|\nabla_{d}\Pi^{n+1}-\mu V^{n+1}\right\} \nonumber 
-\end{eqnarray}
-
-\end_inset
-
-where 
-\begin_inset Formula $\left(\partial V/\partial t\right)^{n}$
-\end_inset
-
- is the term in curly brackets in eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:V"
-
-\end_inset
-
-) but from time-level 
-\begin_inset Formula $n$
-\end_inset
-
-.
- We have not yet said how we define 
-\begin_inset Formula $\rho_{f}$
-\end_inset
-
- and 
-\begin_inset Formula $\theta_{f}$
-\end_inset
-
-.
- This will be done below.
-\end_layout
-
-\begin_layout Standard
-Following the semi-implicit solution technique of 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "DCM+05"
-
-\end_inset
-
-, 
-\begin_inset Formula $\theta_{f}^{n+1}$
-\end_inset
-
- in eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:V"
-
-\end_inset
-
-) is calculated from the advective form of the potential temperature equation:
-\begin_inset Formula 
-\begin{equation}
-\frac{\theta_{f}^{n+1}-\theta_{F}^{n}}{\Delta t}=-\left(1-\alpha\right)\left\{ \mathbf{u}^{\perp}\cdot\left(\nabla_{c}\theta\right)_{F}+\frac{V}{\rho_{F}|\mathbf{d}|}\nabla_{d}\theta\right\} ^{n}-\alpha\left\{ \left(\mathbf{u}^{\perp}\right)^{\ell}\cdot\left(\nabla_{c}\theta\right)_{F}^{\ell}+\frac{V^{n+1}}{\rho_{f}^{\ell}|\mathbf{d}|}\nabla_{d}\theta^{\ell}\right\} \label{eq:thetaAdv}
-\end{equation}
-
-\end_inset
-
-so that 
-\begin_inset Formula $\theta_{f}^{n+1}$
-\end_inset
-
- in eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:V"
-
-\end_inset
-
-) can be replace by 
-\begin_inset Formula $V^{n+1}$
-\end_inset
-
- (all other terms being lagged or from the previous time-level).
- Note that 
-\begin_inset Formula $\theta_{F}^{n}$
-\end_inset
-
- is used rather than 
-\begin_inset Formula $\theta_{f}^{n}$
-\end_inset
-
-.
- Ie 
-\begin_inset Formula $\theta$
-\end_inset
-
- on the face from the previous time-step is interpolated from the prognostic,
- cell centre 
-\begin_inset Formula $\theta_{c}$
-\end_inset
-
- rather than storing 
-\begin_inset Formula $\theta_{f}$
-\end_inset
-
- from one time-step to the next which would result in an over-specification
- of 
-\begin_inset Formula $\theta$
-\end_inset
-
-.
- Eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:thetaAdv"
-
-\end_inset
-
-) can be written:
-\begin_inset Formula 
-\begin{equation}
-\theta_{f}^{n+1}=\theta^{\prime}-\alpha\frac{V^{n+1}}{\rho_{f}^{\ell}|\mathbf{d}|}\nabla_{d}\theta^{\ell}\label{eq:thetaAdv-2}
-\end{equation}
-
-\end_inset
-
-so that the part
-\begin_inset Formula 
-\begin{equation}
-\theta^{\prime}=\theta_{F}^{n}-\left(1-\alpha\right)\Delta t\left\{ \mathbf{u}^{\perp}\cdot\left(\nabla_{c}\theta\right)_{F}+\frac{V}{\rho_{f}|\mathbf{d}|}\nabla_{d}\theta\right\} ^{n}-\alpha\Delta t\left(\mathbf{u}^{\perp}\right)^{\ell}\cdot\left(\nabla_{c}\theta\right)_{F}^{\ell}
-\end{equation}
-
-\end_inset
-
-is calculated explicitly.
- 
-\begin_inset Formula $\theta_{f}^{n+1}$
-\end_inset
-
- from eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:thetaAdv-2"
-
-\end_inset
-
-) can now be substituted into the discretised momentum equation, (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:V"
-
-\end_inset
-
-).
- This can be rearranged so that terms involving 
-\begin_inset Formula $V^{n+1}$
-\end_inset
-
-are on the LHS.
- Additionally, one instance of 
-\begin_inset Formula $\nabla_{d}\Pi^{n+1}$
-\end_inset
-
- is replaced by 
-\begin_inset Formula $\nabla_{d}\Pi^{\ell}$
-\end_inset
-
- so that the equation is linear in implicit terms:
-\begin_inset Formula 
-\begin{equation}
-V{}^{n+1}=G\ \left(V{}^{\prime}+\alpha\triangle t\rho_{f}^{\ell}\mathbf{g}\cdot\mathbf{d}-\alpha\Delta tc_{p}\rho_{f}^{\ell}\theta^{\prime}|\mathbf{d}|\nabla_{d}\Pi^{n+1}\right)\label{eq:Vn+1}
-\end{equation}
-
-\end_inset
-
-where 
-\begin_inset Formula $G$
-\end_inset
-
- takes a similar form to that defined by 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "DCM+05"
-
-\end_inset
-
-: 
-\begin_inset Formula 
-\begin{equation}
-G=\frac{1}{1-\alpha^{2}\Delta t^{2}c_{p}\ \nabla_{d}\theta^{\ell}\nabla_{d}\Pi^{\ell}+\alpha\Delta t\mu}\label{eq:G}
-\end{equation}
-
-\end_inset
-
-and: 
-\begin_inset Formula 
-\begin{equation}
-V^{\prime}=V^{n}+\left(1-\alpha\right)\Delta t\left(\frac{\partial V}{\partial t}\right)^{n}-\alpha\Delta t\left(\nabla\cdot\left(U^{\ell}\mathbf{u}_{f}^{\ell}\right)\right)_{F}\cdot\mathbf{d}.\label{eq:V-1}
-\end{equation}
-
-\end_inset
-
-Fixed flow-rate boundary conditions are imposed on 
-\begin_inset Formula $V^{\prime}$
-\end_inset
-
- and the remaining terms of 
-\begin_inset Formula $V^{n+1}$
-\end_inset
-
-, the gravity and pressure gradient, are set to cancel exactly on boundaries.
- Setting 
-\begin_inset Formula $V^{\prime}$
-\end_inset
-
- to zero and 
-\begin_inset Formula $\nabla_{d}\Pi=\frac{\mathbf{g}\cdot\mathbf{d}}{c_{p}\theta}$
-\end_inset
-
- at rigid boundaries gives no flow across the boundaries as long as the
- boundary faces are orthogonal (
-\begin_inset Formula $\mathbf{d}\times\mathbf{S}=0$
-\end_inset
-
- on the boundary).
- This can always be enforced by setting 
-\begin_inset Formula $\mathbf{d}$
-\end_inset
-
- to be parallel to 
-\begin_inset Formula $\mathbf{S}$
-\end_inset
-
- on the boundaries.
-\end_layout
-
-\begin_layout Standard
-It may be counter intuitive that 
-\begin_inset Formula $\rho_{f}$
-\end_inset
-
- is treated explicitly in eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Vn+1"
-
-\end_inset
-
-) since we are treating gravity waves implicitly.
- However, this follows from 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "DCM+05"
-
-\end_inset
-
- who solve the advective form of the momentum equation.
- The important detail is to use the same density in the gravity and pressure
- gradient terms of eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Vn+1"
-
-\end_inset
-
-).
- 
-\end_layout
-
-\begin_layout Standard
-Using 
-\begin_inset Formula $U=HV$
-\end_inset
-
-, equation (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Vn+1"
-
-\end_inset
-
-) can now be substituted into the RHS of the continuity equation (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:C"
-
-\end_inset
-
-):
-\begin_inset Formula 
-\begin{align}
-\frac{\rho^{n+1}-\rho^{n}}{\Delta t} & =-\left(1-\alpha\right)\nabla\cdot U^{n}-\alpha\nabla\cdot\left(HV^{n+1}\right)\nonumber \\
- & =-\left(1-\alpha\right)\nabla\cdot U^{n}-\alpha\nabla\cdot\left(HGV^{\prime}\right)-\alpha\nabla\cdot\left(HG\alpha\triangle t\rho_{f}^{\ell}\mathbf{g}\cdot\mathbf{d}\right)\label{eq:Cm}\\
- & +\alpha\nabla\cdot\left(HG\alpha\Delta tc_{p}\rho_{f}^{\ell}\theta_{f}^{\prime}|\mathbf{d}|\nabla_{d}\Pi^{n+1}\right).\nonumber 
-\end{align}
-
-\end_inset
-
-To make this into a Helmholtz equation for 
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
-, we need to replace 
-\begin_inset Formula $\rho^{n+1}$
-\end_inset
-
- on the LHS with a linear function of 
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
-.
- This can be done using the equation of state (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:S"
-
-\end_inset
-
-):
-\begin_inset Formula 
-\begin{equation}
-\rho^{n+1}=\Psi^{\ell}\ \Pi^{n+1},\label{eq:rhoPi}
-\end{equation}
-
-\end_inset
-
-where
-\begin_inset Formula 
-\[
-\Psi^{\ell}=\left(\rho^{\ell}\right)^{\frac{2\kappa-1}{\kappa-1}}\left(\frac{R\theta^{\ell}}{p_{0}}\right)^{\frac{\kappa}{\kappa-1}}\approx\left(\frac{p_{0}}{R}\right)^{0.4}\frac{\left(\rho^{\ell}\right)^{0.6}}{\left(\theta^{\ell}\right)^{0.4}}.
-\]
-
-\end_inset
-
-Because of the low powers of 
-\begin_inset Formula $\rho$
-\end_inset
-
- and 
-\begin_inset Formula $\theta$
-\end_inset
-
- in 
-\begin_inset Formula $\Psi$
-\end_inset
-
- (assuming that 
-\begin_inset Formula $\kappa=0.288$
-\end_inset
-
-), 
-\begin_inset Formula $\Psi$
-\end_inset
-
- varies less than 
-\begin_inset Formula $\rho$
-\end_inset
-
- and 
-\begin_inset Formula $\theta$
-\end_inset
-
- so the above linearisation is useful and leads to a convergent outer iterations
- (in the tests so far undertaken but analysis is needed).
- Substituting (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:rhoPi"
-
-\end_inset
-
-) into (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Cm"
-
-\end_inset
-
-) gives the Helmholtz equation for 
-\begin_inset Formula $\Pi^{n+1}$
-\end_inset
-
-:
-\begin_inset Formula 
-\begin{align}
-\frac{\Psi^{\ell}\Pi^{n+1}-\Psi^{n}\Pi^{n}}{\Delta t} & =-\left(1-\alpha\right)\nabla\cdot U^{n}-\alpha\nabla\cdot\left(HGV^{\prime}\right)-\alpha\nabla\cdot\left(HG\alpha\triangle t\rho_{f}^{\ell}\mathbf{g}\cdot\mathbf{d}\right)\label{eq:Phelm}\\
- & +\alpha\nabla\cdot\left(HG\alpha\Delta tc_{p}\rho_{f}^{\ell}\theta_{f}^{\prime}|\mathbf{d}|\nabla_{d}\Pi^{n+1}\right).\nonumber 
-\end{align}
-
-\end_inset
-
-Given the spatial discretisation defined, eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Phelm"
-
+) is now a sum over a sum since 
+\begin_inset Formula $(HV)_{f}$
 \end_inset
 
-) is a sparse matrix equation which could be solved to find 
-\begin_inset Formula $\Pi^{n+1}$
+ is one element of a matrix-vector multiply.
+ In order to simplify the construction of the matrix for the Helmholtz problem,
+ only the diagonal terms of 
+\begin_inset Formula $HV$
 \end_inset
 
-.
- However, to simplify the construction of the matrix, the operator 
+ are treated implicitly.
+ We therefore separate 
 \begin_inset Formula $H$
 \end_inset
 
- is split into its diagonal and off-diagonal components and only the diagonal
- components are treated implicitly: 
-\begin_inset Formula $H=H_{d}+H_{\text{off}}$
+ into a diagonal and off-diagonal matrix:
+\begin_inset Formula 
+\begin{equation}
+H=H_{d}+H_{off}.
+\end{equation}
+
+\end_inset
+
+Eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:contD"
+
+\end_inset
+
+) can now be approximated by:
+\begin_inset Formula 
+\begin{equation}
+\frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(H_{d}V)^{(n+1)}+\nabla\cdot(H_{off}V)^{\ell}\right\} =0\label{eq:contDd}
+\end{equation}
+
+\end_inset
+
+where superscript 
+\begin_inset Formula $\ell$
+\end_inset
+
+ means lagged values taken from a previous iteration or from a previous
+ stage of a Runge-Kutta scheme.
+ This was the approach taken by 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "weller-shahrokhi2014"
+
 \end_inset
 
 .
- So the final term in eqn (
+ However, numerical solution of eqn (
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:Phelm"
+reference "eq:contDd"
 
 \end_inset
 
-) becomes
+) turns out to be unstable when using a large time-step on a highly non-orthogon
+al mesh associated with terrain following coordinates over steep orography.
+ Improved stability and energy conservation can be achieved by splitting
+ 
+\begin_inset Formula $H$
+\end_inset
+
+ into a diagonal component which would be correct on an orthogonal grid
+ and a non-orthogonal correction:
 \begin_inset Formula 
 \begin{equation}
-\alpha\nabla\cdot\left(H_{d}G\alpha\Delta tc_{p}\rho_{f}^{\ell}\theta_{f}^{\prime}|\mathbf{d}|\nabla_{d}\Pi^{n+1}\right)+\alpha\nabla\cdot\left(H_{\text{off}}G\alpha\Delta tc_{p}\rho_{f}^{\ell}\theta_{f}^{\prime}|\mathbf{d}|\nabla_{d}\Pi^{\ell}\right).
+H=H_{c}+H_{corr}
 \end{equation}
 
 \end_inset
 
-This version is not considered better, just simpler to implement.
- This version would not be stable for long time-steps for highly non-orthogonal
- grids since too much of the pressure gradient would be treated explicitly.
- However it is stable for the test cases described in this paper.
- 
-\end_layout
-
-\begin_layout Standard
-This leads to a sparse matrix which is solved using the conjugate gradient
- solver from 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "OpenFOAM"
-
+where the diagonal matrix 
+\begin_inset Formula $H_{c}=|\mathbf{S}_{f}|/|\mathbf{d}_{f}|$
 \end_inset
 
- with incomplete Cholesky preconditioning.
- 
-\end_layout
-
-\begin_layout Standard
-We now come to how 
-\begin_inset Formula $\rho_{f}^{\ell}$
+ and the non-orthogonal correction is 
+\begin_inset Formula $H_{corr}=H-H_{c}$
 \end_inset
 
- is defined in eqns (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:V"
-
+.
+ The orthogonal part, 
+\begin_inset Formula $H_{c}$
 \end_inset
 
--
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:Phelm"
-
-\end_inset
-
-).
- The algorithm, as defined so far, has too many prognostic variables: 
-\begin_inset Formula $\rho$
-\end_inset
-
-, 
-\begin_inset Formula $\Pi$
-\end_inset
-
-, 
-\begin_inset Formula $\theta$
-\end_inset
-
- and 
-\begin_inset Formula $V$
-\end_inset
-
-, and the continuity equation is used to advance both 
-\begin_inset Formula $\rho$
-\end_inset
-
- and 
-\begin_inset Formula $\Pi$
-\end_inset
-
- independently.
- The over-specification is removed by setting 
-\begin_inset Formula $\Psi=\left(\rho\right)^{\frac{2\kappa-1}{\kappa-1}}\left(\frac{R\theta}{p_{0}}\right)^{\frac{\kappa}{\kappa-1}}$
-\end_inset
-
- using 
-\begin_inset Formula $\rho$
-\end_inset
-
- advanced from the continuity equation and then setting
+, can be treated implicitly in the Helmholtz equation:
 \begin_inset Formula 
 \begin{equation}
-\rho_{f}^{\ell}=\left(\Psi^{\ell}\Pi^{\ell}\right)_{F}.
+\frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(H_{c}V)^{(n+1)}+\nabla\cdot(H_{corr}V)^{\ell}\right\} =0.\label{eq:contDc}
 \end{equation}
 
 \end_inset
 
-This ensures that, over the course of a long simulation, 
-\begin_inset Formula $\rho$
-\end_inset
-
- advanced from the continuity equation and 
-\begin_inset Formula $\Psi\Pi$
-\end_inset
-
- do not drift.
+This form is used for the solutions of the Euler equations in this paper
+ and is stable, with good energy conservation for all of the tests presented.
+ 
 \end_layout
 
 \begin_layout Standard
 \noindent
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "numerics"
+bibfiles "references"
 options "abbrvnat"
 
 \end_inset
