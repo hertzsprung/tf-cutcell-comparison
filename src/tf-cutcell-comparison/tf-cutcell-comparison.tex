@@ -19,11 +19,11 @@
 % cut cell citations: good2014, yamazaki2015 puts this clearly but not yet published
 % In a test of a stably stratified atmosphere initially at rest, we find that spurious velocities are no more than \SI{0.1}{\meter\per\second} on any grid. [TODO: and this is much better than klemp2011]
 % Advection terms also contribute to numerical error.  We show that advection is most accurate when the flow is aligned with the grid layers.  Near the surface, flow tends to follow the terrain which results in larger errors when more orthogonal grids are used.
-% In a test of orographically induced gravity waves, we find that the advection of potential temperature generates grid-scale errors on the cut cell grid.  The errors persist because the Lorenz staggering of variables renders them invisible to the model. [TODO: I don't think we have enough evidence to support this final sentence]
+% In a test of orographically induced gravity waves, we find that the advection of potential temperature generates grid-scale errors on the cut cell grid.
 
 \abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent atmospheric dynamics over steep orography.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  In contrast, here a single C-grid finite volume model is used to enable a like-for-like comparison of terrain following and cut cell grids.
 A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test starting from stably stratified initial conditions, and orographically induced gravity waves described by nonhydrostatic dynamics.  In addition, a new tracer advection test is formulated having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.  This new test presents a challenge to cut cells in situations with a large Froude number and large Scorer parameter.  \TODO{discuss Froude number/Scorer parameter in body.}
-The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  As expected, the cut cell grid maintains greater accuracy in the test of stationary, stratified flow.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.  However, it is found that the Lorenz computational mode is excited as a vertical zig--zag in potential temperature on the cut cell grid.}
+The results of the advection tests demonstrate that tracer accuracy depends upon alignment of the flow with the grid.  As expected, the cut cell grid maintains greater accuracy in the test of stationary, stratified flow.  In the gravity waves test, results on all grids are in good agreement with existing results from the literature.}
 
 \begin{document}
 
@@ -315,7 +315,7 @@ Spurious vertical velocities were small in the resting initial state test, reach
 
 Cut cell grids reduced errors in two of the four tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
 
-Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  In the gravity waves test, the Lorenz computational mode was manifested as a zig--zag in potential temperature in the lowest layers in the lee of the mountain.  This spurious error was excited only on the cut cell grid.  This test motivates further work to formulate a Charney--Phillips staggering of variables on cut cell grids.
+Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.
 
 \acknowledgments
 I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
