@@ -1,9 +1,10 @@
-\documentclass{ametsoc}
+\documentclass[draft]{ametsoc}
 
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{siunitx}
+\usepackage[title]{appendix}
 
 \bibpunct{(}{)}{;}{a}{}{,}
 \newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
@@ -88,31 +89,32 @@ There are two details of grid construction which mean that resulting cut cell gr
 We use the finite volume model from \citet{weller-shahrokhi2014} which details a discretisation of the fully-compressible Euler equations, given by
 \begin{subequations}
 \begin{align}
-	\text{Momentum} &\ &\  	\frac{\partial \rho \bm{u}}{\partial t} + \nabla \cdot \rho \bm{uu} &= \rho \bm{g} - c_p \rho \theta \nabla \Pi - \mu \rho \bm{u} \label{eq:momentum} \\
-	\text{Continuity} &\ &\	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \bm{u} &= 0 \\
-	\text{Thermodynamic equation} &\ &\ \frac{\partial \rho \theta}{\partial t} + \nabla \cdot \rho \bm{u} \theta &= 0 \\
+	\text{Momentum} &\ &\  	\frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \rho \mathbf{u}\otimes\mathbf{u} &= \rho \mathbf{g} - c_p \rho \theta \nabla \Pi - \mu \rho \mathbf{u} \label{eq:momentum} \\
+	\text{Continuity} &\ &\	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \mathbf{u} &= 0 \\
+	\text{Thermodynamic equation} &\ &\ \frac{\partial \rho \theta}{\partial t} + \nabla \cdot \rho \mathbf{u} \theta &= 0 \label{eq:theta} \\
 	\text{Ideal gas law} &\ &\ \Pi^{(1 - \kappa)/\kappa} &= \frac{R \rho \theta}{p_0}
 \end{align}
 \end{subequations}
-where \(\rho\) is the density, \(\bm{u}\) is the velocity field, \(\bm{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.  \(\mu\) is a dimensionless damping function used for the sponge layer in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.
+where \(\rho\) is the density, \(\mathbf{u}\) is the velocity field, \(\mathbf{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.  \(\mu\) is a dimensionless damping function used for the sponge layer in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.
 
 The model is operated in a two-dimensional $x$--$z$ slice configuration without Coriolis forces.  The model uses the C-grid staggering in the horizontal and the Lorenz staggering in the vertical such that $\theta$, $\rho$ and $\Pi$ are stored at cell centroids and the covariant component of velocity at cell faces.
-A minor change has been made to the non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grid, and this is detailed in appendix A.
+\input{model}
+%A minor change has been made to the non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grid, and this is detailed in appendix A.
 
-For tracer advection tests, the advection equation is solved in flux form, given by
-\begin{align}
-\partial \phi / \partial t + \nabla \cdot \left( \bm{u} \phi \right) = 0
-\end{align}
-where the tracer density, $\phi$, is interpolated onto cell faces using the upwind-biased multidimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
-The time derivative is solved using a three-stage, second order Runge-Kutta scheme:
-\begin{subequations}
-\begin{align}
-	\phi^\star &= \phi^{(n)} + \Delta t f(\phi^{(n)}) \\
-	\phi^{\star\star} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^\star) \right) \\
-	\phi^{(n+1)} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^{\star\star}) \right)
-\end{align}
-\end{subequations}
-where \(f(\phi^{(n)}) = - \nabla \cdot (\bm{u} \phi^{(n)})\) at time level \(n\).
+%For tracer advection tests, the advection equation is solved in flux form, given by
+%\begin{align}
+%\partial \phi / \partial t + \nabla \cdot \left( \mathbf{u} \phi \right) = 0
+%\end{align}
+%where the tracer density, $\phi$, is interpolated onto cell faces using the upwind-biased multidimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
+%The time derivative is solved using a three-stage, second order Runge-Kutta scheme:
+%\begin{subequations}
+%\begin{align}
+%	\phi^\star &= \phi^{(n)} + \Delta t f(\phi^{(n)}) \\
+%	\phi^{\star\star} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^\star) \right) \\
+%	\phi^{(n+1)} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^{\star\star}) \right)
+%\end{align}
+%\end{subequations}
+%where \(f(\phi^{(n)}) = - \nabla \cdot (\mathbf{u} \phi^{(n)})\) at time level \(n\).
 
 \section{Results}
 \label{sec:results}
@@ -320,22 +322,27 @@ Conversely, in the terrain following advection test, errors were large on the SL
 \acknowledgments
 I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
 
-% APPENDICES
-\appendix[A]
-\appendixtitle{Non-orthogonal formulation}
+\begin{appendices}
+\input{WellerAppendix}
+\end{appendices}
 
-\TODO{Hilary will redraft this appendix}
-A minor change has been made to the curl-free, non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grids.  \citet{weller-shahrokhi2014} use a Hodge dual operator, \(H\), to map from co-variant to contra-variant velocity components:
-\begin{align}
-	U = HV
-\end{align}
-where \(U = \rho\bm{u}\cdot\bm{S}_f\) and \(V=\rho\bm{u}\cdot\bm{d}_f\).  \(\bm{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\bm{d}_f\) is the vector between neighbouring cell centres.
 
-In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation for \(\Pi\).  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
-\begin{align}
-	H = H_c + H_\mathrm{corr}
-\end{align}
-where the diagonal matrix \(H_c=|\bm{S}_f|/|\bm{d}_f|\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
+%% APPENDICES
+%\appendix[A]
+%\appendixtitle{Non-orthogonal formulation}
+
+%\TODO{Hilary will redraft this appendix}
+%A minor change has been made to the curl-free, non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grids.  \citet{weller-shahrokhi2014} use a Hodge dual operator, \(H\), to map from co-variant to contra-variant velocity components:
+%\begin{align}
+%	U = HV
+%\end{align}
+%where \(U = \rho\mathbf{u}\cdot\mathbf{S}_f\) and \(V=\rho\mathbf{u}\cdot\mathbf{d}_f\).  \(\mathbf{S}_f\) is the surface normal vector for a face, \(f\), which has a magnitude of the surface area, and \(\mathbf{d}_f\) is the vector between neighbouring cell centres.
+
+%In order to create a semi-implicit formulation, \cite{weller-shahrokhi2014} split \(H\) into diagonal and off-diagonal components and the off-diagonal components are treated explicitly in the Helmholtz equation for \(\Pi\).  However, this was found to be unstable when using a large timestep on a grid with large non-orthogonality.  Improved stability is achieved by splitting \(H\) into the orthogonal part and the non-orthogonal correction: 
+%\begin{align}
+%	H = H_c + H_\mathrm{corr}
+%\end{align}
+%where the diagonal matrix \(H_c=|\mathbf{S}_f|/|\mathbf{d}_f|\) and the non-orthogonal correction is simply \(H_\mathrm{corr} = H - H_c\).  The orthogonal part, \(H_c\), is treated implicitly in the Helmholtz equation and the non-orthogonal part, \(H_\mathrm{corr}\), is treated explicitly. 
 
 
 % REFERENCES
@@ -407,6 +414,5 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.  Axes are in units of \si{\meter}.}
 	\label{fig:gw-theta}
 \end{figure*}
-
 
 \end{document}

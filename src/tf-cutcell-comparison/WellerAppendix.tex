@@ -1,0 +1,44 @@
+\section{Semi-implicit treatment of the Hodge operator\label{appx:SI}}
+
+In order to ensure curl-free pressure gradients, following \citet{WS14},
+the momentum at the cell face in the direction between cell centres
+is used as the prognostic variable for velocity:
+\begin{equation}
+V_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{d}_{f}
+\end{equation}
+where $\mathbf{d}_{f}$ is the vector between cell centres and subscript
+$f$ means ``at face $f$''. Fluxes across faces are diagnostic
+variables:
+\begin{equation}
+U_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{S}_{f}
+\end{equation}
+where $\mathbf{S}_{f}$ is the outward pointing normal vector to face
+$f$ with magnitude equal to the area of the face. $U$ is the vector
+of all values of $U_{f}$ and $V$ is the vector of all values of
+$V_{f}$ then we can define the Hodge operator: a matrix to transform
+$V$ to $U$:
+\begin{equation}
+U=HV.
+\end{equation}
+For energy conservation, \citet{TC12} showed that the Hodge operator
+must be symmetric and positive definite. We define a symmetric $H$
+suitable for arbitrary 3D meshes:
+\begin{equation}
+U_{f}=(\rho\mathbf{u})_{F}\cdot\mathbf{S}_{f}
+\end{equation}
+where subscript $F$ implies mid-point interpolation from two surrounding
+cell values onto face $f$:
+\begin{equation}
+(\rho\mathbf{u})_{F}=\frac{1}{2}\sum_{c\in f}(\rho\mathbf{u})_{C}
+\end{equation}
+where $c\in f$ means the two cells either side of cell $c$ and where
+$(\rho\mathbf{u})_{C}$ is the consistent cell centre reconstruction
+of $\rho\mathbf{u}$ from surrounding values of $V_{f}$:
+\[
+(\rho\mathbf{u})_{C}=\left(\sum_{f^{\prime}\in c}\mathbf{d}_{f^{\prime}}\otimes\mathbf{d}_{f^{\prime}}^{T}\right)^{-1}\sum_{f^{\prime}\in c}\mathbf{d}_{f^{\prime}}V_{f^{\prime}}
+\]
+where $\mathbf{d}_{f^{\prime}}\otimes\mathbf{d}_{f^{\prime}}^{T}$
+is a $3\times3$ tensor and so the inversion of the tensor sum is
+a local operation which can be calculated once for each cell of the
+grid before time-stepping begins. 
+
