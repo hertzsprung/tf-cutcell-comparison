@@ -3,3 +3,5 @@ tf-cutcell-comparison.pdf
 gmt.history
 legends
 *.swp
+*#
+*~

@@ -109,7 +109,7 @@ key "weller-shahrokhi2014"
 \end_inset
 
 , the co-variant momentum component, that is the momentum at the cell face
- in the direction between cell centres is used as the prognostic variable
+ in the direction between cell centres, is used as the prognostic variable
  for velocity:
 \begin_inset Formula 
 \begin{equation}
@@ -139,7 +139,8 @@ at face
 \end_inset
 
 .
- Fluxes across faces, or the contravariant component, are diagnostic variables:
+ The contravariant momentum component, that is the flux across faces, is
+ a diagnostic variable:
 \begin_inset Formula 
 \begin{equation}
 U_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{S}_{f}
@@ -151,12 +152,12 @@ where
 \begin_inset Formula $\mathbf{S}_{f}$
 \end_inset
 
- is the outward pointing normal vector to face 
+ is the outward-pointing normal vector to face 
 \begin_inset Formula $f$
 \end_inset
 
  with magnitude equal to the area of the face.
- 
+ If 
 \begin_inset Formula $U$
 \end_inset
 
@@ -172,7 +173,7 @@ where
 \begin_inset Formula $V_{f}$
 \end_inset
 
- then we can define the Hodge operator: a matrix to transform 
+ then we can define the Hodge operator as a matrix that transforms 
 \begin_inset Formula $V$
 \end_inset
 
@@ -212,7 +213,7 @@ where subscript
 \begin_inset Formula $F$
 \end_inset
 
- implies mid-point interpolation from two surrounding cell values onto face
+ denotes mid-point interpolation from two surrounding cell values onto face
  
 \begin_inset Formula $f$
 \end_inset
@@ -229,8 +230,8 @@ where
 \begin_inset Formula $c\in f$
 \end_inset
 
- means the two cells either side of cell 
-\begin_inset Formula $c$
+ denotes the two cells sharing face 
+\begin_inset Formula $f$
 \end_inset
 
 .
@@ -263,7 +264,8 @@ where
 \end_inset
 
  tensor and so the inversion of the tensor sum is a local operation which
- can be calculated once for each cell of the grid before time-stepping begins.
+ can be calculated once for every cell in the grid before time-stepping
+ begins.
  The 
 \begin_inset Formula $H$
 \end_inset
@@ -273,54 +275,53 @@ where
 \end_inset
 
  is likely to be positive definite for meshes with sufficiently low non-orthogon
-ality.
- However this has not been proved.
+ality, although this has not been proved.
  
 \end_layout
 
 \begin_layout Standard
-The semi-implicit technique involves combining the momentum (
+The semi-implicit technique involves combining the momentum 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:momentum"
 
 \end_inset
 
-), continuity (
+, continuity 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:cont"
 
 \end_inset
 
-) and 
+ and 
 \begin_inset Formula $\theta$
 \end_inset
 
- (
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:theta"
 
 \end_inset
 
-) equations and the equation of state (
+ equations and the equation of state 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:state"
 
 \end_inset
 
-) to form a Helmholtz equation to be solved implicitly (see 
+ to form a Helmholtz equation to be solved implicitly, as described by 
 \begin_inset CommandInset citation
 LatexCommand citet
 key "weller-shahrokhi2014"
 
 \end_inset
 
-).
+.
  The semi-implicit solution technique with a Hodge operator can be defined
- by considering only a discretised from of the continuity equation:
+ by considering only a discretised form of the continuity equation:
 \begin_inset Formula 
 \begin{equation}
 \frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(HV)^{(n+1)}\right\} =0.\label{eq:contD}
@@ -331,20 +332,28 @@ key "weller-shahrokhi2014"
 The divergence is discretised using Gauss' divergence theorem so that:
 \begin_inset Formula 
 \begin{equation}
-\nabla\cdot\left(HV\right)=\frac{1}{V_{c}}\sum_{f\in c}n_{f}(HV)_{f}\label{eq:GaussDiv}
+\nabla\cdot\left(HV\right)=\frac{1}{\mathcal{V}_{c}}\sum_{f\in c}n_{f}(HV)_{f}\label{eq:GaussDiv}
 \end{equation}
 
 \end_inset
 
 where 
-\begin_inset Formula $V_{c}$
+\begin_inset Formula $\mathcal{V}_{c}$
 \end_inset
 
  is the volume of cell 
 \begin_inset Formula $c$
 \end_inset
 
- and 
+, 
+\begin_inset Formula $f\in c$
+\end_inset
+
+ denotes the faces of cell 
+\begin_inset Formula $c$
+\end_inset
+
+, and 
 \begin_inset Formula $n_{f}=1$
 \end_inset
 
@@ -357,14 +366,14 @@ where
 \end_inset
 
 -1 otherwise.
- Equation (
+ Equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:GaussDiv"
 
 \end_inset
 
-) is now a sum over a sum since 
+ is now a sum over a sum since 
 \begin_inset Formula $(HV)_{f}$
 \end_inset
 
@@ -375,11 +384,11 @@ reference "eq:GaussDiv"
 \end_inset
 
  are treated implicitly.
- We therefore separate 
+ Therefore, 
 \begin_inset Formula $H$
 \end_inset
 
- into a diagonal and off-diagonal matrix:
+ is separated into a diagonal and off-diagonal matrix:
 \begin_inset Formula 
 \begin{equation}
 H=H_{d}+H_{off}.
@@ -387,14 +396,14 @@ H=H_{d}+H_{off}.
 
 \end_inset
 
-Eqn (
+Equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:contD"
 
 \end_inset
 
-) can now be approximated by:
+ can now be approximated by:
 \begin_inset Formula 
 \begin{equation}
 \frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(H_{d}V)^{(n+1)}+\nabla\cdot(H_{off}V)^{\ell}\right\} =0\label{eq:contDd}
@@ -406,7 +415,7 @@ where superscript
 \begin_inset Formula $\ell$
 \end_inset
 
- means lagged values taken from a previous iteration or from a previous
+ denotes lagged values taken from a previous iteration or from a previous
  stage of a Runge-Kutta scheme.
  This was the approach taken by 
 \begin_inset CommandInset citation
@@ -416,15 +425,15 @@ key "weller-shahrokhi2014"
 \end_inset
 
 .
- However, numerical solution of eqn (
+ However, the numerical solution of equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:contDd"
 
 \end_inset
 
-) turns out to be unstable when using a large time-step on a highly non-orthogon
-al mesh associated with terrain following coordinates over steep orography.
+ turns out to be unstable when using a large time-step on highly non-orthogonal
+ meshes associated with terrain following layers over steep orography.
  Improved stability and energy conservation can be achieved by splitting
  
 \begin_inset Formula $H$

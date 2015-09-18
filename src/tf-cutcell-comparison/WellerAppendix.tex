@@ -2,22 +2,22 @@
 
 In order to ensure curl-free pressure gradients, following \citet{weller-shahrokhi2014},
 the co-variant momentum component, that is the momentum at the cell
-face in the direction between cell centres is used as the prognostic
+face in the direction between cell centres, is used as the prognostic
 variable for velocity:
 \begin{equation}
 V_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{d}_{f}
 \end{equation}
 where $\mathbf{d}_{f}$ is the vector between cell centres and subscript
-$f$ means ``at face $f$''. Fluxes across faces, or the contravariant
-component, are diagnostic variables:
+$f$ means ``at face $f$''. The contravariant momentum component,
+that is the flux across faces, is a diagnostic variable:
 \begin{equation}
 U_{f}=\rho_{f}\mathbf{u}_{f}\cdot\mathbf{S}_{f}
 \end{equation}
-where $\mathbf{S}_{f}$ is the outward pointing normal vector to face
-$f$ with magnitude equal to the area of the face. $U$ is the vector
-of all values of $U_{f}$ and $V$ is the vector of all values of
-$V_{f}$ then we can define the Hodge operator: a matrix to transform
-$V$ to $U$:
+where $\mathbf{S}_{f}$ is the outward-pointing normal vector to face
+$f$ with magnitude equal to the area of the face. If $U$ is the
+vector of all values of $U_{f}$ and $V$ is the vector of all values
+of $V_{f}$ then we can define the Hodge operator as a matrix that
+transforms $V$ to $U$:
 \begin{equation}
 U=HV.
 \end{equation}
@@ -27,12 +27,12 @@ suitable for arbitrary 3D meshes:
 \begin{equation}
 U_{f}=(\rho\mathbf{u})_{F}\cdot\mathbf{S}_{f}
 \end{equation}
-where subscript $F$ implies mid-point interpolation from two surrounding
+where subscript $F$ denotes mid-point interpolation from two surrounding
 cell values onto face $f$:
 \begin{equation}
 (\rho\mathbf{u})_{F}=\frac{1}{2}\sum_{c\in f}(\rho\mathbf{u})_{C}
 \end{equation}
-where $c\in f$ means the two cells either side of cell $c$. $(\rho\mathbf{u})_{C}$
+where $c\in f$ denotes the two cells sharing face $f$. $(\rho\mathbf{u})_{C}$
 is the consistent cell centre reconstruction of $\rho\mathbf{u}$
 from surrounding values of $V_{f}$:
 \[
@@ -40,44 +40,45 @@ from surrounding values of $V_{f}$:
 \]
 where $\mathbf{d}_{f^{\prime}}\otimes\mathbf{d}_{f^{\prime}}^{T}$
 is a $3\times3$ tensor and so the inversion of the tensor sum is
-a local operation which can be calculated once for each cell of the
+a local operation which can be calculated once for every cell in the
 grid before time-stepping begins. The $H$ implied by this reconstruction
 of $U$ is likely to be positive definite for meshes with sufficiently
-low non-orthogonality. However this has not been proved. 
+low non-orthogonality, although this has not been proved. 
 
-The semi-implicit technique involves combining the momentum (\ref{eq:momentum}),
-continuity (\ref{eq:cont}) and $\theta$ (\ref{eq:theta}) equations
-and the equation of state (\ref{eq:state}) to form a Helmholtz equation
-to be solved implicitly (see \citet{weller-shahrokhi2014}). The semi-implicit
-solution technique with a Hodge operator can be defined by considering
-only a discretised from of the continuity equation:
+The semi-implicit technique involves combining the momentum \ref{eq:momentum},
+continuity \ref{eq:cont} and $\theta$ \ref{eq:theta} equations
+and the equation of state \ref{eq:state} to form a Helmholtz equation
+to be solved implicitly, as described by \citet{weller-shahrokhi2014}.
+The semi-implicit solution technique with a Hodge operator can be
+defined by considering only a discretised form of the continuity equation:
 \begin{equation}
 \frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(HV)^{(n+1)}\right\} =0.\label{eq:contD}
 \end{equation}
 The divergence is discretised using Gauss' divergence theorem so that:
 \begin{equation}
-\nabla\cdot\left(HV\right)=\frac{1}{V_{c}}\sum_{f\in c}n_{f}(HV)_{f}\label{eq:GaussDiv}
+\nabla\cdot\left(HV\right)=\frac{1}{\mathcal{V}_{c}}\sum_{f\in c}n_{f}(HV)_{f}\label{eq:GaussDiv}
 \end{equation}
-where $V_{c}$ is the volume of cell $c$ and $n_{f}=1$ if $\mathbf{d}_{f}$
-points outwards from the cell and $n_{f}=$-1 otherwise. Equation
-(\ref{eq:GaussDiv}) is now a sum over a sum since $(HV)_{f}$ is
-one element of a matrix-vector multiply. In order to simplify the
-construction of the matrix for the Helmholtz problem, only the diagonal
-terms of $HV$ are treated implicitly. We therefore separate $H$
-into a diagonal and off-diagonal matrix:
+where $\mathcal{V}_{c}$ is the volume of cell $c$, $f\in c$ denotes
+the faces of cell $c$, and $n_{f}=1$ if $\mathbf{d}_{f}$ points
+outwards from the cell and $n_{f}=$-1 otherwise. Equation \ref{eq:GaussDiv}
+is now a sum over a sum since $(HV)_{f}$ is one element of a matrix-vector
+multiply. In order to simplify the construction of the matrix for
+the Helmholtz problem, only the diagonal terms of $HV$ are treated
+implicitly. Therefore, $H$ is separated into a diagonal and off-diagonal
+matrix:
 \begin{equation}
 H=H_{d}+H_{off}.
 \end{equation}
-Eqn (\ref{eq:contD}) can now be approximated by:
+Equation \ref{eq:contD} can now be approximated by:
 \begin{equation}
 \frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(H_{d}V)^{(n+1)}+\nabla\cdot(H_{off}V)^{\ell}\right\} =0\label{eq:contDd}
 \end{equation}
-where superscript $\ell$ means lagged values taken from a previous
+where superscript $\ell$ denotes lagged values taken from a previous
 iteration or from a previous stage of a Runge-Kutta scheme. This was
-the approach taken by \citet{weller-shahrokhi2014}. However, numerical
-solution of eqn (\ref{eq:contDd}) turns out to be unstable when using
-a large time-step on a highly non-orthogonal mesh associated with
-terrain following coordinates over steep orography. Improved stability
+the approach taken by \citet{weller-shahrokhi2014}. However, the
+numerical solution of equation \ref{eq:contDd} turns out to be unstable
+when using a large time-step on highly non-orthogonal meshes associated
+with terrain following layers over steep orography. Improved stability
 and energy conservation can be achieved by splitting $H$ into a diagonal
 component which would be correct on an orthogonal grid and a non-orthogonal
 correction:
@@ -93,4 +94,3 @@ part, $H_{c}$, can be treated implicitly in the Helmholtz equation:
 This form is used for the solutions of the Euler equations in this
 paper and is stable, with good energy conservation for all of the
 tests presented. 
-

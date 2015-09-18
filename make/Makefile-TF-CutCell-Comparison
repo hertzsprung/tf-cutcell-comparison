@@ -4,6 +4,7 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   src/tf-cutcell-comparison/ametsoc.cls \
   src/tf-cutcell-comparison/ametsoc2014.bst \
   src/tf-cutcell-comparison/references.bib \
+  src/tf-cutcell-comparison/WellerAppendix.tex \
   build/fig-advection-tracer/fig-advection-tracer.pdf \
   build/fig-meshes/fig-meshes.pdf \
   build/fig-resting/fig-resting.pdf \
