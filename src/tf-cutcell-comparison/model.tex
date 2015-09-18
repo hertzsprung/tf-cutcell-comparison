@@ -1,15 +1,2 @@
-Acoustic and gravity waves are treated implicitly and advection is treated explicitly. The trapezoidal implicit treatment of fast waves and the Hodge operator suitable for non-orthogonal grids are described in appendix \ref{appx:SI}. To avoid time-splitting errors between the advection and the fast waves, the advection is time-stepped using a three-stage, second-order Runge-Kutta scheme. When considering only the linear advection of a tracer, $\phi$:
-\begin{align}
-\partial \phi / \partial t + \nabla \cdot \left( \mathbf{u} \phi \right) = 0
-\label{eq:advect}
-\end{align}
-the Runge-Kutta scheme is defined as:
-\begin{subequations}
-\begin{align}
-	\phi^\star &= \phi^{(n)} + \Delta t f(\phi^{(n)}) \\
-	\phi^{\star\star} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^\star) \right) \\
-	\phi^{(n+1)} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^{\star\star}) \right)
-\end{align}
-\end{subequations}
-where \(f(\phi^{(n)}) = - \nabla \cdot (\mathbf{u} \phi^{(n)})\) at time level \(n\). The advection terms of the momentum and $\theta$ equations, (\ref{eq:momentum}) and (\ref{eq:theta}) and of the linear advection equation, (\ref{eq:advect}) are discretised in flux form using the upwind-biased, multi-dimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
+Acoustic and gravity waves are treated implicitly and advection is treated explicitly. The trapezoidal implicit treatment of fast waves and the Hodge operator suitable for non-orthogonal grids are described in appendix \ref{appx:SI}. To avoid time-splitting errors between the advection and the fast waves, the advection is time-stepped using a three-stage, second-order Runge-Kutta scheme. The advection terms of the momentum and $\theta$ equations, (\ref{eq:momentum}) and (\ref{eq:theta}) are discretised in flux form using the upwind-biased, multi-dimensional cubic scheme from \citet{weller-shahrokhi2014}.
 

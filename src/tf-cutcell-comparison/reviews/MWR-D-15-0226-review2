@@ -61,6 +61,7 @@ It is Good et al. 2014 that use centres of uncut cells.  Weller & Shahrokhi 2014
 > vicinity of the cut cells above the terrain and swept downstream. In any
 > event, the terrain-following version also uses Lorenz staggering and
 > does not exhibit this anomalous behavior.
+Having analysed test results at increasing vertical resolution (as suggested below), we agree that errors are primarily due to inaccuracies in the advection of theta.
 > 
 > As mentioned above, I believe this work would have stronger scientific
 > merit if it were refocused, with more emphasis on the construction and

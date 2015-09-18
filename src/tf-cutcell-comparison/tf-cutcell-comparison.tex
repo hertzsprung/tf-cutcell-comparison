@@ -84,9 +84,31 @@ There are two details of grid construction which mean that resulting cut cell gr
 
 \section{Model}
 \label{sec:model}
-\TODO{Add info about the different numerical options that are assessed in combination with the orography treatment}
+Three models are used for the test cases in this study, and all are operated in a two-dimensional $x$--$z$ slice configuration.  The first model discretises the linear advection equation in flux form:
+\begin{align}
+\partial \phi / \partial t + \nabla \cdot \left( \mathbf{u} \phi \right) = 0
+\label{eq:advect}
+\end{align}
+where the tracer density, $\phi$, is interpolated onto cell faces using one of two schemes: first, the centred linear scheme which takes the average of the two neighbouring cell values; second, the upwind-biased multidimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
+The time derivative is solved using a three-stage, second order Runge-Kutta scheme defined as:
+\begin{subequations}
+\begin{align}
+	\phi^\star &= \phi^{(n)} + \Delta t f(\phi^{(n)}) \\
+	\phi^{\star\star} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^\star) \right) \\
+	\phi^{(n+1)} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^{\star\star}) \right)
+\end{align}
+\end{subequations}
+where \(f(\phi^{(n)}) = - \nabla \cdot (\mathbf{u} \phi^{(n)})\) at time level \(n\). 
+To ensure that the discrete velocity field is non-divergent, velocities are prescribed at cell faces by differencing the streamfunction, \(\Psi(x, z)\), along the edges from \(\Psi\) stored at cell vertices.
 
-We use the finite volume model from \citet{weller-shahrokhi2014} which details a discretisation of the fully-compressible Euler equations, given by
+The second model is a modified version of the linear advection finite difference model first used by \citet{schaer2002}.  It uses terrain following coordinates and it is configured with leapfrog timestepping and a fourth-order centred difference scheme: \TODO{this wasn't properly documented in schaer2002 but we can document it using the Fortran code}
+\begin{align}
+	TODO
+\end{align}
+
+Once again, velocity fields are prescribed using a streamfunction defined at cell vertices (referred to as double staggered grid points by \citet{schaer2002}).  The original version of the code interpolated the geometric height, $z$, at doubly staggered points from values at adjacent half levels in order to calculate the streamfunction.  The modified version used here directly calculates the height at vertices to enable comparisons with the finite volume model solutions.
+
+The third model is taken from \citet{weller-shahrokhi2014} which details a discretisation of the fully-compressible Euler equations, given by
 \begin{subequations}
 \begin{align}
 	\text{Momentum} &\ &\  	\frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \rho \mathbf{u}\otimes\mathbf{u} &= \rho \mathbf{g} - c_p \rho \theta \nabla \Pi - \mu \rho \mathbf{u} \label{eq:momentum} \\
@@ -97,24 +119,9 @@ We use the finite volume model from \citet{weller-shahrokhi2014} which details a
 \end{subequations}
 where \(\rho\) is the density, \(\mathbf{u}\) is the velocity field, \(\mathbf{g}\) is the gravitational acceleration, \(c_p\) is the heat capacity at constant pressure, \(\theta = T \left(p_0/p\right)^\kappa\) is the potential temperature, \(T\) is the temperature, \(p\) is the pressure, \(p_0\) is a reference pressure, \(\Pi = \left(p / p_0 \right)^\kappa\) is the Exner function of pressure, and \(\kappa = R/c_p\) is the gas constant to heat capacity ratio.  \(\mu\) is a dimensionless damping function used for the sponge layer in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.
 
-The model is operated in a two-dimensional $x$--$z$ slice configuration without Coriolis forces.  The model uses the C-grid staggering in the horizontal and the Lorenz staggering in the vertical such that $\theta$, $\rho$ and $\Pi$ are stored at cell centroids and the covariant component of velocity at cell faces.
-\input{model}
-%A minor change has been made to the non-orthogonal formulation as described in \citet{weller-shahrokhi2014} to improve stability on non-orthogonal grid, and this is detailed in appendix A.
+The fully-compressible model uses the C-grid staggering in the horizontal and the Lorenz staggering in the vertical such that $\theta$, $\rho$ and $\Pi$ are stored at cell centroids and the covariant component of velocity at cell faces.  The model is configured without Coriolis forces.
 
-%For tracer advection tests, the advection equation is solved in flux form, given by
-%\begin{align}
-%\partial \phi / \partial t + \nabla \cdot \left( \mathbf{u} \phi \right) = 0
-%\end{align}
-%where the tracer density, $\phi$, is interpolated onto cell faces using the upwind-biased multidimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
-%The time derivative is solved using a three-stage, second order Runge-Kutta scheme:
-%\begin{subequations}
-%\begin{align}
-%	\phi^\star &= \phi^{(n)} + \Delta t f(\phi^{(n)}) \\
-%	\phi^{\star\star} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^\star) \right) \\
-%	\phi^{(n+1)} &= \phi^{(n)} + \frac{\Delta t}{2} \left( f(\phi^{(n)}) + f(\phi^{\star\star}) \right)
-%\end{align}
-%\end{subequations}
-%where \(f(\phi^{(n)}) = - \nabla \cdot (\mathbf{u} \phi^{(n)})\) at time level \(n\).
+\input{model}
 
 \section{Results}
 \label{sec:results}
@@ -157,7 +164,9 @@ The wind is entirely horizontal and is prescribed as
 where $u_0 = \SI{10}{\meter\per\second}$, $z_1 = \SI{4}{\kilo\meter}$ and $z_2 = \SI{5}{\kilo\meter}$.
 This results in a constant wind above $z_2$, and zero flow at \SI{4}{\kilo\meter} and below.
 
-To ensure that the discrete velocity field is non-divergent, velocities are prescribed at cell faces by differencing the streamfunction, \(\Psi\), along the edges from \(\Psi\) stored at cell vertices.  Since \(u = \partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
+\TODO{Schaer defines u=-dPsi/dz, w=dPsi/dx --- check all this streamfunction stuff AGAIN}
+
+The discrete velocity field is defined using a streamfunction, \(\Psi\).  Since \(u = \partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
 \begin{align}
 	\Psi(z) &= \frac{u_0}{2} \left\{ \begin{array}{l l}
 		\left( 2z - z_1 - z_2 \right) & \enskip \text{if $z > z_2$} \\
@@ -185,7 +194,7 @@ where $A_x = \SI{25}{\kilo\meter}$, $A_z = \SI{3}{\kilo\meter}$ are the horizont
 Unlike \citet{schaer2002} who use periodic lateral boundaries, a fixed value of 0 is used at the inlet boundary and all other boundaries have zero gradient.  Furthermore, a second order Runge-Kutta timestepping scheme is used here instead of the leapfrog scheme used by \citet{schaer2002}.
 Tests are integrated forward in time for \SI{10000}{\second} with a timestep of \(\Delta t = \SI{25}{\second}\).
 
-The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain using a centred linear scheme and the upwind-biased cubic scheme.   Results were also obtained on BTF and SLEVE grids with the fourth order scheme from \citet{schaer2002} using a modified version of their Fortran code.  The original version of the code interpolated the geometric height at cell vertices from values at adjacent half levels in order to calculate the streamfunction, \(\Psi(z)\).  The modified version used here directly calculates the height at vertices to enable comparisons with the finite volume model solutions.  \TODO{move this detail into section 3 and add more info and references}
+The test was executed on the BTF, SLEVE and cut cell grids, and on a regular grid with flat terrain using a centred linear scheme and the upwind-biased cubic scheme.   Results were also obtained on BTF and SLEVE grids with the fourth order scheme from \citet{schaer2002} using a modified version of their code.
 
 Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.
 The results are compared on the BTF grid for the centred linear scheme (\ref{fig:advection-tracer}a) and the fourth order scheme from \citet{schaer2002} (\ref{fig:advection-tracer}c), and the upwind-biased cubic scheme on the cut cell grid (\ref{fig:advection-tracer}b), and BTF grid (\ref{fig:advection-tracer}d).  Tracer errors at \(t = \SI{10000}{\second}\) are shown for the fourth order and upwind-biased cubic schemes in figures \ref{fig:advection-tracer}e and \ref{fig:advection-tracer}f respectively.
@@ -309,7 +318,7 @@ To summarize, results of the gravity waves test on all grids are in good agreeme
 The spatial domain, mountain profile, grid resolutions and timesteps are the same as those in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.  The terrain following velocity field is defined by the streamfunction:
 \begin{align}
 	\Psi(x,z) = u_0 \left\{ \begin{array}{l l}
-			H_\mathrm{TF} \frac{z - h}{H_\mathrm{TF} - h} \label{eqn:streamfunc-btf} & \enskip \text{if $z \leq H_\mathrm{TF}$} \\
+			H_\mathrm{TF} \frac{z - h}{H_\mathrm{TF} - h} & \enskip \text{if $z \leq H_\mathrm{TF}$} \\
 			z & \enskip \text{if $z > H_\mathrm{TF}$}
 	\end{array} \right.
 \end{align}
