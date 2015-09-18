@@ -210,9 +210,7 @@ The results of the horizontal advection test show that numerical errors are due 
 
 
 \subsection{Terrain following advection}
-\TODO{make it clearer that we're trying to determine if non-orthogonality or misalignment of the flow is the primary source of error}
-
-In the horizontal advection test, results were more accurate where the flow was aligned with the grid layers, and distortions in the BTF grid led to increased errors.  To determine the primary source of numerical error, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  Misalignment on the SLEVE and cut cell grids is designed to challenge the advection scheme.
+In the horizontal advection test, results were least accurate on the BTF grid, where the grid was most non-orthogonal and flow was misaligned with the grid layers.  Here, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  This test determines whether the primary source of numerical error is due to non-orthogonality or misalignment of the flow with grid layers. 
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
