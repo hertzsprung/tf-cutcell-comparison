@@ -82,14 +82,17 @@ The OpenFOAM utility \texttt{snappyHexMesh} was used to create a grid that appro
 There are two details of grid construction which mean that resulting cut cell grids can differ slightly from a typical cut cell grid created using a shaving method, as described by \citet{adcroft1997}.  First, when \texttt{snappyHexMesh} moves vertices onto the terrain surface, some points are moved horizontally.  Second, the utility does not create new points necessary for pentagonal cells.
 
 
-\section{Model}
+\section{Models}
 \label{sec:model}
-Three models are used for the test cases in this study, and all are operated in a two-dimensional $x$--$z$ slice configuration.  The first model discretises the linear advection equation in flux form:
+Three models are used for the test cases in this study: two linear advection models and a model of the fully-compressible Euler equations.  All are operated in a two-dimensional $x$--$z$ slice configuration.
+
+\subsection{Finite volume linear advection model}
+The first model discretises the linear advection equation in flux form:
 \begin{align}
 \partial \phi / \partial t + \nabla \cdot \left( \mathbf{u} \phi \right) = 0
 \label{eq:advect}
 \end{align}
-where the tracer density, $\phi$, is interpolated onto cell faces using one of two schemes: first, the centred linear scheme which takes the average of the two neighbouring cell values; second, the upwind-biased multidimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
+where $\mathbf{u} = (u, w)$ is a prescribed velocity field and the tracer density, $\phi$, is interpolated onto cell faces using one of two schemes: first, the centred linear scheme which takes the average of the two neighbouring cell values; second, the upwind-biased multidimensional cubic scheme from \citet{weller-shahrokhi2014} which is non-monotonic and not flux corrected.
 The time derivative is solved using a three-stage, second order Runge-Kutta scheme defined as:
 \begin{subequations}
 \begin{align}
@@ -101,13 +104,15 @@ The time derivative is solved using a three-stage, second order Runge-Kutta sche
 where \(f(\phi^{(n)}) = - \nabla \cdot (\mathbf{u} \phi^{(n)})\) at time level \(n\). 
 To ensure that the discrete velocity field is non-divergent, velocities are prescribed at cell faces by differencing the streamfunction, \(\Psi(x, z)\), along the edges from \(\Psi\) stored at cell vertices.
 
-The second model is a modified version of the linear advection finite difference model first used by \citet{schaer2002}.  It uses terrain following coordinates and it is configured with leapfrog timestepping and a fourth-order centred difference scheme: \TODO{this wasn't properly documented in schaer2002 but we can document it using the Fortran code}
+\subsection{Finite difference linear advection model}
+The second model is a modified version of the linear advection model first used by \citet{schaer2002}.  It uses terrain following coordinates and it is configured with leapfrog timestepping and a fourth-order centred difference scheme:
 \begin{align}
-	TODO
+	\frac{\partial \phi_i}{\partial x} \approx \frac{1}{\Delta x} \left( \frac{1}{12} \phi_{i-2} - \frac{2}{3} \phi_{i-1} + \frac{2}{3} \phi_{i+1} - \frac{1}{12} \phi_{i+2} \right)
 \end{align}
 
 Once again, velocity fields are prescribed using a streamfunction defined at cell vertices (referred to as double staggered grid points by \citet{schaer2002}).  The original version of the code interpolated the geometric height, $z$, at doubly staggered points from values at adjacent half levels in order to calculate the streamfunction.  The modified version used here directly calculates the height at vertices to enable comparisons with the finite volume model solutions.
 
+\subsection{Fully-compressible model}
 The third model is taken from \citet{weller-shahrokhi2014} which details a discretisation of the fully-compressible Euler equations, given by
 \begin{subequations}
 \begin{align}
@@ -126,7 +131,7 @@ The fully-compressible model uses the C-grid staggering in the horizontal and th
 \section{Results}
 \label{sec:results}
 
-A series of two-dimensional tests are performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.  The first test from \citet{schaer2002} advects a tracer in a horizontal velocity field.  Second, a new tracer advection test is formulated employing a terrain following velocity field to challenge the advection scheme on cut cell grids.  The third test solves the Euler equations for a stably stratified atmosphere initially at rest, following \citet{klemp2011}.  Finally, as specified by \citet{schaer2002}, a test of orographically-induced gravity waves is performed.  No explicit diffusion is used in any of the tests.
+A series of two-dimensional tests are performed over idealised orography.  For each test, results on the BTF, SLEVE and cut cell grid are compared.  The first test from \citet{schaer2002} advects a tracer in a horizontal velocity field.  Second, a new tracer advection test is formulated employing a terrain following velocity field to challenge the advection scheme on cut cell grids.  The third test solves the Euler equations for a stably stratified atmosphere initially at rest, following \citet{klemp2011}.  Finally, as specified by \citet{schaer2002}, a test of orographically-induced gravity waves is performed.  \TODO{advection of thermal profile} No explicit diffusion is used in any of the tests.
 
 The OpenFOAM implementation of the numerical model, grid generation utilities and test cases are available at \url{https://github.com/hertzsprung/tf-cutcell-comparison/tree/shaw-weller-2015-mwr}.
 
@@ -164,11 +169,9 @@ The wind is entirely horizontal and is prescribed as
 where $u_0 = \SI{10}{\meter\per\second}$, $z_1 = \SI{4}{\kilo\meter}$ and $z_2 = \SI{5}{\kilo\meter}$.
 This results in a constant wind above $z_2$, and zero flow at \SI{4}{\kilo\meter} and below.
 
-\TODO{Schaer defines u=-dPsi/dz, w=dPsi/dx --- check all this streamfunction stuff AGAIN}
-
-The discrete velocity field is defined using a streamfunction, \(\Psi\).  Since \(u = \partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
+The discrete velocity field is defined using a streamfunction, \(\Psi\).  Given that \(u = -\partial \Psi / \partial z\), the streamfunction is found by vertical integration of the velocity profile:
 \begin{align}
-	\Psi(z) &= \frac{u_0}{2} \left\{ \begin{array}{l l}
+	\Psi(z) &= -\frac{u_0}{2} \left\{ \begin{array}{l l}
 		\left( 2z - z_1 - z_2 \right) & \enskip \text{if $z > z_2$} \\
 		z - z_1 - \frac{z_2 - z_1}{\pi} \sin \left(\pi \frac{z - z_1}{z_2-z_1}\right) & \enskip \text{if $z_1 < z \leq z_2$} \\
 		0 & \enskip \text{if $z \leq z_1$}
@@ -212,7 +215,12 @@ where $\phi$ is the numerical tracer value, $\phi_T$ is the analytic value and $
 The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell_2 = \num{0.107}\) but is significantly reduced on the SLEVE grid with \(\ell_2 = \num{0.0146}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
 Tracer minima and maxima for the centred linear and fourth order schemes are lower than those presented by \citet{schaer2002} because no interpolation is used to calculate the streamfunction.
 
-The centred linear scheme is sensitive to changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell_2$ error on the BTF grid rises from \num{0.284} to \num{0.432}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell_2$ error decreasing from \num{0.107} to \num{0.104}.
+The centred linear scheme is sensitive to changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell_2$ error on the BTF grid rises from \num{0.284} to \num{0.432}.  The same sensitivity is found using terrain following coordinates and centred differences in space and time, as implemented by \citet{schaer2002}.  This sensitivity can be explained by realising that increased non-orthogonality or flow misalignment tends to increase errors.  To measure non-orthogonality, consider the total variation, $TV$, of the discrete terrain profile:
+\begin{align}
+	TV = \sum_i | h(x_{i+1}) - h(x_i) |
+\end{align}
+where $x_i$ is the horizontal location of a vertex on the lower boundary.  For a domain width of \SI{301}{\kilo\meter}, $TV = \SI{18095}{\meter}$, but for a width of \SI{300}{\kilo\meter}, $TV = \SI{18964}{\meter}$.
+The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell_2$ error decreasing from \num{0.107} to \num{0.104}.
 
 The results of the horizontal advection test show that numerical errors are due either to misalignment of the flow with the grid, or to grid distortions.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
 
@@ -223,12 +231,12 @@ In the horizontal advection test, results were least accurate on the BTF grid, w
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the continuous velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
 \begin{equation}
-	\Psi(x,z) = u_0 H \frac{z - h}{H - h} \label{eqn:streamfunc-btf}
+	\Psi(x,z) = -u_0 H \frac{z - h}{H - h} \label{eqn:streamfunc-btf}
 \end{equation}
 where $u_0 = \SI{10}{\meter\per\second}$, which is the horizontal wind speed where $h(x) = 0$.
 The horizontal and vertical components of velocity, $u$ and $w$, are then given by
 \begin{align}
-	u &= \frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = -\frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{H - z}{\left( H - h \right)^2} \label{eqn:uw-btf} \\
+	u &= -\frac{\partial \Psi}{\partial z} = u_0 \frac{H}{H - h}, \quad w = \frac{\partial \Psi}{\partial x} = u_0 H \frac{\mathrm{d} h}{\mathrm{d} x} \frac{H - z}{\left( H - h \right)^2} \label{eqn:uw-btf} \\
 	\frac{\mathrm{d} h}{\mathrm{d} x} &= - h_0 \left[ 
 		\beta \cos^2 \left( \alpha x \right) \sin \left( 2 \beta x \right) +
 		\alpha \cos^2 \left( \beta x \right) \sin \left( 2 \alpha x \right)
@@ -317,7 +325,7 @@ To summarize, results of the gravity waves test on all grids are in good agreeme
 \subsection{Terrain following advection of thermal profile}
 The spatial domain, mountain profile, grid resolutions and timesteps are the same as those in the gravity waves test in section~\ref{sec:results}\ref{sec:gw}.  The terrain following velocity field is defined by the streamfunction:
 \begin{align}
-	\Psi(x,z) = u_0 \left\{ \begin{array}{l l}
+	\Psi(x,z) = -u_0 \left\{ \begin{array}{l l}
 			H_\mathrm{TF} \frac{z - h}{H_\mathrm{TF} - h} & \enskip \text{if $z \leq H_\mathrm{TF}$} \\
 			z & \enskip \text{if $z > H_\mathrm{TF}$}
 	\end{array} \right.
