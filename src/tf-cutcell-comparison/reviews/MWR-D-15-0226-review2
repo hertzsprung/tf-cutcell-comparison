@@ -70,10 +70,9 @@ Having analysed test results at increasing vertical resolution (as suggested bel
 > would be helpful to expand the description of the grid construction
 > presently given on lines 127-137. A number of questions immediately come
 > to  mind, for example: How are the BTF grid surfaces actually used to
-> modify the cut-cell grid. 
-
-> Why do grid points need to be moved horizontally, 
-An illustrative example has been included in a new figure demonstrating the movement of grid points and the lack of pentagonal cells.
+> modify the cut-cell grid. Why do grid points need to be moved 
+> horizontally, 
+This section has been expanded to further explain and justify how cut cell grids are generated.  An illustrative example has been included in a new figure demonstrating the movement of grid points and the lack of pentagonal cells.
 
 > and where are the cell centers used for the numerics
 > actually located.
