@@ -291,7 +291,7 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 \label{sec:gw}
 The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
 
-Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high with a grid resolution of \(\Delta x = \SI{500}{\meter}\) and \(\Delta z^\star = \SI{300}{\meter}\).  \TODO{we want to consider much higher resolutions, too} The mountain profile has the same form as equation~\ref{eqn:resting:mountain}.  Tests are performed with mountain heights of $h_0 = \SI{250}{\meter}$ and \(h_0 = \SI{500}{\meter}\).  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
+Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.     \TODO{we want to consider much higher resolutions, too} The mountain profile has the same form as equation~\ref{eqn:resting:mountain}, but the gravity waves tests have a mountain height of $h_0 = \SI{250}{\meter}$.  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.  On the optimised SLEVE grid, $s_1 = \SI{5}{\kilo\meter}$ is the large scale height, $s_2 = \SI{2}{\kilo\meter}$ is the small scale height and the optimal exponent value $n = 1.35$ is used.
 
 The initial thermodynamic conditions have a surface temperature of $\theta(z=0) = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
 
@@ -312,11 +312,17 @@ where $\overline{\mu} = 1.2$ is the damping coefficient, $z_B = \SI{20}{\kilo\me
 
 Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the purposes of generating BTF and SLEVE grids, the domain height is set to \SI{20}{\kilo\meter} because the sponge layer occupies the uppermost \SI{10}{\kilo\meter}.
 
-No normal flow is imposed at the top and bottom boundaries and the outlet has a zero gradient boundary condition.  For the Exner function of pressure, hydrostatic balance is prescribed on all boundaries.  The simulation is integrated forward by 5 hours with a timestep $\Delta t = \SI{8}{\second}$.
+No normal flow is imposed at the top and bottom boundaries and the outlet has a zero gradient boundary condition.  For the Exner function of pressure, hydrostatic balance is prescribed on all boundaries.
 
-Test results are compared between the BTF, SLEVE and cut cell grids.  Vertical velocities on the BTF, SLEVE and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
+Test results are compared between the BTF, SLEVE and cut cell grids at several resolutions.
+The spatial and temporal resolutions tested are shown in table~\ref{tab:gw-resolutions}.  The lowest resolution is the same as that used by \citet{schaer2002}, and higher resolutions preserve the same aspect ratio.
+The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.  \TODO{a reviewer (and Terry) suggested these tests, but we haven't found anything notable with any particular cut cell grid.  so I don't see much value in some of this description.  also not sure how much value there is in having a figure showing several cut cell grids (e.g. 300dz, 250dz, 200dz)}
+The simulation is integrated forward by 5 hours and the timestep, $\Delta t = 8 \Delta z / \SI{300}{\second}$, is chosen so that it scales linearly with spatial resolution and, following the original test specified by \citet{schaer2002}, $\Delta t = \SI{8}{\second}$ when $\Delta z = \SI{300}{\meter}$.
 
-The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  Once again, the results are similar on all three grids, and results are shown on the BTF and cut cell grids in figures~\ref{fig:gw-theta}a and \ref{fig:gw-theta}c respectively.  However, examining more closely the anomalies in the lee of the mountain for the cut cell grid, figure~\ref{fig:gw-theta}d shows that the bottommost layer is anomalously warm and the layer above it is anomalously cold.  This feature is not present on the BTF grid (figure~\ref{fig:gw-theta}b) or the SLEVE grid (not shown).  \TODO{not present?  I think it is, just much smaller amplitude}
+At $\Delta z = \SI{300}{\meter}$, vertical velocities on the BTF, SLEVE and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.  \TODO{perhaps I should spot check some of the grids at higher resolutions but, given that the theta fields converge overall, I don't see why vertical velocities contours would do anything funky}
+
+The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.
+Results are similar across all grid types and resolutions, but examining the anomalies in the lee of the mountain errors are found in the lowest few layers: the bottommost layer is anomalously warm and the layer above it is anomalously cold.  \TODO{this isn't true at all resolutions, e.g. 50dz is cold at the bottom}  At all resolutions, the amplitude of the errors is greater on the cut cell grid than the BTF \TODO{or SLEVE?} grid.  As resolution increases, the anomalously cold layers first increase in amplitude, then begin to span multiple layers, which suggests that the errors are controlled by the mountain height. \TODO{that conclusion might be stronger with tests at different mountain heights?  oh no, not more tests! :-P}
 
 To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.
 
@@ -354,7 +360,7 @@ Across all tests, a high degree of accuracy was achieved for all grids.  Even on
 
 Spurious vertical velocities were small in the resting initial state test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{7}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
-Cut cell grids reduced errors in two of the four tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
+Cut cell grids reduced errors in two of the five tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
 
 Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.
 
@@ -405,6 +411,27 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 \end{tabular}
 \end{table*}
 
+\begin{table}
+	\caption{Spatial and temporal resolutions used in the gravity waves test.  The lowest resolution has the same parameters as the original test case specified by \citet{schaer2002}.  At higher resolutions, the vertical resolution is chosen, and horizontal and temporal resolutions are calculated to preserve the same aspect ratio.  \TODO{don't need to include all these resolutions, just those need to do suitable analysis/conclusions}}
+	\label{tab:gw-resolutions}
+%
+\centering
+\begin{tabular}{S S S}
+\hline\hline
+{$\Delta z$ (\si{\meter})} & {$\Delta x$ (\si{\meter})} & {$\Delta t$ (\si{\second})} \\
+\hline
+300	& 500	& 8 \\
+250	& 416.7 & 6.667 \\
+200	& 333.3 & 5.333 \\
+150	& 250	& 4 \\
+125	& 208.3 & 3.333 \\
+100	& 166.7 & 2.667 \\
+75	& 125	& 2 \\
+50	& 83.33 & 1.333 \\
+\hline
+\end{tabular}
+\end{table}
+
 
 % FIGURES
 \begin{figure*}
@@ -438,13 +465,5 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\caption{Maximum spurious vertical velocity, \(w\) (\si{\meter\per\second}), in the resting atmosphere test with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.}
 	\label{fig:resting}
 \end{figure}
-
-\begin{figure*}
-	\centering
-	\includegraphics{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
-%
-	\caption{Anomalies in potential temperature in the gravity waves test after 5 hours with a mountain height, \(h_0 = \SI{250}{\meter}\).  The central domain in the lowest \SI{12}{\kilo\meter} is shown on (a) the BTF grid, and (c) the cut cell grid.  The four lowest layers of each grid are shown for (b) BTF, and (d) cut cell grids, using a narrower potential temperature scale.  The results on the SLEVE grid (not shown) are qualitatively identical to results on the BTF grid.  Axes are in units of \si{\meter}.}
-	\label{fig:gw-theta}
-\end{figure*}
 
 \end{document}
