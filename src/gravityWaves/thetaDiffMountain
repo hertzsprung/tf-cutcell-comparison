@@ -11,7 +11,7 @@ FoamFile {
     object          gmtDict;
 }
 
-projection "X2i/1.5i";
+projection "X3i/1.5i";
 projection2D XZ;
 separateLegend true;
 plotBoundaryDots false;

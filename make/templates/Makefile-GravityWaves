@@ -3,11 +3,9 @@ define GravityWavesPlots
 
 $(eval $(call GmtPlot,$1,src/gravityWaves/thetaDiffOverview,18000,pdf))
 $(eval $(call GmtPlot,$1,src/gravityWaves/thetaDiffMountain,18000,pdf))
-$(eval $(call GmtPlot,$1,src/gravityWaves/thetaDiffLee,18000,pdf))
 
 $1/18000/thetaDiffOverview.pdf \
-$1/18000/thetaDiffMountain.pdf \
-$1/18000/thetaDiffLee.pdf: \
+$1/18000/thetaDiffMountain.pdf: \
   $1/18000/theta_diff \
   $(addprefix $1/,$(systemFiles)) \
   $(addprefix $1/,$(meshFiles))

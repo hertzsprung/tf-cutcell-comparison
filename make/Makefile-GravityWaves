@@ -1,15 +1,11 @@
-$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves,fig-gravityWaves))
+$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-theta,fig-gravityWaves-theta))
 
-build/fig-gravityWaves/fig-gravityWaves.pdf: \
+build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf: \
   build/gravityWaves-btf-250m-300dz/18000/thetaDiffOverview.pdf \
   build/gravityWaves-btf-250m-300dz/18000/thetaDiffMountain.pdf \
-  build/gravityWaves-btf-250m-300dz/18000/thetaDiffLee.pdf \
   build/gravityWaves-cutCell-250m-300dz/18000/thetaDiffMountain.pdf \
-  build/gravityWaves-cutCell-250m-300dz/18000/thetaDiffLee.pdf \
   build/gravityWaves-btf-250m-250dz/18000/thetaDiffMountain.pdf \
-  build/gravityWaves-btf-250m-250dz/18000/thetaDiffLee.pdf \
-  build/gravityWaves-cutCell-250m-250dz/18000/thetaDiffMountain.pdf \
-  build/gravityWaves-cutCell-250m-250dz/18000/thetaDiffLee.pdf
+  build/gravityWaves-cutCell-250m-250dz/18000/thetaDiffMountain.pdf
 
 $(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-300dz))
 $(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-300dz))
