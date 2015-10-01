@@ -28,7 +28,9 @@ include $(MAKE_COMMON)/templates/Makefile-LaTeX
 include $(MAKE_COMMON)/templates/Makefile-Gnuplot
 include $(MAKE_COMMON)/templates/Makefile-GmtPlot
 include make/templates/Makefile-PlotMesh
+include make/templates/Makefile-GravityWaves
 include make/Makefile-Meshes
 include make/Makefile-Advection
 include make/Makefile-Resting
+include make/Makefile-GravityWaves
 include make/Makefile-TF-CutCell-Comparison

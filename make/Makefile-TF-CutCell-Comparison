@@ -9,6 +9,7 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   build/fig-advection-tracer/fig-advection-tracer.pdf \
   build/fig-meshes/fig-meshes.pdf \
   build/fig-snappyHexMesh/fig-snappyHexMesh.pdf \
-  build/fig-resting/fig-resting.pdf
+  build/fig-resting/fig-resting.pdf \
+  build/fig-gravityWaves/fig-gravityWaves.pdf
 
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-snappyHexMesh,fig-snappyHexMesh))
