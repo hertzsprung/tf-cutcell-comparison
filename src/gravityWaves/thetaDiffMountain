@@ -15,6 +15,7 @@ projection "X3i/1.5i";
 projection2D XZ;
 separateLegend true;
 plotBoundaryDots false;
+plotZeroValuePolys false;
 
 FieldsToPlot (
     [theta_diff rawValues -1.0 1.0 0.1 "$GMTU/colours/red_white_blue.cpt"]
