@@ -339,7 +339,7 @@ The spatial domain, mountain profile, grid resolutions and timesteps are the sam
 where \(H_\mathrm{TF} = \SI{20}{\kilo\meter}\) is the level at which the terrain following layers become flat; the domain height is \(\SI{30}{\kilo\meter}\).
 For $z \leq H$, the $u$ and $w$ components of velocity are given by equation~\ref{eqn:uw-btf}, but $h(x)$ has the same form as equation~\ref{eqn:resting:mountain}, hence the derivative is:
 \begin{align}
-	\frac{\mathrm{d} h}{\mathrm{d} x} = -h_0 \exp \left(- \left( \frac{x}{a} \right)^2 \right) \left[ \frac{\pi}{\lambda} \sin \left( \frac{2 \pi x}{\lambda} \right) - \frac{2x}{a^2} \cos^2\left( \frac{\pi x}{\lambda} \right) \right]
+	\frac{\mathrm{d} h}{\mathrm{d} x} = -h_0 \exp \left(- \left( \frac{x}{a} \right)^2 \right) \left[ \alpha \sin \left( 2 \alpha x \right) - \frac{2x}{a^2} \cos^2\left( \alpha x \right) \right]
 \end{align}
 For $z > H$, $u = u_0$ and $w = 0$.
 
