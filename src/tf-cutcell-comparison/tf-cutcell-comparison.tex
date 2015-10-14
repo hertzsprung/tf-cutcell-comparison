@@ -14,13 +14,6 @@
 \affiliation{Department of Meteorology, University of Reading, Reading, United Kingdom}
 \email{js102@zepler.net}
 
-% Every term in the discretised equations of motion is a potential source of numerical error.
-% Errors in calculating the horizontal pressure gradient generate spurious circulations and much effort has been put into improving this calculation.  This is often achieved by making the grid more orthogonal: flattening terrain following coordinate surfaces [citations] or using a cut cell approach [citations].
-% TF citations: mahrer1984, schaer2002, klemp2011
-% cut cell citations: good2014, yamazaki2015 puts this clearly but not yet published
-% In a test of a stably stratified atmosphere initially at rest, we find that spurious velocities are no more than \SI{0.1}{\meter\per\second} on any grid. [TODO: and this is much better than klemp2011]
-% Advection terms also contribute to numerical error.  We show that advection is most accurate when the flow is aligned with the grid layers.  Near the surface, flow tends to follow the terrain which results in larger errors when more orthogonal grids are used.
-% In a test of orographically induced gravity waves, we find that the advection of potential temperature generates grid-scale errors on the cut cell grid.
 
 \abstract{Terrain following coordinates are widely used in operational models but the cut cell method has been proposed as an alternative that can more accurately represent atmospheric dynamics over steep orography.  Because the type of grid is usually chosen during model implementation, it is typically necessary to use different models in order to compare the accuracy of different grids.  In contrast, here a single C-grid finite volume model is used to enable a like-for-like comparison of terrain following and cut cell grids.
 A series of standard two-dimensional tests using idealised terrain are performed: tracer advection in a prescribed horizontal velocity field, a test starting from stably stratified initial conditions, and orographically induced gravity waves described by nonhydrostatic dynamics.  In addition, a new tracer advection test is formulated having a velocity field that is everywhere tangential to the terrain following coordinate surfaces.  This new test presents a challenge to cut cells in situations with a large Froude number and large Scorer parameter.  \TODO{discuss Froude number/Scorer parameter in body.}
@@ -29,6 +22,15 @@ The results of the advection tests demonstrate that tracer accuracy depends upon
 \begin{document}
 
 \maketitle
+\TODO{this is preliminary, but somewhere in the body I want to highlight the tension between horizontal pressure gradient/advection errors and the choice of grid:}
+
+\TODO{Every term in the discretised equations of motion is a potential source of numerical error.
+ Errors in calculating the horizontal pressure gradient generate spurious circulations and much effort has been put into improving this calculation.  This is often achieved by making the grid more orthogonal: flattening terrain following coordinate surfaces [citations] or using a cut cell approach [citations].
+ TF citations: mahrer1984, schaer2002, klemp2011
+ cut cell citations: good2014, yamazaki2015 puts this clearly but not yet published
+ In a test of a stably stratified atmosphere initially at rest, we find that spurious velocities are no more than \SI{0.1}{\meter\per\second} on any grid. [TODO: and this is much better than klemp2011]
+ Advection terms also contribute to numerical error.  We show that advection is most accurate when the flow is aligned with the grid layers.  Near the surface, flow tends to follow the terrain which results in larger errors when more orthogonal grids are used.
+ In a test of orographically induced gravity waves, we find that the advection of potential temperature generates grid-scale errors on the cut cell grid.}
 
 \section{Introduction}
 Representing orography accurately in numerical weather prediction systems is necessary to model downslope winds and local precipitation.  Orography also exerts strong non-local influences: from the latent heat release due to convection, by directly forcing planetary waves, and by the atmospheric response to form drag and gravity wave drag.  There are two main approaches to representing orography on a grid: terrain following layers and cut cells.  Another way of treating orography is the immersed (or embedded) boundary method \citep{simon2012}.  All methods align cells in vertical columns.  Because most models are designed for a particular type of grid, existing studies of cut cell solutions have compared results with terrain following grid solutions implemented within different models, for example \citet{good2014}.  Instead, this study uses a single model to enable a like-for-like comparison between solutions using terrain following and cut cell grids.
@@ -291,9 +293,18 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 \label{sec:gw}
 The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
 
-Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.     \TODO{we want to consider much higher resolutions, too} The mountain profile has the same form as equation~\ref{eqn:resting:mountain}, but the gravity waves tests have a mountain height of $h_0 = \SI{250}{\meter}$.  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.
+Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.
+The mountain profile has the same form as equation~\ref{eqn:resting:mountain}, but the gravity waves tests have a mountain height of $h_0 = \SI{250}{\meter}$.  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.
 
-The initial thermodynamic conditions have a surface temperature of $\theta(z=0) = \SI{288}{\kelvin}$ and constant stability with $N = \SI{0.01}{\per\second}$ everywhere.  A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed at the inlet boundary.
+A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed in the interior domain and at the inlet boundary.  No normal flow is imposed at the top and bottom boundaries and the velocity field has a zero gradient outlet boundary condition.
+
+The initial thermodynamic conditions have a temperature at $z=0$ of $\theta_0 = \SI{288}{\kelvin}$ and constant static stability with $N = \SI{0.01}{\per\second}$ everywhere, such that
+\begin{align}
+	\theta(z) = \theta_0 \exp \left( \frac{N^2}{g} z \right) \label{eqn:thermal-profile}
+\end{align}
+for $z > 0$.
+Potential temperature values are prescribed at the inlet and upper boundary using equation~\ref{eqn:thermal-profile}, and a zero gradient boundary condition is applied at the outlet.  At the ground, fixed gradients are imposed by calculating the component of $\nabla \theta$ normal to each face using the vertical derivative of equation~\ref{eqn:thermal-profile}.
+For the Exner function of pressure, hydrostatic balance is prescribed on all boundaries.
 
 Sponge layers are added to the upper \SI{10}{\kilo\meter} and leftmost \SI{10}{\kilo\meter} at the inlet boundary to damp the reflection of waves.
 The damping function, \(\mu\), is adapted from \citet{melvin2010} such that
@@ -312,11 +323,10 @@ where $\overline{\mu} = 1.2$ is the damping coefficient, $z_B = \SI{20}{\kilo\me
 
 Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the purposes of generating BTF grids, the domain height is set to \SI{20}{\kilo\meter} because the sponge layer occupies the uppermost \SI{10}{\kilo\meter}.
 
-No normal flow is imposed at the top and bottom boundaries and the outlet has a zero gradient boundary condition.  For the Exner function of pressure, hydrostatic balance is prescribed on all boundaries.
-
 Test results are compared between the BTF and cut cell grids at several resolutions.
 The spatial and temporal resolutions tested are shown in table~\ref{tab:gw-resolutions}.  The lowest resolution is the same as that used by \citet{schaer2002}, and higher resolutions preserve the same aspect ratio.
-The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.  \TODO{a reviewer (and Terry) suggested these tests, but we haven't found anything notable with any particular cut cell grid.  so I don't see much value in some of this description.  also not sure how much value there is in having a figure showing several cut cell grids (e.g. 300dz, 250dz, 200dz)}
+The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.
+
 The simulation is integrated forward by 5 hours and the timestep, $\Delta t = 8 \Delta z / \SI{300}{\second}$, is chosen so that it scales linearly with spatial resolution and, following the original test specified by \citet{schaer2002}, $\Delta t = \SI{8}{\second}$ when $\Delta z = \SI{300}{\meter}$.
 
 At $\Delta z = \SI{300}{\meter}$, vertical velocities on the BTF and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
@@ -339,17 +349,18 @@ The spatial domain, mountain profile, grid resolutions and timesteps are the sam
 where \(H_\mathrm{TF} = \SI{20}{\kilo\meter}\) is the level at which the terrain following layers become flat; the domain height is \(\SI{30}{\kilo\meter}\).
 For $z \leq H$, the $u$ and $w$ components of velocity are given by equation~\ref{eqn:uw-btf}, but $h(x)$ has the same form as equation~\ref{eqn:resting:mountain}, hence the derivative is:
 \begin{align}
-	\frac{\mathrm{d} h}{\mathrm{d} x} = -h_0 \exp \left(- \left( \frac{x}{a} \right)^2 \right) \left[ \frac{\pi}{\lambda} \sin \left( \frac{2 \pi x}{\lambda} \right) - \frac{2x}{a^2} \cos^2\left( \frac{\pi x}{\lambda} \right) \right]
+	\frac{\mathrm{d} h}{\mathrm{d} x} = -h_0 \exp \left(- \left( \frac{x}{a} \right)^2 \right) \left[ \alpha \sin \left( 2 \alpha x \right) - \frac{2x}{a^2} \cos^2\left( \alpha x \right) \right]
 \end{align}
 For $z > H$, $u = u_0$ and $w = 0$.
 
-The tracer field, \(\phi\), is the same as the initial potential temperature field in the gravity waves test:
+The initial tracer density field, \(\phi\), and its boundary conditions, are the same as those of the initial potential temperature field in the gravity waves test.
+Following the gravity waves test, the simulation is integrated forward by \SI{18000}{\second}, by which time the tracer initially upwind of the mountain will have cleared the mountain range.
+Hence, the analytic solution, $\phi_T$, can be found by considering the vertical displacement of the tracer profile by the terrain following velocity field.
 \begin{align}
-	\phi(z) = \phi_0 \exp \left( \frac{N^2}{g} z \right) \label{eqn:thermal-tracer}
+	\phi_T(x, z) = \phi_0 \exp \left( \frac{N^2}{g} z^\star(x, z) \right) 
 \end{align}
-where \(\phi_0 = 288\) and \(N = \SI{0.01}{\per\second}\).  The inlet boundary has fixed values prescribed by equation~\ref{eqn:thermal-tracer} and a zero gradient boundary condition is applied at the outlet.
-
-Columns of low tracer density are seen above the mountain peaks which have been advected upwards from the surface on the windward mountain slope, with the lowest tracer densities over the highest central peak.
+where the tracer density at $z = 0$, $\phi_0 = 288$, and the transform, $z^\star$, is given by rearranging equation~\ref{eqn:btf}.
+\TODO{is this clear enough?  my point is I don't need to worry about an analytic solution where only /part/ of the tracer has been advected over the mountain range.  the analytic solution at t=18000s is symmetric about x=0.}
 
 \TODO{analyse results of test, draw conclusions}
 
@@ -412,7 +423,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 \end{table*}
 
 \begin{table}
-	\caption{Spatial and temporal resolutions used in the gravity waves test.  The lowest resolution has the same parameters as the original test case specified by \citet{schaer2002}.  At higher resolutions, the vertical resolution is chosen, and horizontal and temporal resolutions are calculated to preserve the same aspect ratio.  \TODO{don't need to include all these resolutions, just those need to do suitable analysis/conclusions}}
+	\caption{Spatial and temporal resolutions used in the gravity waves test.  The lowest resolution has the same parameters as the original test case specified by \citet{schaer2002}.  At higher resolutions, the vertical resolution is chosen, and horizontal and temporal resolutions are calculated to preserve the same aspect ratio.  \TODO{don't necessary need to include all these resolutions, just those need to do suitable analysis/conclusions}.  \TODO{*** might have to be smaller for cut cell grid due to small cell problem}}
 	\label{tab:gw-resolutions}
 %
 \centering
@@ -424,7 +435,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 250	& 416.7 & 6.667 \\
 200	& 333.3 & 5.333 \\
 150	& 250	& 4 \\
-125	& 208.3 & 3.333 \\
+125	& 208.3 & 3.333 \TODO{***} \\
 100	& 166.7 & 2.667 \\
 75	& 125	& 2 \\
 50	& 83.33 & 1.333 \\
@@ -470,7 +481,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\centering
 	\includegraphics[width=6in]{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{\TODO{}}
+	\caption{\TODO{This will eventually include a large panel showing BTF dz=50m (the best "reference" solution we have).  Below that I intend to compare BTF/cut cell results at dz=50m, between gravity waves and thermal advection tests.  These plots will zoom into a small domain covering the mountain peaks and a small part of the lee side.}}
 	\label{fig:gw-theta}
 \end{figure*}
 
@@ -478,7 +489,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\centering
 	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{\TODO{}}
+	\caption{\TODO{Vertical sample through x=50km (quite far to the east of the mountain) in gravity waves tests.  BTF results I have so far are in good agreement.  The cut cell results are not.  I am not yet sure if it will be worth taking sample lines through thermal advection tracer diffs because not all of them agree with the gravity waves results.  This can, perhaps, be forgiven because the wind fields differ between the advection and gravity waves tests.}}
 	\label{fig:gw-sampleLine}
 \end{figure}
 
