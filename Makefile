@@ -29,6 +29,7 @@ include $(MAKE_COMMON)/templates/Makefile-Gnuplot
 include $(MAKE_COMMON)/templates/Makefile-GmtPlot
 include make/templates/Makefile-PlotMesh
 include make/templates/Makefile-GravityWaves
+include make/templates/Makefile-ThermalAdvection
 include make/Makefile-Meshes
 include make/Makefile-Advection
 include make/Makefile-Resting

@@ -24,6 +24,13 @@ $(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-75dz))
 $(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-50dz))
 $(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-50dz))
 
+$(eval $(call ThermalAdvectionPlots,build/thermalAdvection-btf-250m-300dz))
+$(eval $(call ThermalAdvectionPlots,build/thermalAdvection-cutCell-250m-300dz))
+$(eval $(call ThermalAdvectionPlots,build/thermalAdvection-btf-250m-250dz))
+$(eval $(call ThermalAdvectionPlots,build/thermalAdvection-cutCell-250m-250dz))
+$(eval $(call ThermalAdvectionPlots,build/thermalAdvection-btf-250m-200dz))
+$(eval $(call ThermalAdvectionPlots,build/thermalAdvection-cutCell-250m-200dz))
+
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-sampleLine,fig-gravityWaves-sampleLine))
 
 build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf: \
