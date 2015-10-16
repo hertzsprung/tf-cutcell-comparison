@@ -298,11 +298,11 @@ The mountain profile has the same form as equation~\ref{eqn:resting:mountain}, b
 
 A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed in the interior domain and at the inlet boundary.  No normal flow is imposed at the top and bottom boundaries and the velocity field has a zero gradient outlet boundary condition.
 
-The initial thermodynamic conditions have a temperature at $z=0$ of $\theta_0 = \SI{288}{\kelvin}$ and constant static stability with $N = \SI{0.01}{\per\second}$ everywhere, such that
+The initial thermodynamic conditions have constant static stability with $N = \SI{0.01}{\per\second}$ everywhere, such that
 \begin{align}
 	\theta(z) = \theta_0 \exp \left( \frac{N^2}{g} z \right) \label{eqn:thermal-profile}
 \end{align}
-for $z > 0$.
+where the temperature at $z=0$ is $\theta_0 = \SI{288}{\kelvin}$.
 Potential temperature values are prescribed at the inlet and upper boundary using equation~\ref{eqn:thermal-profile}, and a zero gradient boundary condition is applied at the outlet.  At the ground, fixed gradients are imposed by calculating the component of $\nabla \theta$ normal to each face using the vertical derivative of equation~\ref{eqn:thermal-profile}.
 For the Exner function of pressure, hydrostatic balance is prescribed on all boundaries.
 
@@ -392,6 +392,28 @@ I am grateful to my co-supervisors John Methven and Terry Davies for their valua
 \bibliography{references}
 
 % TABLES
+\begin{table}
+	\caption{\TODO{mesh statistics.  BTF max/min cell area ratio is very close to 1 irrespective of resolution.}}
+	\label{tab:gw-meshes}
+%
+\centering
+\begin{tabular}{S S S S}
+\hline\hline
+
+{$\Delta z$ (\si{\meter})} & {cut cell max/min cell area ratio} & {BTF nonortho} & {cut cell nonortho} \\
+\hline
+300	& 4.325 & 10.2	& 7.3 \\
+250	& 5.422 & 10.8	& 20.9 \\
+200	& 25.36 & 10.8	& 31.9 \\
+150	& 10.03 & 11.0	& 29.4 \\
+125	& 10.11 & 11.1	& 24.37 \\
+100	& 36.27 & 11.1	& 32.2 \\
+75	& 52.89 & 11.2	& 34.2 \\
+50	& 75.25 & 11.2	& 31.7 \\
+\hline
+\end{tabular}
+\end{table}
+
 \begin{table*}
 	\caption{Minimum and maximum tracer magnitudes and \(\ell_2\) error norms (defined by equation~\ref{eqn:l2-error}) at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, \(\ell_2\) error norms, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
 \label{tab:advection}
@@ -408,15 +430,15 @@ Horizontal        & Centred linear      & \(\ell_2\) error & 0        & 0.284   
                   & Fourth order        & \(\ell_2\) error & 0        & 0.0938  & 0.00244         & {---}          & 0.00234     \\
                   &                     & min              & 0        & -0.0926 & -0.00174        & {---}          & -0.00178    \\
                   &                     & max              & 1        & 1.00    & 0.984           & {---}          & 0.983       \\
-                  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.107   & 0.0146          & 0.00784        & 0.00784     \\
-                  &                     & min              & 0        & -0.0446 & -0.0106         & -0.000674      & -0.00674    \\
-                  &                     & max              & 1        & 0.925   & 0.982           & 0.983          & 0.983       \\
+                  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.112   & 0.0146          & 0.00784        & 0.00784     \\
+                  &                     & min              & 0        & -0.0464 & -0.0106         & -0.000674      & -0.00674    \\
+                  &                     & max              & 1        & 0.922   & 0.982           & 0.983          & 0.983       \\
 \hline
 Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  & 0.235           & {unstable}     & {---}        \\
 	          &                     & min              & 0        & -0.0245 & -0.120          & {unstable}     & {---}        \\
 		  &                     & max              & 1        & 0.985   & 0.950           & {unstable}     & {---}        \\
 		  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.0209  & 0.162           & 0.181          & {---}        \\
-                  &                     & min              & 0        & -0.0110 & -0.0263         & -0.028         & {---}        \\
+                  &                     & min              & 0        & -0.0110 & -0.0263         & -0.0284        & {---}        \\
                   &                     & max              & 1        & 0.983   & 0.865           & 0.851          & {---}        \\
 \hline
 \end{tabular}
