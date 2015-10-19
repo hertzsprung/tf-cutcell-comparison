@@ -327,14 +327,14 @@ where $\overline{\mu} = 1.2$ is the damping coefficient, $z_B = \SI{20}{\kilo\me
 
 Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the purposes of generating BTF grids, the domain height is set to \SI{20}{\kilo\meter} because the sponge layer occupies the uppermost \SI{10}{\kilo\meter}.
 
+The simulation is integrated forward by 5 hours and the timestep, $\Delta t = 8 \Delta z / \SI{300}{\second}$, is chosen so that it scales linearly with spatial resolution and, following the original test specified by \citet{schaer2002}, $\Delta t = \SI{8}{\second}$ when $\Delta z = \SI{300}{\meter}$.
 Test results are compared between the BTF and cut cell grids at several resolutions.
 The spatial and temporal resolutions tested are shown in table~\ref{tab:gw-resolutions}.  The lowest resolution is the same as that used by \citet{schaer2002}, and higher resolutions preserve the same aspect ratio.
 The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.  \TODO{These grids are shown in figure x.}
 
-The simulation is integrated forward by 5 hours and the timestep, $\Delta t = 8 \Delta z / \SI{300}{\second}$, is chosen so that it scales linearly with spatial resolution and, following the original test specified by \citet{schaer2002}, $\Delta t = \SI{8}{\second}$ when $\Delta z = \SI{300}{\meter}$.
+Some statistics of the grids are presented in table~\ref{tab:gw-meshes}.  The ratio of minimum and maximum cell areas provides an indication of size of the smallest cut cells.  As expected, there is almost no variation in cell sizes on the BTF grids.  Small cells are generated on cut cell grids at resolutions finer than $\Delta z = \SI{300}{\meter}$ in which the terrain intersects grid layers.  Nonorthogonality is measured by the angle between the vector connecting adjacent cell centres and the normal vector of the shared cell face, ranging from \SI{0}{\degree} on an orthogonal grid, to a maximum of \SI{90}{\degree}.  On the BTF grid, nonorthogonality gradually increases from \TODO{\SI{999}{\degree}} to \SI{11.1}{\degree} as increasing horizontal resolution leads to steeper terrain.  Nonorthogonality is higher on almost all cut cell grids.
 
 At $\Delta z = \SI{300}{\meter}$, vertical velocities on the BTF and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
-
 The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.
 Results are similar across all grid types and resolutions but, examining the anomalies in the lee of the mountain, errors are found in the lowest few layers.  Errors are generated on the lee slopes of the mountain and are advected to the outlet boundary, forming striped anomalies.  At resolution of $\Delta z > \SI{50}{\meter}$, the lowest layer is anomalously warm and the layer above is anomalously cold.  As resolution increases, the anomalously cold layer first increases in amplitude, then the cold anomaly begins to span multiple layers.  At $\Delta z = \SI{50}{\meter}$, the structure is reversed, having lower layers that are too cold and layers above that are too warm.  At all resolutions, the amplitude and height of the errors are greater on the cut cell grid compared to the BTF grid.
 
@@ -365,7 +365,6 @@ Hence, the analytic solution, $\phi_T$, can be found by considering the vertical
 \end{align}
 where the tracer density at $z = 0$, $\phi_0 = 288$, and the transform, $z^\star$, is given by rearranging equation~\ref{eqn:btf}.
 
-
 \TODO{analyse results of test, draw conclusions}
 
 \section{Conclusions}
@@ -382,7 +381,7 @@ Conversely, in the terrain following advection test, errors were large on the SL
 \TODO{do we want to say more about how cubicUpwindCPCFit is designed to cope with small cells?  this approach differs from other existing approaches.  the technique will be described in future publication.  (although an implementation of the technique is already available online)}
 
 \acknowledgments
-I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
+I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  The authors thank the two anonymous reviewers whose comments greatly improved this manuscript.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
 
 %% APPENDICES
 \begin{appendices}
@@ -511,7 +510,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\centering
 	\includegraphics[width=6in]{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{Differences in potential temperature between the start and end of the gravity waves test with $\Delta z = \SI{50}{\meter}$ \TODO{if we have the results in time!} showing (a) waves in potential temperature on the BTF grid.  Enlargements of the same domain near the mountain on (b) the BTF grid, and (c) the cut cell grid \TODO{revealing errors near the ground in the lee of the mountain}.  The gravity waves test results are compared with differences in tracer between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (d) the BTF grid, and (e) the cut cell grid, in which errors are seen which are similar to those in (c).}
+	\caption{Differences in potential temperature between the start and end of the gravity waves test with $\Delta z = \SI{50}{\meter}$ \TODO{if we have the results in time!} showing (a) waves in potential temperature on the BTF grid.  Enlargements of the same domain near the mountain on (b) the BTF grid, and (c) the cut cell grid \TODO{revealing errors near the ground in the lee of the mountain}.  The gravity waves test results are compared with thermal advection test results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (d) the BTF grid, and (e) the cut cell grid, in which errors are seen which are similar to those in (c).  Axes are in units of \si{\meter}.}
 	\label{fig:gw-theta}
 \end{figure*}
 
@@ -519,7 +518,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\centering
 	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{\TODO{Vertical sample through x=50km (quite far to the east of the mountain) in gravity waves tests.  BTF results I have so far are in good agreement.  The cut cell results are not.  I am not yet sure if it will be worth taking sample lines through thermal advection tracer diffs because not all of them agree with the gravity waves results.  This can, perhaps, be forgiven because the wind fields differ between the advection and gravity waves tests.}}
+	\caption{Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  \TODO{a little bit of analysis: explain why BTF GW increases temperature with height; say that BTF results in good agreement in both GW and adv tests; errors in cut cell results in both tests in the lowest layers }}
 	\label{fig:gw-sampleLine}
 \end{figure}
 
