@@ -11,6 +11,7 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   build/fig-snappyHexMesh/fig-snappyHexMesh.pdf \
   build/fig-resting/fig-resting.pdf \
   build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf \
-  build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf
+  build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf \
+  build/fig-thermalAdvection/fig-thermalAdvection.pdf
 
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-snappyHexMesh,fig-snappyHexMesh))
