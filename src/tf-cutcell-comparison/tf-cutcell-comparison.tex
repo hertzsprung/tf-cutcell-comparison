@@ -332,13 +332,12 @@ Test results are compared between the BTF and cut cell grids at several resoluti
 The spatial and temporal resolutions tested are shown in table~\ref{tab:gw-resolutions}.  The lowest resolution is the same as that used by \citet{schaer2002}, and higher resolutions preserve the same aspect ratio.
 The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.  \TODO{These grids are shown in figure x.}
 
-Some statistics of the grids are presented in table~\ref{tab:gw-meshes}.  The ratio of minimum and maximum cell areas provides an indication of size of the smallest cut cells.  As expected, there is almost no variation in cell sizes on the BTF grids.  Small cells are generated on cut cell grids at resolutions finer than $\Delta z = \SI{300}{\meter}$ in which the terrain intersects grid layers.  Nonorthogonality is measured by the angle between the vector connecting adjacent cell centres and the normal vector of the shared cell face, ranging from \SI{0}{\degree} on an orthogonal grid, to a maximum of \SI{90}{\degree}.  On the BTF grid, nonorthogonality gradually increases from \TODO{\SI{999}{\degree}} to \SI{11.1}{\degree} as increasing horizontal resolution leads to steeper terrain.  Nonorthogonality is higher on almost all cut cell grids.
+Some statistics of the grids are presented in table~\ref{tab:gw-meshes}.  The ratio of minimum and maximum cell areas provides an indication of size of the smallest cut cells.  As expected, there is almost no variation in cell sizes on the BTF grids.  Small cells are generated on cut cell grids at resolutions finer than $\Delta z = \SI{300}{\meter}$ in which the terrain intersects grid layers.  Nonorthogonality is measured by the angle between the vector connecting adjacent cell centres and the normal vector of the shared cell face, ranging from \SI{0}{\degree} on an orthogonal grid, to a maximum of \SI{90}{\degree}.  On the BTF grid, maximum nonorthogonality gradually increases from \TODO{\SI{999}{\degree}} to \SI{11.1}{\degree} as increasing horizontal resolution leads to steeper terrain.  Maximum nonorthogonality is higher on almost all cut cell grids.  \TODO{so what?  if we want to talk about nonortho we need a reason for doing so...}
 
 At $\Delta z = \SI{300}{\meter}$, vertical velocities on the BTF and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
-The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.
-Results are similar across all grid types and resolutions but, examining the anomalies in the lee of the mountain, errors are found in the lowest few layers.  Errors are generated on the lee slopes of the mountain and are advected to the outlet boundary, forming striped anomalies.  At resolution of $\Delta z > \SI{50}{\meter}$, the lowest layer is anomalously warm and the layer above is anomalously cold.  As resolution increases, the anomalously cold layer first increases in amplitude, then the cold anomaly begins to span multiple layers.  At $\Delta z = \SI{50}{\meter}$, the structure is reversed, having lower layers that are too cold and layers above that are too warm.  At all resolutions, the amplitude and height of the errors are greater on the cut cell grid compared to the BTF grid.
+The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  The anomalies on the BTF grid with $\Delta z = \SI{50}{\meter}$ is shown in figure~\ref{fig:gw-theta}a.  A vertical profile is taken at $x = \SI{50}{\kilo\meter}$, marked by the dashed line in figure~\ref{fig:gw-theta}a, with results shown for the BTF grids in figure~\ref{fig:gw-sampleLine}a and on the cut cell grids in figure~\ref{fig:gw-sampleLine}b.  On all grids, potential temperature increases with height due to the presence of a gravity wave at this location.  Results are seen to converge on all grids, with two exceptions.  First, the result on the cut cell grid with $\Delta z = \SI{500}{\meter}$ differs from results on all other grids, though at this coarse resolution the mountain is poorly resolved.  Second, small errors are seen in the lowest layers on the cut cell grids.
 
-To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  Stripes of potential temperature anomalies are found in the lee of the mountain, and these errors are most severe on the cut cell grid.
+To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The potential temperature field converges with increasing resolution, though errors are found in the lowest layers on the cut cell grids.
 
 \subsection{Terrain following advection of thermal profile}
 The potential temperature errors in the gravity waves test varied between terrain following and cut cell grids of the same resolution.  This variation may be due to differences in the wind fields between grids, or errors in the advection of potential temperature, amongst other possible causes.  To help establish the primary source of error, a new advection test is formulated in which the initial potential temperature field from the gravity waves test is used as a tracer density field.  To eliminate any differences in wind fields, the tracer is advected in a fixed, terrain-following velocity field that mimics the flow in the gravity waves test.
@@ -449,14 +448,14 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 \end{table}
 
 \begin{table}
-	\caption{\TODO{DOUBLE-CHECK THESE VALUES.}}
+	\caption{Cell area ratios and nonorthogonality of BTF and cut cell grids used in the gravity waves and thermal advection tests.  Cell sizes are almost uniform on BTF grids, but for the cut cell grids the cell area ratio gives an indication of the smallest cell sizes.  \TODO{describe nonorthogonality}  \TODO{DOUBLE-CHECK THESE VALUES.}}
 	\label{tab:gw-meshes}
 %
 \centering
 \begin{tabular}{S S S S S}
 \hline\hline
 
-{$\Delta z$ (\si{\meter})} & \multicolumn{2}{c}{max/min cell area ratio} & \multicolumn{2}{c}{Nonorthogonality (\si{\degree})} \\
+{$\Delta z$ (\si{\meter})} & \multicolumn{2}{c}{max/min cell area ratio} & \multicolumn{2}{c}{Maximum nonorthogonality (\si{\degree})} \\
  & {BTF} & {Cut cell} & {BTF} & {Cut cell} \\
 \hline
 500	& 1.01 &  999  & 999    & 999 \\
@@ -510,7 +509,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\centering
 	\includegraphics[width=6in]{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{Differences in potential temperature between the start and end of the gravity waves test with $\Delta z = \SI{50}{\meter}$ \TODO{if we have the results in time!} showing (a) waves in potential temperature on the BTF grid.  Enlargements of the same domain near the mountain on (b) the BTF grid, and (c) the cut cell grid \TODO{revealing errors near the ground in the lee of the mountain}.  The gravity waves test results are compared with thermal advection test results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (d) the BTF grid, and (e) the cut cell grid, in which errors are seen which are similar to those in (c).  Axes are in units of \si{\meter}.}
+	\caption{Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$ \TODO{if we have the results in time!}  Axes are in units of \si{\meter}.}
 	\label{fig:gw-theta}
 \end{figure*}
 

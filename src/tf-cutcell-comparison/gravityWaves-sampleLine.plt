@@ -3,46 +3,64 @@ set style data linespoints
 
 set multiplot layout 2,2 margins 0.1,0.95,0.1,0.9 spacing 0.15
 
-set xrange [-0.2:0.2]
+set xrange [-0.1:0.1]
 set yrange [0:1200]
 set ylabel "$z$ (\\si{\\meter})" offset 3
 set yzeroaxis
 
-set key at 0.38,1200 title "$\\Delta z$"
+set key at 0.1875,1200 title "$\\Delta z$"
 
-set label 1 "(a)" at -0.18,1100 center front
+set label 1 "(a)" at -0.09,1100 center front
 set title "Gravity waves BTF"
-plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-300dz/18000/sampleLine.dat" using 2:1 title '\SI{300}{\meter}' lc 1, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-250dz/18000/sampleLine.dat" using 2:1 title '\SI{250}{\meter}' lc 2, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-200dz/18000/sampleLine.dat" using 2:1 title '\SI{200}{\meter}' lc 3, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-150dz/18000/sampleLine.dat" using 2:1 title '\SI{150}{\meter}' lc 4
+plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-500dz/18000/sampleLine.dat" using 2:1 title '\SI{500}{\meter}', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-300dz/18000/sampleLine.dat" using 2:1 title '\SI{300}{\meter}', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-250dz/18000/sampleLine.dat" using 2:1 title '\SI{250}{\meter}', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-200dz/18000/sampleLine.dat" using 2:1 title '\SI{200}{\meter}', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-150dz/18000/sampleLine.dat" using 2:1 title '\SI{150}{\meter}', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-125dz/18000/sampleLine.dat" using 2:1 title '\SI{125}{\meter}', \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-btf-250m-100dz/18000/sampleLine.dat" using 2:1 title '\SI{100}{\meter}'
 
 unset key
 unset ylabel
 set label 1 "(b)"
 set title "Gravity waves cut cell"
 set ytics format ""
-plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-300dz/18000/sampleLine.dat" using 2:1 title '300dz' lc 1, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-250dz/18000/sampleLine.dat" using 2:1 title '250dz' lc 2, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-200dz/18000/sampleLine.dat" using 2:1 title '200dz' lc 3, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-150dz/18000/sampleLine.dat" using 2:1 title '\SI{150}{\meter}' lc 4
+plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-500dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-300dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-250dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-200dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-150dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-125dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-100dz/18000/sampleLine.dat" using 2:1
 
+set key at 0.1875,1300 title "$\\Delta z$"
 set xlabel "$\\theta$ (\\si{\\kelvin})" offset 0,0.5
 set ytics format "% h"
 set label 1 "(c)"
 set title "Thermal advection BTF"
-plot "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-300dz/18000/sampleLine.dat" using 2:1 title '\SI{300}{\meter}' lc 1, \
-     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-250dz/18000/sampleLine.dat" using 2:1 title '\SI{250}{\meter}' lc 2, \
-     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-200dz/18000/sampleLine.dat" using 2:1 title '\SI{200}{\meter}' lc 3, \
-     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-150dz/18000/sampleLine.dat" using 2:1 title '\SI{150}{\meter}' lc 4
+plot "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-500dz/18000/sampleLine.dat" using 2:1 title "500dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-300dz/18000/sampleLine.dat" using 2:1 title "300dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-250dz/18000/sampleLine.dat" using 2:1 title "250dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-200dz/18000/sampleLine.dat" using 2:1 title "200dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-150dz/18000/sampleLine.dat" using 2:1 title "150dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-125dz/18000/sampleLine.dat" using 2:1 title "125dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-100dz/18000/sampleLine.dat" using 2:1 title "100dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-75dz/18000/sampleLine.dat" using 2:1  title "75dz", \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-btf-250m-50dz/18000/sampleLine.dat" using 2:1  title "50dz"
 
+unset key
 unset ylabel
 set label 1 "(d)"
 set title "Thermal advection cut cell"
 set ytics format ""
-plot "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-300dz/18000/sampleLine.dat" using 2:1 title '300dz' lc 1, \
-     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-250dz/18000/sampleLine.dat" using 2:1 title '250dz' lc 2, \
-     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-200dz/18000/sampleLine.dat" using 2:1 title '200dz' lc 3, \
-     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-150dz/18000/sampleLine.dat" using 2:1 title '200dz' lc 4
+plot "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-500dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-300dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-250dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-200dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-150dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-125dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-100dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-75dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/thermalAdvection-cutCell-250m-50dz/18000/sampleLine.dat" using 2:1
 
 unset multiplot
