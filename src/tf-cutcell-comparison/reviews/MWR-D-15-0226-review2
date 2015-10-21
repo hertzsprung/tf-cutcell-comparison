@@ -61,7 +61,7 @@ It is Good et al. 2014 that use centres of uncut cells.  Weller & Shahrokhi 2014
 > vicinity of the cut cells above the terrain and swept downstream. In any
 > event, the terrain-following version also uses Lorenz staggering and
 > does not exhibit this anomalous behavior.
-Having analysed test results at increasing vertical resolution (as suggested below), we agree that errors are primarily due to inaccuracies in the advection of theta.  An additional advection test has been performed which provides evidence for this hypothesis.
+Having analysed test results at increasing vertical resolution (as suggested below), we agree that errors are primarily due to inaccuracies in the advection of theta.  An additional advection test has been performed which provides evidence for this hypothesis.  Errors on cut cell grids have been reduced due to fixes to the advection scheme made since the submission of the previous manuscript.
 > 
 > As mentioned above, I believe this work would have stronger scientific
 > merit if it were refocused, with more emphasis on the construction and
@@ -94,5 +94,5 @@ Clarified in section 2 that values are stored at cell centroids.
 > consider a higher terrain (say 500 m) with similar relative grid
 > spacings. I believe such tests could be quite illuminating in evaluating
 > the viability of this interesting cut-cell implementation.
-Further tests have been performed at dz=500m, 250m, 200m, 150m, 125m, 100m, 75m and 50m, keeping the mountain height, h=250m constant.  The same grids have also been used in the thermal advection test.
+Further tests have been performed at dz=500m, 250m, 200m, 150m, 125m, 100m, 75m and 50m, keeping the mountain height, h=250m constant.  The same grids have also been used in the thermal advection test.  A figure has been added showing the 300m, 250m and 200m cut cell grids.
 
