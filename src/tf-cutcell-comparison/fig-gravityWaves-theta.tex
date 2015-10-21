@@ -5,9 +5,18 @@
 \usepackage{siunitx}
 \usepackage[absolute,overlay]{textpos}
 \usepackage{color}
+\usepackage{tikz}
 
 \setlength{\parindent}{0pt}
 \begin{document}
+\TPMargin{3pt}
+\begin{textblock}{0.75}(11.7,0.3)
+\begin{tikzpicture}[
+  scale=0.25
+]
+\draw [dashed, ultra thick] (0,0) -- (0,18);
+\end{tikzpicture}
+\end{textblock}
 \centering
 \includegraphics[width=6in]{../gravityWaves-btf-250m-50dz/18000/thetaDiffOverview.pdf} \\
 \includegraphics[height=5in,angle=270]{thetaDiffOverview_theta_diff.eps}

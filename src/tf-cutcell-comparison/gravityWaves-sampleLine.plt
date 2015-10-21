@@ -8,7 +8,7 @@ set yrange [0:1200]
 set ylabel "$z$ (\\si{\\meter})" offset 3
 set yzeroaxis
 
-set key at 0.1875,1220 title "$\\Delta z$"
+set key at 0.1875,1350 title "$\\Delta z$"
 
 set label 1 "(a)" at -0.09,1100 center front
 set title "Gravity waves BTF"
