@@ -1,6 +1,5 @@
 \documentclass{article}
-\usepackage{showframe}
-\usepackage[paperwidth=3.1in,paperheight=3.2in,margin=0in]{geometry}
+\usepackage[paperwidth=3.1in,paperheight=3.5in,margin=0in]{geometry}
 \usepackage{mathptmx}%{times}
 \usepackage{graphicx}
 \usepackage{siunitx}
@@ -16,13 +15,22 @@
 \centering
 (a)
 \end{textblock}
+\begin{textblock}{2}(9,0.4)
+\normalsize
+$\ell^2 = \num{5.86e-8}$
+\end{textblock}
 \begin{textblock}{0.75}(2.2,8.4)
 \normalsize
 \centering
 (b)
 \end{textblock}
+\begin{textblock}{2}(9,8.4)
+\normalsize
+$\ell^2 = \num{5.94e-6}$
+\end{textblock}
 \centering
 \includegraphics[width=3in]{../thermalAdvection-btf-250m-50dz/18000/tracerDiffMountain.pdf} \\
 \vspace*{0.1in}
-\includegraphics[width=3in]{../thermalAdvection-cutCell-250m-50dz/18000/tracerDiffMountain.pdf}
+\includegraphics[width=3in]{../thermalAdvection-cutCell-250m-50dz/18000/tracerDiffMountain.pdf} \\
+\includegraphics[height=3in,angle=270]{tracerDiffMountain_T_diff.eps}
 \end{document}

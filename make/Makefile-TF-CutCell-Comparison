@@ -10,6 +10,7 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   build/fig-meshes/fig-meshes.pdf \
   build/fig-snappyHexMesh/fig-snappyHexMesh.pdf \
   build/fig-resting/fig-resting.pdf \
+  build/fig-gravityWaves-meshes/fig-gravityWaves-meshes.pdf \
   build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf \
   build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf \
   build/fig-thermalAdvection/fig-thermalAdvection.pdf

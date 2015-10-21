@@ -330,14 +330,14 @@ Note that, while the domain itself is \SI{30}{\kilo\meter} in height, for the pu
 The simulation is integrated forward by 5 hours and the timestep, $\Delta t = 8 \Delta z / \SI{300}{\second}$, is chosen so that it scales linearly with spatial resolution and, following the original test specified by \citet{schaer2002}, $\Delta t = \SI{8}{\second}$ when $\Delta z = \SI{300}{\meter}$.
 Test results are compared between the BTF and cut cell grids at several resolutions.
 The spatial and temporal resolutions tested are shown in table~\ref{tab:gw-resolutions}.  The lowest resolution is the same as that used by \citet{schaer2002}, and higher resolutions preserve the same aspect ratio.
-The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.  \TODO{These grids are shown in figure x.}
+The vertical resolution is chosen to test various configurations of cut cell grid.  At $\Delta z = \SI{300}{\meter}$, the mountain lies entirely within the lowest layer of cells, while at $\Delta z = \SI{250}{\meter}$ and $\Delta z = \SI{125}{\meter}$ the mountain peak is aligned with the interface between layers.  With increasing resolutions up to $\Delta z = \SI{50}{\meter}$, the orography intersects more layers and becomes better resolved.  Three of the cut cell grids are shown in figure~\ref{fig:gw-meshes} at $\Delta z = \SI{300}{\meter}$, $\SI{250}{\meter}$ and $\SI{200}{\meter}$.  Small cells are visible on the $\SI{200}{\meter}$ grid but, on the $\SI{250}{\meter}$ grid, the grid generator has merged the small cells with those in the layer above.
 
-Some statistics of the grids are presented in table~\ref{tab:gw-meshes}.  The ratio of minimum and maximum cell areas provides an indication of size of the smallest cut cells.  As expected, there is almost no variation in cell sizes on the BTF grids.  Small cells are generated on cut cell grids at resolutions finer than $\Delta z = \SI{300}{\meter}$ in which the terrain intersects grid layers.  Nonorthogonality is measured by the angle between the vector connecting adjacent cell centres and the normal vector of the shared cell face, ranging from \SI{0}{\degree} on an orthogonal grid, to a maximum of \SI{90}{\degree}.  On the BTF grid, maximum nonorthogonality gradually increases from \TODO{\SI{999}{\degree}} to \SI{11.1}{\degree} as increasing horizontal resolution leads to steeper terrain.  Maximum nonorthogonality is higher on almost all cut cell grids.  \TODO{so what?  if we want to talk about nonortho we need a reason for doing so...}
+Some statistics of the grids are presented in table~\ref{tab:gw-meshes}.  The ratio of minimum and maximum cell areas provides an indication of size of the smallest cut cells.  As expected, there is almost no variation in cell sizes on the BTF grids.  Small cells are generated on cut cell grids at resolutions finer than $\Delta z = \SI{300}{\meter}$ in which the terrain intersects grid layers.  Nonorthogonality is measured by the angle between the vector connecting adjacent cell centres and the normal vector of the shared cell face, ranging from \SI{0}{\degree} on an orthogonal grid, to a maximum of \SI{90}{\degree}.  On the BTF grid, maximum nonorthogonality gradually increases from \SI{9.2}{\degree} to \SI{11.2}{\degree} as increasing horizontal resolution leads to steeper terrain.  Maximum nonorthogonality is higher on almost all cut cell grids.  \TODO{so what?  if we want to talk about nonortho we need a reason for doing so...}
 
 At $\Delta z = \SI{300}{\meter}$, vertical velocities on the BTF and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
 The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  The anomalies on the BTF grid with $\Delta z = \SI{50}{\meter}$ is shown in figure~\ref{fig:gw-theta}a.  A vertical profile is taken at $x = \SI{50}{\kilo\meter}$, marked by the dashed line in figure~\ref{fig:gw-theta}a, with results shown for the BTF grids in figure~\ref{fig:gw-sampleLine}a and on the cut cell grids in figure~\ref{fig:gw-sampleLine}b.  On all grids, potential temperature increases with height due to the presence of a gravity wave at this location.  Results are seen to converge on all grids, with two exceptions.  First, the result on the cut cell grid with $\Delta z = \SI{500}{\meter}$ differs from results on all other grids, though at this coarse resolution the mountain is poorly resolved.  Second, small errors are seen in the lowest layers on the cut cell grids.
 
-To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The potential temperature field converges with increasing resolution, though errors are found in the lowest layers on the cut cell grids.
+To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The potential temperature field converges, though errors are found in the lowest layers on the cut cell grids.
 
 \subsection{Terrain following advection of thermal profile}
 The potential temperature errors in the gravity waves test varied between terrain following and cut cell grids of the same resolution.  This variation may be due to differences in the wind fields between grids, or errors in the advection of potential temperature, amongst other possible causes.  To help establish the primary source of error, a new advection test is formulated in which the initial potential temperature field from the gravity waves test is used as a tracer density field.  To eliminate any differences in wind fields, the tracer is advected in a fixed, terrain-following velocity field that mimics the flow in the gravity waves test.
@@ -364,7 +364,13 @@ Hence, the analytic solution, $\phi_T$, can be found by considering the vertical
 \end{align}
 where the tracer density at $z = 0$, $\phi_0 = 288$, and the transform, $z^\star$, is given by rearranging equation~\ref{eqn:btf}.
 
-\TODO{analyse results of test, draw conclusions}
+Enlargements of the error field near the mountain is shown in figure~\ref{fig:thermalAdvection}.
+\TODO{Errors are negligible on the BTF grids with a maximum error in tracer density of \num{123}.}
+Errors are also small on the cut cell grids at $\Delta z = \SI{500}{\meter}$ and $\Delta z = \SI{300}{\meter}$.  However, at resolutions where the terrain intersects layers of the cut cell grids, advection errors are apparent around mountain peaks, with small cells having the largest errors.  These errors are advected horizontally along the lee side, forming stripes.
+
+For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of tracer density error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-theta}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-theta}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.  The magnitude of error is about ten times larger than the potential temperature anomalies found on the cut cell grids in the gravity waves test seen in figure~\ref{fig:gw-theta}b.  We offer two explanations for this difference: first, there are no restoring forces in the linear advection model and, second, the wind fields in the two tests are different.
+
+While the magnitude and structure of tracer error on the cut cell grids differs from potential temperature anomalies in the gravity waves test, results on the BTF grids are in close agreement in both tests but not on the cut cell grids.  Therefore, it is likely that anomalies on the cut cell grids in the gravity waves test are primarily due to errors in the advection of potential temperature.
 
 \section{Conclusions}
 We have presented a like-for-like comparison between terrain following and cut cell grids using a single model.  Accuracy on the BTF, SLEVE and cut cell grids was evaluated in a series of two-dimensional tests.
@@ -373,11 +379,11 @@ Across all tests, a high degree of accuracy was achieved for all grids.  Even on
 
 Spurious vertical velocities were small in the resting initial state test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{7}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
-Cut cell grids reduced errors in two of the five tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain folllowing grids.
+Cut cell grids reduced errors in two of the five tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain following grids.
 
-Conversely, in the terrain following advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.
+Conversely, in the first terrain following tracer advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  Errors were also large on the cut cell grids in the second terrain following tracer advection test.  This result suggests that, in the gravity waves test, that potential temperature anomalies in the cut cell grids are primarily due to advection errors.
 
-\TODO{do we want to say more about how cubicUpwindCPCFit is designed to cope with small cells?  this approach differs from other existing approaches.  the technique will be described in future publication.  (although an implementation of the technique is already available online)}
+\TODO{the cubicUpwindCPCFit advection scheme offers an approach for treating small cells that differs from other existing approaches.  the technique will be described in future publication.  (although an implementation of the technique is already available online)  I haven't talked about this anywhere in the body of the paper yet... I need to!}
 
 \acknowledgments
 I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  The authors thank the two anonymous reviewers whose comments greatly improved this manuscript.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
@@ -458,7 +464,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 {$\Delta z$ (\si{\meter})} & \multicolumn{2}{c}{max/min cell area ratio} & \multicolumn{2}{c}{Maximum nonorthogonality (\si{\degree})} \\
  & {BTF} & {Cut cell} & {BTF} & {Cut cell} \\
 \hline
-500	& 1.01 &  999  & 999    & 999 \\
+500	& 1.01 &  1.68  & 9.2   & 4.1 \\
 300	& 1.01 &  4.33 & 10.2	& 7.3 \\
 250	& 1.01 &  5.42 & 10.8	& 20.9 \\
 200	& 1.01 &  25.4 & 10.8	& 31.9 \\
@@ -507,25 +513,33 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 
 \begin{figure*}
 	\centering
+	\includegraphics{../fig-gravityWaves-meshes/fig-gravityWaves-meshes.pdf}
+	%
+	\caption{Cut cell grids used for the gravity waves and thermal advection tests at (a) $\Delta z = \SI{300}{\meter}$, (b) $\Delta z = \SI{250}{\meter}$, and (c) $\Delta z = \SI{200}{\meter}$.  The mountain peak $h_0 = \SI{250}{\meter}$.  At $\Delta z = \SI{250}{\meter}$, the grid creation process has merged small cells with the cells in the layer above but, at $\Delta z = \SI{200}{\meter}$, small cells have been retained.  The full two dimensional grids are \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.  Axes are in units of \si{\meter}.}
+	\label{fig:gw-meshes}
+\end{figure*}
+
+\begin{figure*}
+	\centering
 	\includegraphics[width=6in]{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$ \TODO{if we have the results in time!}  Axes are in units of \si{\meter}.}
+	\caption{Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$.  Axes are in units of \si{\meter}.  \TODO{draw a dashed line at x=50km if possible}}
 	\label{fig:gw-theta}
 \end{figure*}
 
-\begin{figure}
+\begin{figure*}
 	\centering
 	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  \TODO{a little bit of analysis: explain why BTF GW increases temperature with height; say that BTF results in good agreement in both GW and adv tests; errors in cut cell results in both tests in the lowest layers }}
+	\caption{Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  The results are convergent, with the exception of the cut cell grid at $\Delta z = \SI{500}{\meter}$, and errors are found in the lowest layers on the cut cell grids.}
 	\label{fig:gw-sampleLine}
-\end{figure}
+\end{figure*}
 
 \begin{figure}
 	\centering
 	\includegraphics{../fig-thermalAdvection/fig-thermalAdvection.pdf}
 %
-	\caption{\TODO{}}
+	\caption{Error in tracer density in the thermal advection test at $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  \TODO{a sentence of analysis}}
 	\label{fig:thermalAdvection}
 \end{figure}
 
