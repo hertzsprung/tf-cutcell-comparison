@@ -231,7 +231,7 @@ The results of the horizontal advection test show that numerical errors are due 
 \subsection{Terrain following advection}
 In the horizontal advection test, results were least accurate on the BTF grid, where the grid was most non-orthogonal and flow was misaligned with the grid layers.  Here, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  This test determines whether the primary source of numerical error is due to non-orthogonality or misalignment of the flow with grid layers. 
 
-The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the discrete velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~\ref{eqn:btf} such that
+The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the discrete velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~(\ref{eqn:btf}) such that
 \begin{equation}
 	\Psi(x,z) = -u_0 H \frac{z - h}{H - h} \label{eqn:streamfunc-btf}
 \end{equation}
@@ -296,7 +296,7 @@ In summary, spurious velocities in the resting atmosphere test were similar on b
 The test originally specified by \citet{schaer2002} prescribes flow over terrain with small-scale and large-scale undulations which induces propagating and evanescent gravity waves.
 
 Following \citet{melvin2010}, the domain is \SI{300}{\kilo\meter} wide and \SI{30}{\kilo\meter} high.
-The mountain profile has the same form as equation~\ref{eqn:resting:mountain}, but the gravity waves tests have a mountain height of $h_0 = \SI{250}{\meter}$.  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.
+The mountain profile has the same form as equation~(\ref{eqn:resting:mountain}), but the gravity waves tests have a mountain height of $h_0 = \SI{250}{\meter}$.  As in the resting atmosphere test, $a = \SI{5}{\kilo\meter}$ is the mountain half-width and $\lambda = \SI{4}{\kilo\meter}$ is the wavelength.
 
 A uniform horizontal wind $u = \SI{10}{\meter\per\second}$ is prescribed in the interior domain and at the inlet boundary.  No normal flow is imposed at the top and bottom boundaries and the velocity field has a zero gradient outlet boundary condition.
 
@@ -305,7 +305,7 @@ The initial thermodynamic conditions have constant static stability with $N = \S
 	\theta(z) = \theta_0 \exp \left( \frac{N^2}{g} z \right) \label{eqn:thermal-profile}
 \end{align}
 where the temperature at $z=0$ is $\theta_0 = \SI{288}{\kelvin}$.
-Potential temperature values are prescribed at the inlet and upper boundary using equation~\ref{eqn:thermal-profile}, and a zero gradient boundary condition is applied at the outlet.  At the ground, fixed gradients are imposed by calculating the component of $\nabla \theta$ normal to each face using the vertical derivative of equation~\ref{eqn:thermal-profile}.
+Potential temperature values are prescribed at the inlet and upper boundary using equation~(\ref{eqn:thermal-profile}), and a zero gradient boundary condition is applied at the outlet.  At the ground, fixed gradients are imposed by calculating the component of $\nabla \theta$ normal to each face using the vertical derivative of equation~(\ref{eqn:thermal-profile}).
 For the Exner function of pressure, hydrostatic balance is prescribed on top and bottom boundaries and the inlet and outlet are zero normal gradient.
 
 Sponge layers are added to the upper \SI{10}{\kilo\meter} and leftmost \SI{10}{\kilo\meter} at the inlet boundary to damp the reflection of waves.
@@ -348,7 +348,7 @@ The spatial domain, mountain profile, grid resolutions and timesteps are the sam
 	\end{array} \right.
 \end{align}
 where \(H_\mathrm{TF} = \SI{20}{\kilo\meter}\) is the level at which the terrain following layers become flat; the domain height is \(\SI{30}{\kilo\meter}\).
-For $z \leq H_\mathrm{TF}$, the $u$ and $w$ components of velocity are given by equation~\ref{eqn:uw-btf}, but $h(x)$ has the same form as equation~\ref{eqn:resting:mountain}, hence the derivative is:
+For $z \leq H_\mathrm{TF}$, the $u$ and $w$ components of velocity are given by equation~(\ref{eqn:uw-btf}), but $h(x)$ has the same form as equation~(\ref{eqn:resting:mountain}), hence the derivative is:
 \begin{align}
 	\frac{\mathrm{d} h}{\mathrm{d} x} = -h_0 \exp \left(- \left( \frac{x}{a} \right)^2 \right) \left[ \alpha \sin \left( 2 \alpha x \right) - \frac{2x}{a^2} \cos^2\left( \alpha x \right) \right]
 \end{align}
@@ -360,7 +360,7 @@ Hence, the analytic solution, $\phi_T$, can be found by considering the vertical
 \begin{align}
 	\phi_T(x, z) = \phi_0 \exp \left( \frac{N^2}{g} z^\star(x, z) \right) 
 \end{align}
-where the tracer density at $z = 0$, $\phi_0 = 288$, and the transform, $z^\star$, is given by rearranging equation~\ref{eqn:btf}.
+where the tracer density at $z = 0$, $\phi_0 = 288$, and the transform, $z^\star$, is given by rearranging equation~(\ref{eqn:btf}).
 
 Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours in tracer density overlayed.  Errors are too small to be visible on the BTF grid with a maximum error of \num{4.26e-4}.
 However, on the cut cell grid, the maximum error is \num{0.302}.  Advection errors are apparent around mountainous terrain, with small cells having the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
@@ -402,7 +402,7 @@ I am grateful to my co-supervisors John Methven and Terry Davies for their valua
 % TABLES
 
 \begin{table*}
-	\caption{Minimum and maximum tracer magnitudes and \(\ell_2\) error norms (defined by equation~\ref{eqn:l2-error}) at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, \(\ell_2\) error norms, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
+	\caption{Minimum and maximum tracer magnitudes and \(\ell_2\) error norms, defined by equation~(\ref{eqn:l2-error}), at \(t = \SI{10000}{\second}\) in the horizontal and terrain following tracer advection tests using centred linear and cubic upwind-biased schemes.  For the horizontal advection test, \(\ell_2\) error norms, minimum and maximum values are given for the fourth order scheme using the modified code from \citet{schaer2002}.}
 \label{tab:advection}
 %
 \centering
