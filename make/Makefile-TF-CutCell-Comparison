@@ -16,3 +16,10 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   build/fig-thermalAdvection/fig-thermalAdvection.pdf
 
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-snappyHexMesh,fig-snappyHexMesh))
+
+$(eval $(call LaTeXWithBibTeX,src/tf-cutcell-comparison,build,responses))
+
+build/responses/responses.pdf: \
+  src/tf-cutcell-comparison/ametsoc.cls \
+  src/tf-cutcell-comparison/ametsoc2014.bst \
+  src/tf-cutcell-comparison/references.bib
