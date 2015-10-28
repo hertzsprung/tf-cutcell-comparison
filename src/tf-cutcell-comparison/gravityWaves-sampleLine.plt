@@ -34,7 +34,8 @@ plot "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-500dz/18000/sampleL
      "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-150dz/18000/sampleLine.dat" using 2:1, \
      "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-125dz/18000/sampleLine.dat" using 2:1, \
      "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-100dz/18000/sampleLine.dat" using 2:1, \
-     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-75dz/18000/sampleLine.dat" using 2:1
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-75dz/18000/sampleLine.dat" using 2:1, \
+     "`echo $ATMOSTESTS_DIR`/build/gravityWaves-cutCell-250m-50dz/18000/sampleLine.dat" using 2:1
 
 set key at 0.1875,2130 title ""
 set xlabel "$\\theta$ (\\si{\\kelvin})" offset 0,0.5
