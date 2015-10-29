@@ -53,7 +53,7 @@ This study uses a modified version of the fully-compressible model from \citet{w
 \section{Grids}
 \label{sec:grid}
 
-Here we describe the formulation of the terrain following grids and the method of cut cell grid construction.  The techniques presented are used to define the grids for the experiments in the subsequent section.
+Here we describe the formulation of the terrain following grids and the method of cut cell grid construction.  The techniques presented are used to define the grids for the experiments in section~\ref{sec:results}.
 
 \citet{galchen-somerville1975} proposed a basic terrain following (BTF) coordinate defined as 
 \begin{equation}
@@ -219,10 +219,10 @@ Minimum and maximum tracer values and \(\ell_2\) error norms on the BTF, SLEVE, 
 \end{align}
 where $\phi$ is the numerical tracer value, $\phi_T$ is the analytic value and $\mathcal{V}_c$ is the cell volume.
 
-The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell_2 = \num{0.107}\) but is significantly reduced on the SLEVE grid with \(\ell_2 = \num{0.0146}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
+The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell_2 = \num{0.112}\) but is significantly reduced on the SLEVE grid with \(\ell_2 = \num{0.0146}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
 Tracer minima and maxima for the centred linear and fourth order schemes are lower than those presented by \citet{schaer2002} because no interpolation is used to calculate the streamfunction.
 
-The centred linear scheme is sensitive to grid-scale changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell_2$ error on the BTF grid rises from \num{0.284} to \num{0.432}.  The same sensitivity is found using terrain following coordinates and centred differences in space and time, as implemented by \citet{schaer2002}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell_2$ error decreasing from \num{0.107} to \num{0.104}.  It is likely that changes in the domain width affect the wave power spectrum of the discrete terrain profile.  Grid-scale oscillations persist in the centred linear scheme but are damped by the upwind-biased scheme.
+The centred linear scheme is sensitive to grid-scale changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell_2$ error on the BTF grid rises from \num{0.284} to \num{0.432}.  The same sensitivity is found using terrain following coordinates and centred differences in space and time, as implemented by \citet{schaer2002}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell_2$ error decreasing from \num{0.112} to \num{0.105}.  It is likely that changes in the domain width affect the wave power spectrum of the discrete terrain profile.  Grid-scale oscillations persist in the centred linear scheme but are damped by the upwind-biased scheme.
 
 The results of the horizontal advection test show that numerical errors are due either to misalignment of the flow with the grid, or to grid distortions.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
 
@@ -252,7 +252,7 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 	t &= \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha + \beta) x}{\alpha + \beta} \right.+ \nonumber \\
    &\ \left. \frac{\sin 2(\alpha - \beta) x}{\alpha - \beta} + 2 \left( \frac{\sin 2\alpha x}{\alpha} + \frac{\sin 2\beta x}{\beta} \right) \right]
 \end{align}
-Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is parallel to the surface.
+Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is parallel to the coordinate surfaces.
 
 $\ell_2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
 
@@ -279,7 +279,7 @@ and, following \cite{leuenberger2010}, $s_1 = \SI{4}{\kilo\meter}$ is the large 
 
 The initial thermodynamic conditions are in discrete hydrostatic balance in the vertical direction, having a reference potential temperature of $\theta(z = 0) = \SI{288}{\kelvin}$ and constant stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  The damping function, \(\mu\), is set to zero.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
 
-The test was integrated forward by 5 hours on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  
+The test was integrated forward by 5 hours using a timestep $\Delta t = \SI{100}{\second}$ on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  
 The results presented in figure~\ref{fig:resting}, which use a curl-free pressure gradient, have maximum spurious values of $w$ of \SI{0.33}{\meter\per\second} on the BTF grid, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
 The results in figure~\ref{fig:resting} have the same maximum errors as \citet{weller-shahrokhi2014} but, due to the more stable split into implicitly and explicitly treated terms (described in the appendix), the errors decay over time due to the dissipative nature of the advection scheme.
 
@@ -355,7 +355,7 @@ For $z > H_\mathrm{TF}$, $u = u_0$ and $w = 0$.
 
 The initial tracer density field, \(\phi\), and its boundary conditions, are the same as those of the initial potential temperature field in the gravity waves test.
 Following the gravity waves test, the simulation is integrated forward by \SI{18000}{\second}, by which time the tracer initially upwind of the mountain will have cleared the mountain range.
-Hence, the analytic solution, $\phi_T$, can be found by considering the vertical displacement of the tracer profile by the terrain following velocity field.
+Hence, the analytic solution, $\phi_T$, can be found by considering the vertical displacement of the tracer profile by the terrain following velocity field:
 \begin{align}
 	\phi_T(x, z) = \phi_0 \exp \left( \frac{N^2}{g} z^\star(x, z) \right) 
 \end{align}
@@ -378,7 +378,7 @@ Spurious vertical velocities were small in the resting initial state test, reach
 
 Cut cell grids reduced errors in two of the five tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain following grids.
 
-Conversely, in the first terrain following tracer advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  Errors were also large on the cut cell grids in the second terrain following tracer advection test.  This result suggests that, in the gravity waves test, that potential temperature anomalies in the cut cell grids are primarily due to advection errors.
+Conversely, in the first terrain following tracer advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  Errors were also large on the cut cell grids in the second terrain following tracer advection test.  This result suggests that, in the gravity waves test, potential temperature errors in the cut cell grids are primarily due to advection errors.
 
 The tests we have presented demonstrate the trade-off between errors in calculating pressure gradient and advection terms: pressure gradient errors can be reduced by using a cut cell grid but, when flow follows the terrain, advection errors are reduced using a terrain following grid.
 
