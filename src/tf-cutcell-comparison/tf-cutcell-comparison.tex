@@ -67,7 +67,7 @@ The smooth level vertical (SLEVE) coordinate proposed by \citet{schaer2002} achi
 \intertext{where the vertical decay functions are given by}
 	b_i &= \frac{\sinh \left( \left( H / s_i \right)^n - \left( z^\star / s_i \right)^n \right)}{\sinh \left( H / s_i \right)^n}
 \end{align}
-with \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps.  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.  An example of the SLEVE grid can be seen in figure~\ref{fig:grid}b.
+and \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale terrain respectively.  The exponent \(n\) was introduced by \citet{leuenberger2010} in order to increase cell thickness in the layers nearest the ground, allowing longer timesteps.  \citet{leuenberger2010} found the exponent has an optimal value of \(n = 1.35\).  Choosing \(n = 1\) gives the decay functions used by \citet{schaer2002}.  An example of the SLEVE grid can be seen in figure~\ref{fig:grid}b.
 
 Most implementations of terrain following layers use a coordinate system that makes the computational domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and non-orthogonal grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
 
@@ -252,7 +252,7 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 	t &= \frac{x}{u_0} - \frac{h_0}{16 u_0 H} \left[ 4x + \frac{\sin 2 (\alpha + \beta) x}{\alpha + \beta} \right.+ \nonumber \\
    &\ \left. \frac{\sin 2(\alpha - \beta) x}{\alpha - \beta} + 2 \left( \frac{\sin 2\alpha x}{\alpha} + \frac{\sin 2\beta x}{\beta} \right) \right]
 \end{align}
-Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is along the terrain following coordinate surface.
+Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is parallel to the surface.
 
 $\ell_2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Using the cubic upwind-biased scheme, errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
 
@@ -382,7 +382,7 @@ Conversely, in the first terrain following tracer advection test, errors were la
 
 The tests we have presented demonstrate the trade-off between errors in calculating pressure gradient and advection terms: pressure gradient errors can be reduced by using a cut cell grid but, when flow follows the terrain, advection errors are reduced using a terrain following grid.
 
-The cubic upwind-biased advection scheme takes an approach for treating small cut cells that differs from other existing approaches by adjusting weightings to ensure that advection remains upwind-biased near small cells.  The technique is already implemented in OpenFOAM and will be described in greater detail a future publication.  Combined with semi-implicit timestepping and a grid generator that preserves cell length in the direction of the flow, small cells did not impose additional timestep constraints.
+The cubic upwind-biased advection scheme takes an approach for treating small cut cells that differs from other existing approaches by adjusting weightings to ensure that advection remains upwind-biased near small cells.  The implementation of this technique in OpenFOAM is available at \url{https://github.com/hertzsprung/AtmosFOAM/tree/shaw-weller-2015-mwr} and will be described in greater detail a future publication.  Combined with semi-implicit timestepping and a grid generator that preserves cell length in the direction of the flow, small cells did not impose additional timestep constraints.
 
 \acknowledgments
 I am grateful to my co-supervisors John Methven and Terry Davies for their valuable input, and to Christoph Sch\"{a}r (ETH) for his assistance in reproducing his advection test results.  The authors thank the two anonymous reviewers whose comments greatly improved this manuscript.  I am thankful for the NERC studentship which helped fund this work.  Weller is funded by NERC grant NE/H015698/1.
