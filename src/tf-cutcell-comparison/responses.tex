@@ -163,23 +163,34 @@ Even when using the TF coordinates this mimetic property diminishes the spurious
 
 
 There are a couple of weaknesses in the paper that need to be addressed:
-\begin{enumerate}
+\begin{comment}
 \item A sign error in the derivation of the new advection test case in section 4b.
 	Maybe it is just a typo in the manuscript, but if this wrong formulation has indeed been used
 	in the example results, they all need to be rerun and corrected (see the detailed information below).
+\end{comment}
+\end{quotation}
+Many thanks, fixed.
+\begin{quotation}
+\begin{comment}
 \item Inconsistent sign convention for the stream function and the derived velocities.  The sign is switched in sections 4a and 4b, which needs to be unified.
+\end{comment}
+\end{quotation}
+Many thanks, fixed.
+\begin{quotation}
+\begin{comment}
 \item Model description in section 3: Since this paper not only compares the orography treatment but also the accuracy of some numerical methods it needs to provide more information about these numerical variants.  E.g. there is no information about the `centered linear' finite-volume scheme, not even a reference.  Is the linear scheme 2nd-order accurate and the cubic scheme 4th-order accurate?  In addition, it is unclear what method the nonlinear steady-state test at rest and the gravity wave test used (the cubic option?).  Include a short description of the linear scheme, the cubic scheme and the fourth-order scheme from \cite{schaer2002} since the manuscript emphasises these aspects in combination with the orography treatment.
 
 The description of the Hodge dual operator is incomprehensible in its current form and does not seem to be crucial for the assessment of the orography analysis.  I suggest moving this description into an appendix and extending it somewhat to make it self-explanatory.  Currently, it is very confusing to read about a semi-implicit formulation, and see the explicit Runge-Kutta time stepping algorithm in the next paragraph.
-\end{enumerate}
+\end{comment}
 \end{quotation}
-New `Model' section added, each model is described separately.  Hodge dual operator moved to appendix.
+New `Model' section added, each model is described separately.  Description of the Hodge dual operator is expanded, clarified and moved to appendix.
 
 \begin{quotation}
 \noindent
 \textbf{Detailed comments}
 
 \begin{comment}
+\setcounter{commenti}{0}
 \item Line 21: The Scorer parameter and Froude number are mentioned in the abstract, but never again in the manuscript.  Either remove this sentence from the abstract, or add the missing discussion why larger Scorer parameters and Froude numbers are a challenge for the cut cell method.  This is not obvious.
 \end{comment}
 \end{quotation}
@@ -375,7 +386,7 @@ Done.
 \item Section 3d: what is the grid spacing for this test case?
 \end{comment}
 \end{quotation}
-The original test case was $\Delta x = 500m$, $\Delta z = 300m$.  The other reviewer suggested additional tests at higher resolutions.
+The original test case was $\Delta x = 500m$, $\Delta z = 300m$.  The other reviewer suggested additional tests at higher resolutions.  The text has been improvedso that the grid spacing used for every test case is clear.
 
 \begin{quotation}
 \begin{comment}
