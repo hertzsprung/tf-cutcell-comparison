@@ -6,8 +6,10 @@
 \usepackage{siunitx}
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{xcolor}
 \newlist{comment}{enumerate}{1}
 \setlist[comment,1]{label={\arabic{commenti}.},leftmargin=*,resume=comment}
+\newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
 
 \begin{document}
 \section*{Review \#1}
@@ -108,46 +110,62 @@ However, there are still a few minor aspects that need attention:
 that mu is dimensionless is therefore wrong and needs to be corrected.
 \end{comment}
 \end{quotation}
+Removed `dimensionless' on line \TODO{xxx} and now included correct units where $\mu$ is specified on lines \TODO{xxx} and \TODO{xxx}.
+
 \begin{quotation}
 	\begin{comment}
 	\item Line 241: $\phi$ is defined as the tracer density. Therefore, the definition of $\phi_0$ needs the physical unit \si{\kilogram\per\meter\cubed}
 	\end{comment}
 \end{quotation}
+Added physical units to $\phi_0$ and in the caption for table 1.
+
 \begin{quotation}
 	\begin{comment}
 	\item Page 18, test c): The initial conditions look incomplete. Please provide information about the initial density or pressure initialization. Do you assume that the pressure at z=0 m is 1000 hPa?
 	\end{comment}
 \end{quotation}
+Yes, amended line \TODO{xxx} to state that $p_0 = \SI{1000}{\hecto\pascal}$, which applies to all tests that use the model.
+
 \begin{quotation}
 	\begin{comment}
 	\item Test d) and e): As for test c), the descriptions of the initial conditions looks incomplete. Is the initial w zero in d,e?
 \end{comment}
 \end{quotation}
+The value of $p_0$ applies to tests (c) and (d).  For test (d), line \TODO{xxx} now states that $w = \SI{0}{\meter\per\second}$.  For test (e), the velocity field is defined by the streamfunction in equation (26), and $w = \SI{0}{\meter\per\second}$ only where $\mathrm{d}h/\mathrm{d}x = 0$.
+
 \begin{quotation}
 	\begin{comment}
 	\item Line 389: mu needs the physical unit 1/s.
 \end{comment}
 \end{quotation}
+Added, many thanks.
+
 \begin{quotation}
 	\begin{comment}
 	\item Line 440: It would be better to say 'The functional form of the initial density field ...potential temperature field (Eq. (22)) in the gravity wave test.
 	\end{comment}
 \end{quotation}
+Instead of amending this line, we now refer to the field as a potential temperature field, not a tracer density field.  Further details are provided in response to the subsequent comment.
+
 \begin{quotation}
 	\begin{comment}
 	\item Line 445: While it is mathematically possible to initialize the tracer density with 288 (needs physical units!) at the ground, it does not make any physical sense. However, it is okay to leave it for this idealized test case, but a more physical choice is clearly more desirable.
 	\end{comment}
 \end{quotation}
+The field is really the potential temperature field from the gravity waves test.  We have modified this section so that the tracer density field is now called a potential temperature field.  Lines \TODO{xxx twice in the abstract, in the intro and conclusion} have also been amended accordingly so that this test is no longer refered to as a tracer advection test..  Equation (\TODO{xxx}) now has $\theta_0 = \SI{288}{\kelvin}$.
+
 \begin{quotation}
 	\begin{comment}
 	\item Line 449: Do you refer to the normalized $\ell_2$ error here?
 	\end{comment}
 \end{quotation}
+Yes, amended the manuscript to state this.
 \begin{quotation}
 	\begin{comment}
 	\item Check the references for some phrases that need to be capitalized, as e.g. Appalachian in line 571 or Lagrangian in line 567 
 	\end{comment}
 \end{quotation}
+Corrected these, also `Navier-Stokes' and `Met Office Unified Model'.
 
 \bibliographystyle{ametsoc2014}
 \bibliography{references}
