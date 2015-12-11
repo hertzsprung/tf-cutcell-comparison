@@ -21,6 +21,8 @@ Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection t
 \begin{quotation}
  Lines 131-147 on cut-cell grid generation - It's still not clear how or why a cell vertex  is moved laterally in constructing the cut-cell mesh. Taking Fig. 2 as an example, it  seems that following the authors' directions to move all vertices lying underneath the  orography on the uniform grid up to the surface would produce four grid cells as  shown in the figure below rather than the three cells shown in Fig. 2. This four-cell structure appears to be consistent with the generation of thin cells as the authors  point out in Fig. 5c. If lateral displacement of a vertex is allowed, how is it decided  whether it should be moved and how is it decided where along the surface it should  be located (i.e. the location of point v in Fig. 2)?
 \end{quotation}
+\TODO{redo everything using slanted cell grids}
+
 \begin{quotation}
 	Section 3b - Finite difference linear advection model - This advection model is solving the same flux form equation (4) as in the previous subsection. Thus, the advection operator in (6) should be in terms of $\partial (u\phi)/\partial x$.  The finite differencing in (6) can also be considered a finite-volume representation, rewriting it as 
 	\begin{align*}
@@ -28,12 +30,17 @@ Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection t
 		F_{i+1/2} &= \frac{1}{12} \left( - \phi_{i+2} + 7 \phi_{i+1} + 7 \phi_i - \phi_{i-1} \right).
 	\end{align*}
 \end{quotation}
+Amended as suggested, many thanks.
+
 \begin{quotation}
  Lines 265-267 and table 1 – The authors are unnecessarily complicating their tests  by comparing results from the cut-cell grid and a regular grid. These grids should be identical for this test and merit no further comparative consideration. There is no need to simulate with both grids, show their identical behavior in table 1, and then  state that the same behavior ``is to be expected.''
 \end{quotation}
+\TODO{agreed, although the comparison with the fourth order scheme in table 1 is perhaps useful?}
+
 \begin{quotation}
  Lines 271-279 and Table 1 – The $\ell_2$ error norms have changed by more than an order  of magnitude from those reported in the original manuscript. What changed?
 \end{quotation}
+In the first draft, the $\ell_2$ values had not been normalised, such that $\ell_2 = \sqrt{\sum_c \left(\phi - \phi_T\right)^2 \mathcal{V}_c}$.  This was fixed in the second draft so that $\ell_2$ was calculated correctly according to equation (13).
 \begin{quotation}
  Lines 280-285 – Reviewer 2 questioned the large change in the $\ell_2$ error norm when 
  the domain width was changed from 301 to 300 km. I share the concern expressed 
@@ -51,11 +58,15 @@ Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection t
  the paper altogether. One would get the same sensitivity leaving the domain width 
  fixed and just shifting the terrain location by one-half grid interval.  
 \end{quotation}
+Yes, the change in domain width causes the terrain to be shifted by $\Delta x / 2$, and it is this which results in a change in accuracy.  We had not intended to perform a sensitivity test, but only to clarify the specification for the \citet{schaer2002} advection test.  \TODO{update the manuscript to put less emphasis on this}
+
 \begin{quotation}
  Lines 321-322 – When the flow is aligned with the grid there is no cross coordinate 
  flow and therefore the numerics are essentially reduced to a one-dimensional 
  advection equation. I don't see how grid distortion is even an issue. 
 \end{quotation}
+The advection scheme fits a multidimensional polynomial using a stencil of cell centroids, hence grid distortions will affect the resulting least squares fit.  If the test used a dimensionally-split advection scheme with a terrain-following coordinate transform, then the test would indeed reduce to a one-dimensional problem.  \TODO{clarify in the manuscript}
+
 \begin{quotation}
  Lines 364-368 – The authors did not need to run these resting atmosphere 
  simulations to reach the conclusion stated in this paragraph. As stated in my first 
@@ -65,6 +76,8 @@ Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection t
  the cut-cell grid, it's only just adjacent to the terrain where pressure gradient 
  calculations between cell centers are not horizontal.   
 \end{quotation}
+\TODO{good idea, we should do this, but first see if anyone else does something similar (zaengl2012?).  Should we abandon the klemp2011 test entirely or just put less emphasis on its results?}
+
 \begin{quotation}
 	Section 4d – Sch\"{a}r mountain-wave tests. These tests are more interesting now that 
  the case has been simulated with a variety of grid resolutions. However, I'm 
@@ -90,15 +103,20 @@ Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection t
  that errors in the advection of theta through the cut cells may be responsible for the 
  anomalies appearing with this grid.
 \end{quotation}
+\TODO{the gravity wave amplitude decreases but the advection errors do not.  hence, this is a good choice for the sample line.  we considered plotting heatmaps, but found that it was not as easy to distinguish between the gravity waves and the advection errors.}
+
 \begin{quotation}
  Lines 479-480 – As mentioned above, for the horizontal advection test, shouldn't the  results for the cut-cell and regular grids be identical?
 \end{quotation}
+This was a mistake: table 1 confirmed that min, max and $\ell_2$ errors were identical on both grids.  This line now reads, `in the horizontal advection test, accuracy was greatest on the cut cell grid'.
+
 \begin{quotation}
  Lines 481-482 – Emphasizing an error reduction of two orders of magnitude for this 
  resting atmosphere case with cut cells compared to a terrain-following coordinate is 
  not very informative. In both cases the errors appear to be quite small, and thus the 
  more relevant question is whether these differences are of any realistic significance. 
 \end{quotation}
+\TODO{this conclusion may change when we run the new resting atmosphere test}
 
 
 \section*{Review \#2}
@@ -124,7 +142,7 @@ Added physical units to $\phi_0$ and in the caption for table 1.
 	\item Page 18, test c): The initial conditions look incomplete. Please provide information about the initial density or pressure initialization. Do you assume that the pressure at z=0 m is 1000 hPa?
 	\end{comment}
 \end{quotation}
-Yes, amended line \TODO{xxx} to state that $p_0 = \SI{1000}{\hecto\pascal}$, which applies to all tests that use the model.
+Yes, amended line \TODO{xxx} to state that $p_0 = \SI{1000}{\hecto\pascal}$, which applies to all tests that use the model.  Line \TODO{xxx} now cites \citet{weller-shahrokhi2014} which explains how the Exner function of pressure is calculated so that it is in discrete hydrostatic balance with the prescribed potential temperature file.
 
 \begin{quotation}
 	\begin{comment}

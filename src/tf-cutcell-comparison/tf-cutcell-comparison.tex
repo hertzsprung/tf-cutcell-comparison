@@ -111,10 +111,13 @@ To ensure that the discrete velocity field is non-divergent, velocities are pres
 
 \subsection{Finite difference linear advection model}
 The second model is a modified version of the linear advection model first used by \citet{schaer2002}.  It uses terrain following coordinates and it is configured with leapfrog timestepping and either second-order centred differences, or a fourth-order centred difference scheme given by:
+\begin{subequations}
 \begin{align}
-	\frac{\partial \phi_i}{\partial x} \approx \frac{1}{\Delta x} \left( \frac{1}{12} \phi_{i-2} - \frac{2}{3} \phi_{i-1} + \frac{2}{3} \phi_{i+1} - \frac{1}{12} \phi_{i+2} \right)
+	\frac{\partial u \phi}{\partial x} &\approx \frac{1}{\Delta x} \left( u_{i+\frac{1}{2}} F_{i+\frac{1}{2}} - u_{i - \frac{1}{2}} F_{i - \frac{1}{2}}\right) \\
+	F_{i+\frac{1}{2}} &= \frac{1}{12} \left( - \phi_{i+2} + 7 \phi_{i+1} + 7 \phi_i - \phi_{i-1} \right)
 \end{align}
-and similarly for \(\partial \phi_i / \partial z\).
+\end{subequations}
+and similarly for \(\partial (w \phi) / \partial z\).
 
 Once again, velocity fields are prescribed using a streamfunction defined at cell vertices (referred to as double staggered grid points by \citet{schaer2002}).  The original version of the code effectively smoothed the orography, interpolating the geometric height, $z$, at doubly staggered points from values at adjacent half levels in order to calculate the streamfunction.  The modified version used here directly calculates the height at vertices to enable comparisons with the finite volume model solutions.
 
@@ -277,7 +280,7 @@ h_1(x) = \frac{1}{2} h_0 \exp \left( - \left( \frac{x}{a} \right)^2 \right)
 \end{align}
 and, following \cite{leuenberger2010}, $s_1 = \SI{4}{\kilo\meter}$ is the large scale height, $s_2 = \SI{1}{\kilo\meter}$ is the small scale height, and the optimal exponent value of $n = 1.35$ is used.
 
-The initial thermodynamic conditions are in discrete hydrostatic balance in the vertical direction, having a reference potential temperature of $\theta(z = 0) = \SI{288}{\kelvin}$ and constant stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  The damping function, \(\mu\), is set to \SI{0}{\per\second}.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
+The initial potential temperature field has $\theta(z = 0) = \SI{288}{\kelvin}$ and a constant static stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  The Exner function of pressure is calculated so that it is in discrete hydrostatic balance in the vertical direction \citep{weller-shahrokhi2014}.  The damping function, \(\mu\), is set to \SI{0}{\per\second}.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
 
 The test was integrated forward by 5 hours using a timestep $\Delta t = \SI{100}{\second}$ on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  
 The results presented in figure~\ref{fig:resting}, which use a curl-free pressure gradient, have maximum spurious values of $w$ of \SI{0.33}{\meter\per\second} on the BTF grid, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
@@ -376,7 +379,7 @@ Across all tests, a high degree of accuracy was achieved for all grids.  Even on
 
 Spurious vertical velocities were small in the resting initial state test, reaching a maximum of $\sim \SI{0.35}{\meter\per\second}$ on the BTF grid, compared to a maximum of $\sim \SI{7}{\meter\per\second}$ found by \citet{klemp2011}.  In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
-Cut cell grids reduced errors in two of the five tests.  First, in the horizontal advection test, tracer accuracy on the cut cell grid was almost as good as accuracy on a regular grid with no mountain.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain following grids.
+Cut cell grids reduced errors in two of the five tests.  First, in the horizontal advection test, accuracy was greatest on the cut cell grid.  Second, in the resting atmosphere test, spurious vertical velocities were two orders of magnitude smaller on the cut cell grid compared with the terrain following grids.
 
 Conversely, in the first terrain following tracer advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  Errors were also large on the cut cell grids in the second terrain following thermal advection test.  This result suggests that, in the gravity waves test, potential temperature errors in the cut cell grids are primarily due to advection errors.
 
