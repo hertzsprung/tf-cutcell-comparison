@@ -1,0 +1,12 @@
+Overall, the authors have been very responsive to my comments and suggestions, and the manuscript improved considerably.
+However, there are still a few minor aspects that need attention:
+1) From equation (7a) it is clear that the symbol mu needs a physical unit which is 1/s. The statement in line 195
+that mu is dimensionless is therefore wrong and needs to be corrected.
+2) Line 241: Phi is defined as the tracer density. Therefore, the definition of Phi0 needs the physical unit kg/m^3
+3) Page 18, test c): The initial conditions look incomplete. Please provide information about the initial density or pressure initialization. Do you assume that the pressure at z=0 m is 1000 hPa?
+4) Test d) and e): As for test c), the descriptions of the initial conditions looks incomplete. Is the initial w zero in d,e?
+5) Line 389: mu needs the physical unit 1/s.
+6) Line 440: It would be better to say 'The functional form of the initial density field ...potential temperature field (Eq. (22)) in the gravity wave test.
+7) Line 445: While it is mathematically possible to initialize the tracer density with 288 (needs physical units!) at the ground, it does not make any physical sense. However, it is okay to leave it for this idealized test case, but a more physical choice is clearly more desirable.
+8) Line 449: Do you refer to the normalized l2 error here?
+9) Check the references for some phrases that need to be capitalized, as e.g. Appalachian in line 571 or Lagrangian in line 567 

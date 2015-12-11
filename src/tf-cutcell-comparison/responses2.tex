@@ -1,0 +1,155 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{url}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\newlist{comment}{enumerate}{1}
+\setlist[comment,1]{label={\arabic{commenti}.},leftmargin=*,resume=comment}
+
+\begin{document}
+\section*{Review \#1}
+\begin{quotation}
+This revised manuscript is improved from its original version. The Sch\"{a}r mountain wave test with various grid resolutions and the new test for theta advection are quite informative in identifying the potential source of errors in the low-level theta field in the cut-cell mountain-wave simulation. However, as indicated in my previous review, I still believe that this paper should be more focused, with more emphasis on what's new and interesting in these test cases comparing terrain-following and cut-cell coordinates, and less attention to results that are obvious or previously documented. More specific comments and suggestions are included below. 
+
+Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection test case for various vertical coordinates and advection schemes; there is little new here that is not already covered in the \citet{schaer2002} paper. The advection tests in section 4b provide an interesting counter example to this test. I would recommend switching the emphasis in these two sections, presenting the advected tracer contours in a new Fig. 3 for the terrain-following advection, and just including results from the Sch\"{a}r case in table 1 for comparison purposes.
+\end{quotation}
+\begin{quotation}
+ Lines 131-147 on cut-cell grid generation - It's still not clear how or why a cell vertex  is moved laterally in constructing the cut-cell mesh. Taking Fig. 2 as an example, it  seems that following the authors' directions to move all vertices lying underneath the  orography on the uniform grid up to the surface would produce four grid cells as  shown in the figure below rather than the three cells shown in Fig. 2. This four-cell structure appears to be consistent with the generation of thin cells as the authors  point out in Fig. 5c. If lateral displacement of a vertex is allowed, how is it decided  whether it should be moved and how is it decided where along the surface it should  be located (i.e. the location of point v in Fig. 2)?
+\end{quotation}
+\begin{quotation}
+	Section 3b - Finite difference linear advection model - This advection model is solving the same flux form equation (4) as in the previous subsection. Thus, the advection operator in (6) should be in terms of $\partial (u\phi)/\partial x$.  The finite differencing in (6) can also be considered a finite-volume representation, rewriting it as 
+	\begin{align*}
+		\frac{\partial u \phi}{\partial x} &= \frac{1}{\Delta x} \left( u_{i+1/2} F_{i+1/2} - u_{i - 1/2} F_{i - 1/2}\right), \\
+		F_{i+1/2} &= \frac{1}{12} \left( - \phi_{i+2} + 7 \phi_{i+1} + 7 \phi_i - \phi_{i-1} \right).
+	\end{align*}
+\end{quotation}
+\begin{quotation}
+ Lines 265-267 and table 1 – The authors are unnecessarily complicating their tests  by comparing results from the cut-cell grid and a regular grid. These grids should be identical for this test and merit no further comparative consideration. There is no need to simulate with both grids, show their identical behavior in table 1, and then  state that the same behavior ``is to be expected.''
+\end{quotation}
+\begin{quotation}
+ Lines 271-279 and Table 1 – The $\ell_2$ error norms have changed by more than an order  of magnitude from those reported in the original manuscript. What changed?
+\end{quotation}
+\begin{quotation}
+ Lines 280-285 – Reviewer 2 questioned the large change in the $\ell_2$ error norm when 
+ the domain width was changed from 301 to 300 km. I share the concern expressed 
+ by this reviewer and find the authors' added explanation (``It's likely that changes in 
+ the domain width affect the wave power spectrum of the discrete terrain profile.'') to 
+ be inadequate. If the results are sensitive to the exact location of the lateral 
+ boundaries, then the numerical experiment is not well designed; the boundaries 
+ should be moved far enough away from the mountain so that this sensitivity 
+ disappears.  Is it possible that the authors shifted the location of the terrain by a half 
+ grid interval when they changed the domain width by one grid interval? This would 
+ occur if they just defined the center of the terrain profile to be in the center of the 
+ domain. If that’s the case, then the results are understandable since numerically, it's a 
+ different terrain shape. However, the changing behavior would have nothing to do 
+ with the domain width, and thus this sensitivity test should then be removed from 
+ the paper altogether. One would get the same sensitivity leaving the domain width 
+ fixed and just shifting the terrain location by one-half grid interval.  
+\end{quotation}
+\begin{quotation}
+ Lines 321-322 – When the flow is aligned with the grid there is no cross coordinate 
+ flow and therefore the numerics are essentially reduced to a one-dimensional 
+ advection equation. I don't see how grid distortion is even an issue. 
+\end{quotation}
+\begin{quotation}
+ Lines 364-368 – The authors did not need to run these resting atmosphere 
+ simulations to reach the conclusion stated in this paragraph. As stated in my first 
+ review, this test case does not challenge the numerics on a cut-cell grid since the horizontal pressure-gradient errors will obviously be reduced in the vicinity of the 
+ low level inversion where the coordinates surfaces are perfectly horizontal. A better 
+ test case might be to specify an inversion layer that intersects the terrain, since on 
+ the cut-cell grid, it's only just adjacent to the terrain where pressure gradient 
+ calculations between cell centers are not horizontal.   
+\end{quotation}
+\begin{quotation}
+	Section 4d – Sch\"{a}r mountain-wave tests. These tests are more interesting now that 
+ the case has been simulated with a variety of grid resolutions. However, I'm 
+ surprised that the analyses of these results seem to focus on behavior far 
+ downstream of the mountain, as is evident in Figs. 6 and 7. I'm not aware of any 
+ published results that extend beyond x = 25 km in Fig. 6. Since the amplitude of the 
+ disturbances are decaying with downstream distance, small inaccuracies in behavior 
+ of the absorbing layer and boundary conditions have larger impact such that the 
+ relative errors in comparison to the analytic solution become large. (Note, for 
+ example the erroneous extension of negative perturbation theta contours to the 
+ surface at x = 25 km in Fig. 6.)  All we learn from Fig. 7b is that errors in theta near 
+ the surface in the cut-cell cases, which must have been produced in the vicinity of the 
+ terrain, continue to be swept downstream. I think it would be more informative to 
+ focus on solution differences between the BTF and cut-cell results near the terrain as 
+ is done in Fig. 8 for the terrain-following theta advection. The authors could display 
+ these difference fields for the various grid resolutions in exactly the same manner as 
+ in Fig. 8. The theta advection test presented by the authors is a very nice complement 
+ to the gravity-wave tests. It confirms that the BTF solution is behaving properly and 
+ therefore lends support to interpreting differences in the two grids as inaccuracies in 
+ the cut cell treatment. I would expect that the difference fields in the Sch\"{a}r case are 
+ at least qualitatively similar to those exhibited in the theta advection case, which 
+ would further confirm the relevance of this advection test as well as the conclusion 
+ that errors in the advection of theta through the cut cells may be responsible for the 
+ anomalies appearing with this grid.
+\end{quotation}
+\begin{quotation}
+ Lines 479-480 – As mentioned above, for the horizontal advection test, shouldn't the  results for the cut-cell and regular grids be identical?
+\end{quotation}
+\begin{quotation}
+ Lines 481-482 – Emphasizing an error reduction of two orders of magnitude for this 
+ resting atmosphere case with cut cells compared to a terrain-following coordinate is 
+ not very informative. In both cases the errors appear to be quite small, and thus the 
+ more relevant question is whether these differences are of any realistic significance. 
+\end{quotation}
+
+
+\section*{Review \#2}
+\begin{quotation}
+Overall, the authors have been very responsive to my comments and suggestions, and the manuscript improved considerably.
+However, there are still a few minor aspects that need attention:
+\begin{comment}
+\item From equation (7a) it is clear that the symbol mu needs a physical unit which is 1/s. The statement in line 195
+that mu is dimensionless is therefore wrong and needs to be corrected.
+\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Line 241: $\phi$ is defined as the tracer density. Therefore, the definition of $\phi_0$ needs the physical unit \si{\kilogram\per\meter\cubed}
+	\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Page 18, test c): The initial conditions look incomplete. Please provide information about the initial density or pressure initialization. Do you assume that the pressure at z=0 m is 1000 hPa?
+	\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Test d) and e): As for test c), the descriptions of the initial conditions looks incomplete. Is the initial w zero in d,e?
+\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Line 389: mu needs the physical unit 1/s.
+\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Line 440: It would be better to say 'The functional form of the initial density field ...potential temperature field (Eq. (22)) in the gravity wave test.
+	\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Line 445: While it is mathematically possible to initialize the tracer density with 288 (needs physical units!) at the ground, it does not make any physical sense. However, it is okay to leave it for this idealized test case, but a more physical choice is clearly more desirable.
+	\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Line 449: Do you refer to the normalized $\ell_2$ error here?
+	\end{comment}
+\end{quotation}
+\begin{quotation}
+	\begin{comment}
+	\item Check the references for some phrases that need to be capitalized, as e.g. Appalachian in line 571 or Lagrangian in line 567 
+	\end{comment}
+\end{quotation}
+
+\bibliographystyle{ametsoc2014}
+\bibliography{references}
+\end{document}
+
