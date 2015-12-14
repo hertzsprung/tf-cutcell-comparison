@@ -8,6 +8,8 @@
 
 \bibpunct{(}{)}{;}{a}{}{,}
 
+\newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
+
 \title{Comparison of Terrain Following and Cut Cell Grids using a Non-Hydrostatic Model}
 \authors{James Shaw\correspondingauthor{Department of Meteorology, University of Reading, Earley Gate, PO Box 243, Reading, RG6 6BB, UK.} and Hilary Weller}
 \affiliation{Department of Meteorology, University of Reading, Reading, United Kingdom}
@@ -225,13 +227,14 @@ where $\phi$ is the numerical tracer value, $\phi_T$ is the analytic value and $
 The results of the cubic upwind-biased scheme on TF and regular grids are comparable with those for the fourth-order centred scheme from \citet{schaer2002}.  Error is largest on the BTF grid with \(\ell_2 = \num{0.112}\) but is significantly reduced on the SLEVE grid with \(\ell_2 = \num{0.0146}\).  The error is approximately halved by changing from the SLEVE grid to the cut cell grid.
 Tracer minima and maxima for the centred linear and fourth order schemes are lower than those presented by \citet{schaer2002} because no interpolation is used to calculate the streamfunction.
 
+\TODO{put less emphasis on this, just clarify the correct test setup to obtain Schaer's results.}
 The centred linear scheme is sensitive to grid-scale changes in the terrain profile: when the domain width is reduced to \SI{300}{\kilo\meter}, the $\ell_2$ error on the BTF grid rises from \num{0.284} to \num{0.432}.  The same sensitivity is found using terrain following coordinates and centred differences in space and time, as implemented by \citet{schaer2002}.  The upwind-biased cubic scheme is less sensitive to the same change, with the $\ell_2$ error decreasing from \num{0.112} to \num{0.105}.  It is likely that changes in the domain width affect the wave power spectrum of the discrete terrain profile.  Grid-scale oscillations persist in the centred linear scheme but are damped by the upwind-biased scheme.
 
 The results of the horizontal advection test show that numerical errors are due either to misalignment of the flow with the grid, or to grid distortions.  Using the upwind-biased cubic scheme, distortions in the grid do not significantly distort the tracer.
 
 
 \subsection{Terrain following advection}
-In the horizontal advection test, results were least accurate on the BTF grid, where the grid was most non-orthogonal and flow was misaligned with the grid layers.  Here, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  This test determines whether the primary source of numerical error is due to non-orthogonality or misalignment of the flow with grid layers. 
+In the horizontal advection test, results were least accurate on the BTF grid, where the grid was most non-orthogonal and flow was misaligned with the grid layers.  Here, we formulate a new tracer advection test in which the velocity field is everywhere tangential to the basic terrain following coordinate surfaces.  This test determines whether the primary source of numerical error is due to non-orthogonality or misalignment of the flow with grid layers.  \TODO{explain how grid distortion could reduce accuracy of the advection scheme}
 
 The spatial domain, mountain profile, initial tracer profile and discretisation are the same as those in the horizontal tracer advection test.  The velocity field is defined using a streamfunction, $\Psi$, so that the discrete velocity field is non-divergent and follows the BTF coordinate surfaces given by equation~(\ref{eqn:btf}) such that
 \begin{equation}
@@ -365,7 +368,7 @@ Hence, the analytic solution, $\theta_T$, can be found by considering the vertic
 where the potential temperature at $z = 0$, $\theta_0 = \SI{288}{\kelvin}$, and the transform, $z^\star$, is given by rearranging equation~(\ref{eqn:btf}).
 
 Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours of potential temperature overlayed.  Errors are too small to be visible on the BTF grid with a maximum $\ell_2$ error of \num{4.26e-4}.
-However, on the cut cell grid, the maximum error is \num{0.302}.  Advection errors are apparent around mountainous terrain, with small cells having the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
+However, on the cut cell grid, the maximum error is \TODO{\num{999}}.  Advection errors are apparent around mountainous terrain, with small cells having the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
 The same error structure is present on all cut cell grids in which the terrain intersects the grid layers.
 
 For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of potential temperature error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-theta}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-theta}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.  The magnitude of error is about ten times larger than the potential temperature anomalies found on the cut cell grids in the gravity waves test seen in figure~\ref{fig:gw-theta}b.  We offer two explanations for this difference: first, there are no restoring forces in the linear advection model and, second, the wind fields in the two tests are different.
@@ -413,22 +416,22 @@ I am grateful to my co-supervisors John Methven and Terry Davies for their valua
 \hline\hline
                   &                     &                  & Analytic & {BTF}   & {SLEVE}         & {Cut cell}     & {No terrain} \\
 \hline
-Horizontal        & Centred linear      & \(\ell_2\) error & 0        & 0.284   & 0.0316          & 0.0304         & 0.0304      \\
-                  &                     & min              & 0        & -0.275  & -0.0252         & -0.0251        & -0.0251     \\
-                  &                     & max              & 1        & 0.925   & 0.985           & 0.985          & 0.985       \\
+Horizontal        & Centred linear      & \(\ell_2\) error & 0        & 0.284   & 0.0316          & 999         & 0.0304      \\
+                  &                     & min              & 0        & -0.275  & -0.0252         & 999        & -0.0251     \\
+                  &                     & max              & 1        & 0.925   & 0.985           & 999          & 0.985       \\
                   & Fourth order        & \(\ell_2\) error & 0        & 0.0938  & 0.00244         & {---}          & 0.00234     \\
                   &                     & min              & 0        & -0.0926 & -0.00174        & {---}          & -0.00178    \\
                   &                     & max              & 1        & 1.00    & 0.984           & {---}          & 0.983       \\
-                  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.112   & 0.0146          & 0.00784        & 0.00784     \\
-                  &                     & min              & 0        & -0.0464 & -0.0106         & -0.000674      & -0.00674    \\
-                  &                     & max              & 1        & 0.922   & 0.982           & 0.983          & 0.983       \\
+                  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.112   & 0.0146          & 999        & 0.00784     \\
+                  &                     & min              & 0        & -0.0464 & -0.0106         & 999      & -0.00674    \\
+                  &                     & max              & 1        & 0.922   & 0.982           & 999          & 0.983       \\
 \hline
-Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  & 0.235           & {unstable}     & {---}        \\
-	          &                     & min              & 0        & -0.0245 & -0.120          & {unstable}     & {---}        \\
-		  &                     & max              & 1        & 0.985   & 0.950           & {unstable}     & {---}        \\
-		  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.0209  & 0.162           & 0.181          & {---}        \\
-                  &                     & min              & 0        & -0.0110 & -0.0263         & -0.0284        & {---}        \\
-                  &                     & max              & 1        & 0.983   & 0.865           & 0.851          & {---}        \\
+Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  & 0.235           & 999     & {---}        \\
+	          &                     & min              & 0        & -0.0245 & -0.120          & 999     & {---}        \\
+		  &                     & max              & 1        & 0.985   & 0.950           & 999     & {---}        \\
+		  & Cubic upwind-biased & \(\ell_2\) error & 0        & 0.0209  & 0.162           & 999          & {---}        \\
+                  &                     & min              & 0        & -0.0110 & -0.0263         & 999        & {---}        \\
+                  &                     & max              & 1        & 0.983   & 0.865           & 999          & {---}        \\
 \hline
 \end{tabular}
 \end{table*}
@@ -468,15 +471,15 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 {$\Delta z$ (\si{\meter})} & \multicolumn{2}{c}{max/min cell area ratio} \\
  & {BTF} & {Cut cell} \\
 \hline
-500	& 1.01 &  1.68 \\
-300	& 1.01 &  4.33 \\
-250	& 1.01 &  5.42 \\
-200	& 1.01 &  25.4 \\
-150	& 1.01 &  10.0 \\
-125	& 1.01 &  10.1 \\
-100	& 1.01 &  36.3 \\
-75	& 1.01 &  52.9 \\
-50	& 1.01 &  75.3 \\
+500	& 1.01 &  999 \\
+300	& 1.01 &  999 \\
+250	& 1.01 &  999 \\
+200	& 1.01 &  999 \\
+150	& 1.01 &  999 \\
+125	& 1.01 &  999 \\
+100	& 1.01 &  999 \\
+75	& 1.01 &  999 \\
+50	& 1.01 &  999 \\
 \hline
 \end{tabular}
 \end{table}
