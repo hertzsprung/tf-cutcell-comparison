@@ -58,7 +58,9 @@ In the first draft, the $\ell_2$ values had not been normalised, such that $\ell
  the paper altogether. One would get the same sensitivity leaving the domain width 
  fixed and just shifting the terrain location by one-half grid interval.  
 \end{quotation}
-Yes, the change in domain width causes the terrain to be shifted by $\Delta x / 2$, and it is this which results in a change in accuracy.  We had not intended to perform a sensitivity test, but only to clarify the specification for the \citet{schaer2002} advection test.  \TODO{update the manuscript to put less emphasis on this}
+Yes, the change in domain width causes the terrain to be shifted by $\Delta x / 2$, and it is this which results in a change in accuracy.  We had not intended to perform a sensitivity test, but only to clarify the specification for the \citet{schaer2002} advection test.
+
+The paragraph discussing the sensitivity of CTCS to the change in mountain profile has been removed.  Line \TODO{xxx} clarifies the test setup required to reproduce \citet{schaer2002}'s results.
 
 \begin{quotation}
  Lines 321-322 – When the flow is aligned with the grid there is no cross coordinate 
@@ -76,7 +78,7 @@ The advection scheme fits a multidimensional polynomial using a stencil of cell 
  the cut-cell grid, it's only just adjacent to the terrain where pressure gradient 
  calculations between cell centers are not horizontal.   
 \end{quotation}
-\TODO{good idea, we should do this, but first see if anyone else does something similar (zaengl2012?).  Should we abandon the klemp2011 test entirely or just put less emphasis on its results?}
+\TODO{good idea.  zaengl2012 did something similar by raising the mountain to 4km, but we think that simply moving the inversion layer is preferable because the mesh remains constant.  Should we abandon the klemp2011 test entirely or just put less emphasis on its results?}
 
 \begin{quotation}
 	Section 4d – Sch\"{a}r mountain-wave tests. These tests are more interesting now that 
