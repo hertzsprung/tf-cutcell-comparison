@@ -498,7 +498,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\includegraphics{../fig-grid-generation/fig-grid-generation.pdf}
 	%
 	\caption{Illustration of a slanted cell grid (a) before, and (b) after construction.
-	The terrain surface, denoted by a heavy dotted line, intersects a uniform rectangular grid comprising four cells, $c_1$, $c_2$, $c_3$ and $c_4$.  The cell vertices, marked by open circles, are moved upwards to the points at which the terrain intersects vertical cell edges, marked by filled circles.  Cells that have no volume are removed.  Where a cell has two vertices occupying the same point, the zero-length edge that joins those vertices is removed.  In this illustration, cell $c_4$ is removed because it has no volume, and the zero-length edge at point $p$ is removed to create a triangular cell, $c_3$.}
+	The terrain surface, denoted by a heavy dotted line, intersects a uniform rectangular grid comprising six cells, $c_1, \ldots, c_6$.  The cell vertices, marked by open circles, are moved to the points at which the terrain intersects vertical cell edges, marked by filled circles.  Cells that have no volume are removed.  Where a cell has two vertices occupying the same point, the zero-length edge that joins those vertices is removed.  In this illustration, cells $c_5$ and $c_6$ are removed because they have no volume, and the zero-length edge at point $q$ is removed to create a triangular cell, $c_4$.  Point $p$ is moved down because it is within $\Delta z/5$ of the surface, avoiding the creation of a thin cell.}
 	\label{fig:grid-generation}
 \end{figure*}
 
