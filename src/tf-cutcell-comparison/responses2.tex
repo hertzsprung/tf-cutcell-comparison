@@ -67,7 +67,7 @@ The paragraph discussing the sensitivity of CTCS to the change in mountain profi
  flow and therefore the numerics are essentially reduced to a one-dimensional 
  advection equation. I don't see how grid distortion is even an issue. 
 \end{quotation}
-The advection scheme fits a multidimensional polynomial using a stencil of cell centroids, hence grid distortions will affect the resulting least squares fit.  If the test used a dimensionally-split advection scheme with a terrain-following coordinate transform, then the test would indeed reduce to a one-dimensional problem.  \TODO{clarify in the manuscript}
+The advection scheme fits a multidimensional polynomial using a stencil of cell centroids, hence grid distortions could affect the resulting least squares fit.  If the test used a dimensionally-split advection scheme with a terrain-following coordinate transform, then the test would indeed reduce to a one-dimensional problem.  We have provided a more detailed motivation of this test in the introductory paragraph starting at line \TODO{xxx}.
 
 \begin{quotation}
  Lines 364-368 – The authors did not need to run these resting atmosphere 
