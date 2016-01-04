@@ -1,29 +1,57 @@
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-advection-tracer,fig-advection-tracer))
 
 build/fig-advection-tracer/fig-advection-tracer.pdf: \
-  build/advection-horizontal-contours/contours.tex
+  build/advection-contours/contours.tex
 
-$(eval $(call MakeDir,build/advection-horizontal-contours))
+$(eval $(call MakeDir,build/advection-contours))
 
-$(eval $(call Gnuplot,build/advection-horizontal-contours,contours.tex,src/tf-cutcell-comparison/advection-horizontal-contours.plt))
-build/advection-horizontal-contours/contours.tex: \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-linear-btf/10000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T_diff.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-btf/10000/T_diff.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.negative
+$(eval $(call Gnuplot,build/advection-contours,contours.tex,src/tf-cutcell-comparison/advection-contours.plt))
+build/advection-contours/contours.tex: \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T_diff.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T_diff.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T_diff.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/0/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/0/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/5000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/5000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T.contour.negative \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T_diff.contour.positive \
+  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T_diff.contour.negative
