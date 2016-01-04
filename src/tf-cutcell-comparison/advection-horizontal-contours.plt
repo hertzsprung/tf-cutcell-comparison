@@ -1,7 +1,7 @@
 set term epslatex color size 6.4,4.25
 set termoption dashed
 
-set multiplot layout 3,2
+set multiplot layout 2,2
 
 set style data lines
 
@@ -46,17 +46,6 @@ plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
 "`echo $ATMOSTESTS_DIR`/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
 "`echo $ATMOSTESTS_DIR`/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
 
-set ylabel "$z$ (\\si{\\kilo\\meter})" offset 2.5
-set label 1 "(c)"
-set title "Fourth order scheme on BTF grid"
-plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/0/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/0/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/5000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/5000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/10000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/10000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
-
 unset ylabel
 set label 1 "(d)"
 set title "Upwind-biased cubic scheme on BTF grid"
@@ -67,15 +56,6 @@ plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
 "`echo $ATMOSTESTS_DIR`/build/advection-horizontal-cubicUpwind-btf/5000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
 "`echo $ATMOSTESTS_DIR`/build/advection-horizontal-cubicUpwind-btf/10000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
 "`echo $ATMOSTESTS_DIR`/build/advection-horizontal-cubicUpwind-btf/10000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
-
-set xlabel "$x$ (\\si{\\kilo\\meter})" offset 0,0.5
-set xtics 25 format "%h"
-set ylabel "$z$ (\\si{\\kilo\\meter})" offset 2.5
-set label 1 "(e)"
-set title "Errors at \\(t = \\SI{10000}{\\second}\\) for (c)"
-plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/10000/T_diff.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $SCHAER_ADVECTION_DIR`/build/fourth-btf/10000/T_diff.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
 
 unset ylabel
 set label 1 "(f)"

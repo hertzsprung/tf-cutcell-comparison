@@ -26,12 +26,4 @@ build/advection-horizontal-contours/contours.tex: \
   $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/5000/T.contour.positive \
   $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/5000/T.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.negative \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/0/T.contour.positive \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/0/T.contour.negative \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/5000/T.contour.positive \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/5000/T.contour.negative \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T.contour.positive \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T.contour.negative \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T_diff.contour.positive \
-  $(SCHAER_ADVECTION_DIR)/build/fourth-btf/10000/T_diff.contour.negative
+  $(ATMOSTESTS_DIR)/build/advection-horizontal-cubicUpwind-cutCell/10000/T.contour.negative

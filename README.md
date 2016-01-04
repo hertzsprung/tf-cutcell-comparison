@@ -12,7 +12,6 @@ First you will need to `git clone` some dependencies and define respective envir
 - https://github.com/hertzsprung/make-common [`MAKE_COMMON`]
 - https://github.com/hertzsprung/AtmosFOAM
 - https://github.com/hertzsprung/AtmosTests [`ATMOSTESTS_DIR`]
-- https://github.com/hertzsprung/schaer-advection (currently private) [`SCHAER_ADVECTION_DIR`]
 
 AtmosFOAM will need to be installed, see its README for instructions.
 
