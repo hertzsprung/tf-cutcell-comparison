@@ -16,8 +16,10 @@
 \begin{quotation}
 This revised manuscript is improved from its original version. The Sch\"{a}r mountain wave test with various grid resolutions and the new test for theta advection are quite informative in identifying the potential source of errors in the low-level theta field in the cut-cell mountain-wave simulation. However, as indicated in my previous review, I still believe that this paper should be more focused, with more emphasis on what's new and interesting in these test cases comparing terrain-following and cut-cell coordinates, and less attention to results that are obvious or previously documented. More specific comments and suggestions are included below. 
 
-Sections 4a and 4b – Section 4a presents results for the Sch\"{a}r advection test case for various vertical coordinates and advection schemes; there is little new here that is not already covered in the \citet{schaer2002} paper. The advection tests in section 4b provide an interesting counter example to this test. I would recommend switching the emphasis in these two sections, presenting the advected tracer contours in a new Fig. 3 for the terrain-following advection, and just including results from the Sch\"{a}r case in table 1 for comparison purposes.
+Sections 4a and 4b -- Section 4a presents results for the Sch\"{a}r advection test case for various vertical coordinates and advection schemes; there is little new here that is not already covered in the \citet{schaer2002} paper. The advection tests in section 4b provide an interesting counter example to this test. I would recommend switching the emphasis in these two sections, presenting the advected tracer contours in a new Fig. 3 for the terrain-following advection, and just including results from the Sch\"{a}r case in table 1 for comparison purposes.
 \end{quotation}
+\TODO{figure 3 will change to show some TF advection results}.  The discussion of the horizontal advection results starting at line \TODO{xxx} has been rewritten more succinctly.
+
 \begin{quotation}
  Lines 131-147 on cut-cell grid generation - It's still not clear how or why a cell vertex  is moved laterally in constructing the cut-cell mesh. Taking Fig. 2 as an example, it  seems that following the authors' directions to move all vertices lying underneath the  orography on the uniform grid up to the surface would produce four grid cells as  shown in the figure below rather than the three cells shown in Fig. 2. This four-cell structure appears to be consistent with the generation of thin cells as the authors  point out in Fig. 5c. If lateral displacement of a vertex is allowed, how is it decided  whether it should be moved and how is it decided where along the surface it should  be located (i.e. the location of point v in Fig. 2)?
 \end{quotation}
@@ -35,7 +37,7 @@ Amended as suggested, many thanks.
 \begin{quotation}
  Lines 265-267 and table 1 – The authors are unnecessarily complicating their tests  by comparing results from the cut-cell grid and a regular grid. These grids should be identical for this test and merit no further comparative consideration. There is no need to simulate with both grids, show their identical behavior in table 1, and then  state that the same behavior ``is to be expected.''
 \end{quotation}
-\TODO{agreed, although the comparison with the fourth order scheme in table 1 is perhaps useful?}
+\TODO{agreed, although the comparison with the fourth order scheme in table 1 is perhaps useful?  I have not removed it yet.}
 
 \begin{quotation}
  Lines 271-279 and Table 1 – The $\ell_2$ error norms have changed by more than an order  of magnitude from those reported in the original manuscript. What changed?
@@ -78,7 +80,7 @@ The advection scheme fits a multidimensional polynomial using a stencil of cell 
  the cut-cell grid, it's only just adjacent to the terrain where pressure gradient 
  calculations between cell centers are not horizontal.   
 \end{quotation}
-\TODO{good idea.  zaengl2012 did something similar by raising the mountain to 4km, but we think that simply moving the inversion layer is preferable because the mesh remains constant.  Should we abandon the klemp2011 test entirely or just put less emphasis on its results?}
+\TODO{good idea.  Should we abandon the klemp2011 test entirely or just put less emphasis on its results?}
 
 \begin{quotation}
 	Section 4d – Sch\"{a}r mountain-wave tests. These tests are more interesting now that 
