@@ -13,9 +13,6 @@ clean:: clean-dist
 
 clean-dist::
 
-$(ATMOSTESTS_DIR)/%:
-	$(MAKE) -C $(ATMOSTESTS_DIR) $*
-
 include $(MAKE_COMMON)/executables/Makefile
 include $(MAKE_COMMON)/executables/Makefile-Gmt
 include $(MAKE_COMMON)/executables/Makefile-OpenFOAM
