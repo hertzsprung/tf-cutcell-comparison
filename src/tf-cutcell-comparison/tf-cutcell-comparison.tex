@@ -333,7 +333,7 @@ The ratio of minimum and maximum cell areas in the various grids is shown in tab
 
 At $\Delta z = \SI{300}{\meter}$, vertical velocities on the BTF and cut cell grids are visually indistinguishable (not shown).  They agree with the high resolution mass-conserving semi-implicit semi-Lagrangian solution from \citet{melvin2010}.
 The initial thermal profile is subtracted from the potential temperature field at the end of the integration to reveal the structure of thermal anomalies.  The anomalies on the BTF grid with $\Delta z = \SI{50}{\meter}$ is shown in figure~\ref{fig:gw-theta}.  A vertical profile is taken at $x = \SI{50}{\kilo\meter}$, marked by the dashed line in figure~\ref{fig:gw-theta}, with results shown for the BTF grids in figure~\ref{fig:gw-sampleLine}a and on the cut cell grids in figure~\ref{fig:gw-sampleLine}b.
-\TODO{say why x=50km is a good place to take these measurements.}
+The position is chosen to be far away from the mountain where the gravity wave amplitude is small in order to better reveal numerical errors.
 On all grids, potential temperature differences increase with height in the lowest \SI{1200}{\meter} at $x = \SI{50}{\kilo\meter}$, in agreement with the results seen in figure~\ref{fig:gw-theta}.  Results are seen to converge on all grids, with the exception of small errors in the lowest layers on the cut cell grids.
 
 To summarize, results of the gravity waves test on all grids are in good agreement with the reference solution from \citet{melvin2010}.  The potential temperature field converges, though errors are found in the lowest layers on the cut cell grids.  The source of the errors in the cut cell grids will be investigated further with an advection test in the following subsection.
