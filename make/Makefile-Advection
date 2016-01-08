@@ -15,14 +15,6 @@ build/advection-contours/contours.tex: \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.positive \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T_diff.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-sleve/10000/T_diff.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/0/T.contour.positive \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/0/T.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/5000/T.contour.positive \
@@ -31,27 +23,7 @@ build/advection-contours/contours.tex: \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T_diff.contour.positive \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-linear-cutCell/10000/T_diff.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.positive \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T_diff.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-sleve/10000/T_diff.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/0/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/0/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/5000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/5000/T.contour.negative \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T.contour.positive \
-  $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T.contour.negative \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T_diff.contour.positive \
   $(ATMOSTESTS_DIR)/build/advection-terrainFollowing-cubicUpwind-cutCell/10000/T_diff.contour.negative
