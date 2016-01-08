@@ -251,12 +251,12 @@ At $t = \SI{10000}{\second}$ the tracer has passed over the mountain.  The horiz
 \end{align}
 Hence, we find that \(x(t=\SI{10000}{\second}) = \SI{51577.4}{\meter}\).  Because the velocity field is non-divergent, the flow accelerates over mountain ridges and the tracer travels \SI{1577.4}{\meter} further compared to advection in the purely horizontal velocity field.  Tracer height is unchanged downwind of the mountains because advection is parallel to the coordinate surfaces.
 
-Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer}.
-The most accurate results are found on the BTF grid using the upwind-biased cubic scheme (\ref{fig:advection-tracer}a).  As seen in figure~\ref{fig:advection-tracer}c, errors are less than \num{0.02} in magnitude and are confined to the expected region of the tracer.
-At \(t = \SI{5000}{\second}\) the tracer is distorted by the terrain-following velocity field.  On the BTF grid, the tracer correctly returns to its original shape having cleared the mountain by \(t = \SI{10000}{\second}\), but this is not the case with centred linear scheme on the cut cell grid (figure~\ref{fig:advection-tracer}b).  Here, the tracer has spread vertically due to increased numerical errors when the tracer is transported between layers.
+Tracer contours at \(t = \SI{0}{\second}, \SI{5000}{\second}\) and \(\SI{10000}{\second}\) are shown in Figure~\ref{fig:advection-tracer} using the centred linear scheme on the BTF grid and cut cell grid (\ref{fig:advection-tracer}a and~\ref{fig:advection-tracer}b respectively).
+At \(t = \SI{5000}{\second}\), the tracer is distorted by the terrain-following velocity field.  On the BTF grid, the tracer correctly returns to its original shape having cleared the mountain by \(t = \SI{10000}{\second}\), but this is not the case with centred linear scheme on the cut cell grid.  Here, the tracer has spread vertically due to increased numerical errors when the tracer is transported between layers.
 Dispersion errors are apparent with grid-scale oscillations that travel in the opposite direction to the wind (figure~\ref{fig:advection-tracer}d) and some artifacts remain above the mountain peak.
 
-Similar accuracy is obtained for both centred linear and upwind-biased cubic schemes on the BTF grid (figures~\ref{fig:advection-tracer}c and~\ref{fig:advection-tracer}e).  However, results are substantially improved by using the upwind-biased cubic scheme on the cut cell grid (figures~\ref{fig:advection-tracer}d and~\ref{fig:advection-tracer}f).
+A small improvement is obtained on the BTF grid by using the upwind-biased cubic scheme: as seen in figure~\ref{fig:advection-tracer}e, errors are less than \num{0.02} in magnitude and errors are confined to the expected region of the tracer.
+However, results are substantially improved by using the upwind-biased cubic scheme on the cut cell grid (figure~\ref{fig:advection-tracer}f).
 Results on the SLEVE grid are comparable to those on the cut cell grid except that the artifacts above the mountain peak with the centred linear scheme on the cut cell grid are not present on the SLEVE grid (not shown).
 
 $\ell_2$ errors and tracer extrema for this test are compared with the horizontal advection results in table~\ref{tab:advection}.  In the terrain following velocity field, tracer accuracy is greatest on the BTF grid.  Errors are about ten times larger on the SLEVE and cut cell grids compared to the BTF grid.
@@ -506,7 +506,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0341  
 	\centering
 	\includegraphics{../fig-advection-tracer/fig-advection-tracer.pdf}
 %
-	\caption{Tracer contours advected in a terrain following velocity field at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using (a) the upwind-biased cubic scheme on the BTF grid, and (b) the centred linear scheme on the cut cell grid with contour intervals every 0.1.  Errors at \(t = \SI{10000}{\second}\) are shown for (c) the the upwind-biased cubic scheme on the BTF grid, (d) the centred linear scheme on the cut cell grid, (e) the centred linear scheme on the BTF grid, and (f) the upwind-biased cubic scheme on the cut cell grid with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.}
+	\caption{Tracer contours advected in a terrain following velocity field at \(t = \SI{0}{\second}\), \SI{5000}{\second} and \SI{10000}{\second} using the centred linear scheme on (a) the BTF grid, and (b) the cut cell grid with contour intervals every 0.1.  Errors at \(t = \SI{10000}{\second}\) are shown for (c) the the centred linear scheme on the BTF grid, (d) the centred linear scheme on the cut cell grid, (e) the upwind-biased cubic scheme on the BTF grid, and (f) the upwind-biased cubic scheme on the cut cell grid with contour intervals every 0.01.  Negative contours denoted by dotted lines.  The terrain profile is also shown immediately above the $x$ axis.}
 	\label{fig:advection-tracer}
 \end{figure*}
 

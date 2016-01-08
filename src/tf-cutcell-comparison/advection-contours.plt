@@ -26,14 +26,14 @@ set trange [-25:25]
 
 set ylabel "$z$ (\\si{\\kilo\\meter})" offset 2
 set label 1 "(a)" at -65,13.5 center front
-set title "Upwind-biased cubic scheme on BTF grid" offset 0,-0.9
+set title "Centred linear scheme on BTF grid" offset 0,-0.9
 plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/0/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/0/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/5000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/5000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/10000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/10000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/0/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/0/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/5000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/5000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000', \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/10000/T.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/10000/T.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
 
 unset ylabel
 set label 1 "(b)"
@@ -50,8 +50,8 @@ set ylabel "$z$ (\\si{\\kilo\\meter})" offset 2
 set label 1 "(c)"
 set title "Errors at \\(t = \\SI{10000}{\\second}\\) for (a)"
 plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
 
 unset ylabel
 set label 1 "(d)" at -65,1.5 center front
@@ -64,10 +64,10 @@ set xlabel "$x$ (\\si{\\kilo\\meter})" offset 0,0.5
 set xtics 25 format "%h"
 set ylabel "$z$ (\\si{\\kilo\\meter})" offset 2
 set label 1 "(e)" at -65,13.5 center front
-set title "Errors for centred linear scheme on BTF grid" offset 0,-0.5
+set title "Errors for upwind-biased cubic scheme on BTF grid" offset 0,-0.5
 plot t, schaerCos(t*1000)/1000 notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
-"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-linear-btf/10000/T_diff.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.positive" using ($1/1000):($2/1000) notitle lt 1 lc 0, \
+"`echo $ATMOSTESTS_DIR`/build/advection-terrainFollowing-cubicUpwind-btf/10000/T_diff.contour.negative" using ($1/1000):($2/1000) notitle dt 3 lc rgbcolor '#ff0000'
 
 unset ylabel
 set label 1 "(f)"
