@@ -280,17 +280,21 @@ h_1(x) = \frac{1}{2} h_0 \exp \left( - \left( \frac{x}{a} \right)^2 \right)
 \end{align}
 and, following \cite{leuenberger2010}, $s_1 = \SI{4}{\kilo\meter}$ is the large scale height, $s_2 = \SI{1}{\kilo\meter}$ is the small scale height, and the optimal exponent value of $n = 1.35$ is used.
 
-The initial potential temperature field has $\theta(z = 0) = \SI{288}{\kelvin}$ and a constant static stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$ between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$.  The Exner function of pressure is calculated so that it is in discrete hydrostatic balance in the vertical direction \citep{weller-shahrokhi2014}.  The damping function, \(\mu\), is set to \SI{0}{\per\second}.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
+Tests were performed with two different stability profiles, both having an initial potential temperature field with $\theta(z = 0) = \SI{288}{\kelvin}$ and a constant static stability with Brunt-V\"ais\"al\"a frequency $N = \SI{0.01}{\per\second}$ everywhere, except for a more stable layer of $N = \SI{0.02}{\per\second}$.  Figure~\ref{fig:resting}a shows where this inversion layer is positioned in the two tests: the `high inversion' test follows \citet{klemp2011}, placing the layer between $\SI{2}{\kilo\meter} \leq z \leq \SI{3}{\kilo\meter}$; the `low inversion' test is designed to challenge the numerics on the cut cell grid by placing the inversion layer between $\SI{0.5}{\kilo\meter} \leq z \leq \SI{1.5}{\kilo\meter}$ so that it intersects the terrain.
 
-The test was integrated forward by 5 hours using a timestep $\Delta t = \SI{100}{\second}$ on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.  Maximum vertical velocities are presented in figure~\ref{fig:resting}.  In agreement with \citet{klemp2011}, vertical velocities are larger on more distorted grids.  However, magnitudes are smaller comparing results on the terrain following grids with those from \citet{klemp2011}.  
-The results presented in figure~\ref{fig:resting}, which use a curl-free pressure gradient, have maximum spurious values of $w$ of \SI{0.33}{\meter\per\second} on the BTF grid, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
-The results in figure~\ref{fig:resting} have the same maximum errors as \citet{weller-shahrokhi2014} but, due to the more stable split into implicitly and explicitly treated terms (described in the appendix), the errors decay over time due to the dissipative nature of the advection scheme.
+The Exner function of pressure is calculated so that it is in discrete hydrostatic balance in the vertical direction \citep{weller-shahrokhi2014}.  The damping function, \(\mu\), is set to \SI{0}{\per\second}.  Unlike \citet{klemp2011}, there is no eddy diffusion in the equation set.
 
-Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.  However, errors are two orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-4}{\meter\per\second}\).  The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
+The tests were integrated forward by 5 hours using a timestep $\Delta t = \SI{100}{\second}$ on the BTF, SLEVE and cut cell grids, and a regular grid with flat terrain.
+The results presented in figure~\ref{fig:resting}b, which use a curl-free pressure gradient, have maximum spurious values of $w$ of \SI{0.37}{\meter\per\second} on the BTF grid with the high inversion layer, compared with a maximum of \(\sim \SI{7}{\meter\per\second}\) found by \citet{klemp2011} using their improved horizontal pressure gradient formulation.
+Unlike the result from \citet{klemp2011}, the SLEVE grid does not significantly reduce vertical velocities compared to the BTF grid.
+For the high inversion test, errors are two orders of magnitude smaller on the cut cell grid with vertical velocities of \(\sim \SI{1e-4}{\meter\per\second}\), but this advantage is lost when the inversion layer is lowered to intersect the terrain.
+The smallest error of \(\sim \SI{1e-10}{\meter\per\second}\) is found on the regular grid.
+The results for the high inversion test in figure~\ref{fig:resting}b have maximum errors that are comparable with \citet{weller-shahrokhi2014} but, due to the more stable split into implicitly and explicitly treated terms (described in the appendix), the errors decay over time due to the dissipative nature of the advection scheme.
 
 \citet{good2014} found the maximum vertical velocity in their cut cell model was \SI{1e-12}{\meter\per\second}, which is better than any result obtained here.  It is worth noting that our model stores values at the geometric centre of cut cells, whereas the model used by \citet{good2014} has cell centres at the centre of the uncut cell, resulting in the centre of some cut cells being below the ground (S.-J. Lock 2014, personal communication).  This means that the grid is effectively regular when calculating horizontal and vertical gradients.  This would account for the very small velocities found by \citet{good2014}.
 
-In summary, spurious velocities in the resting atmosphere test were similar on both terrain following grids, with lower errors compared to those from \citet{klemp2011}.  The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality, or lack of alignment of the grid with surfaces of constant gravitational potential are a significant cause of numerical error in this test.
+In summary, spurious velocities in the resting atmosphere test were similar on terrain following and cut cell grids, with lower errors compared to those from \citet{klemp2011}.
+\TODO{we previously concluded, ``The maximum vertical velocity was significantly decreased on the cut cell grid, so we conclude that non-orthogonality, or lack of alignment of the grid with surfaces of constant gravitational potential are a significant cause of numerical error in this test.'' --- but what can we say now we have the high/low inversion tests?}
 
 
 \subsection{Gravity waves}
@@ -514,7 +518,11 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0338  
 	\centering
 	\includegraphics{../fig-resting/fig-resting.pdf}
 %
-	\caption{Maximum spurious vertical velocity, \(w\) (\si{\meter\per\second}), in the resting atmosphere test with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.}
+	\caption{Setup and results of a stratified atmosphere initially at rest.  Tests are performed on four grids for two different stability profiles, with panel (a) showing the placement of the inversion layer in the two profiles.
+The low inversion is positioned so that it intersects the terrain, shown immediately above the $x$ axis.
+In each test, the inversion layer has a Brunt-V\"ais\"al\"a frequency $N = \SI{0.02}{\per\second}$ and $N = \SI{0.01}{\per\second}$ elsewhere.  
+Panel (b) shows the maximum magnitude of spurious vertical velocity, \(w\) (\si{\meter\per\second}), with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.
+Results for the high inversion test are shown with solid lines, the low inversion test with dashed lines.}
 	\label{fig:resting}
 \end{figure}
 
