@@ -13,12 +13,6 @@ clean:: clean-dist
 
 clean-dist::
 
-$(ATMOSTESTS_DIR)/%:
-	$(MAKE) -C $(ATMOSTESTS_DIR) $*
-
-$(SCHAER_ADVECTION_DIR)/%:
-	$(MAKE) -C $(SCHAER_ADVECTION_DIR) $*
-
 include $(MAKE_COMMON)/executables/Makefile
 include $(MAKE_COMMON)/executables/Makefile-Gmt
 include $(MAKE_COMMON)/executables/Makefile-OpenFOAM
@@ -34,4 +28,6 @@ include make/Makefile-Meshes
 include make/Makefile-Advection
 include make/Makefile-Resting
 include make/Makefile-GravityWaves
+include make/Makefile-GravityWavesMeshes
+include make/Makefile-ThermalAdvection
 include make/Makefile-TF-CutCell-Comparison

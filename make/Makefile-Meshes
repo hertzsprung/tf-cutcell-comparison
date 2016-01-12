@@ -5,9 +5,9 @@ build/fig-meshes/fig-meshes.pdf: \
   build/resting-mesh-sleve/constant/mesh.pdf \
   build/resting-mesh-cutCell/constant/mesh.pdf
 
-$(eval $(call PlotMesh,build/resting-mesh-btf))
-$(eval $(call PlotMesh,build/resting-mesh-sleve))
-$(eval $(call PlotMesh,build/resting-mesh-cutCell))
+$(eval $(call PlotMesh,build/resting-mesh-btf,src/mesh/resting))
+$(eval $(call PlotMesh,build/resting-mesh-sleve,src/mesh/resting))
+$(eval $(call PlotMesh,build/resting-mesh-cutCell,src/mesh/resting))
 
 $(eval $(call CopyNamedFiles,$(ATMOSTESTS_DIR)/build/resting-mesh-btf,$(meshFiles) $(systemFiles),build/resting-mesh-btf))
 $(eval $(call CopyNamedFiles,$(ATMOSTESTS_DIR)/build/resting-mesh-sleve,$(meshFiles) $(systemFiles),build/resting-mesh-sleve))

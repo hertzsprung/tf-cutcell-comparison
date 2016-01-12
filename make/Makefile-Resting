@@ -6,10 +6,11 @@ build/fig-resting/fig-resting.pdf: \
 $(eval $(call Gnuplot,build/resting-diagnostics,w.tex,src/tf-cutcell-comparison/resting-w.plt))
 
 build/resting-diagnostics/w.tex: \
-  $(ATMOSTESTS_DIR)/build/resting-noOrography-lorenz/energy.dat \
-  $(ATMOSTESTS_DIR)/build/resting-btf-lorenz/energy.dat \
-  $(ATMOSTESTS_DIR)/build/resting-sleve-lorenz/energy.dat \
-  $(ATMOSTESTS_DIR)/build/resting-cutCell-lorenz/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-noOrography-low/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-btf-low/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-sleve-low/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-cutCell-low/energy.dat \
 | build/resting-diagnostics
 
 $(eval $(call MakeDir,build/resting-diagnostics))
+

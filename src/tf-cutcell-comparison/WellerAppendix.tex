@@ -45,9 +45,9 @@ grid before time-stepping begins. The $H$ implied by this reconstruction
 of $U$ is likely to be positive definite for meshes with sufficiently
 low non-orthogonality, although this has not been proved. 
 
-The semi-implicit technique involves combining the momentum \ref{eq:momentum},
-continuity \ref{eq:cont} and $\theta$ \ref{eq:theta} equations
-and the equation of state \ref{eq:state} to form a Helmholtz equation
+The semi-implicit technique involves combining the momentum (\ref{eq:momentum}),
+continuity (\ref{eq:cont}) and $\theta$ (\ref{eq:theta}) equations
+and the equation of state (\ref{eq:state}) to form a Helmholtz equation
 to be solved implicitly, as described by \citet{weller-shahrokhi2014}.
 The semi-implicit solution technique with a Hodge operator can be
 defined by considering only a discretised form of the continuity equation:
@@ -60,7 +60,7 @@ The divergence is discretised using Gauss' divergence theorem so that:
 \end{equation}
 where $\mathcal{V}_{c}$ is the volume of cell $c$, $f\in c$ denotes
 the faces of cell $c$, and $n_{f}=1$ if $\mathbf{d}_{f}$ points
-outwards from the cell and $n_{f}=$-1 otherwise. Equation \ref{eq:GaussDiv}
+outwards from the cell and $n_{f}=$-1 otherwise. Equation (\ref{eq:GaussDiv})
 is now a sum over a sum since $(HV)_{f}$ is one element of a matrix-vector
 multiply. In order to simplify the construction of the matrix for
 the Helmholtz problem, only the diagonal terms of $HV$ are treated
@@ -69,14 +69,14 @@ matrix:
 \begin{equation}
 H=H_{d}+H_{off}.
 \end{equation}
-Equation \ref{eq:contD} can now be approximated by:
+Equation (\ref{eq:contD}) can now be approximated by:
 \begin{equation}
 \frac{\phi^{(n+1)}-\rho^{(n)}}{\Delta t}+\frac{1}{2}\left\{ \nabla\cdot(HV)^{(n)}+\nabla\cdot(H_{d}V)^{(n+1)}+\nabla\cdot(H_{off}V)^{\ell}\right\} =0\label{eq:contDd}
 \end{equation}
 where superscript $\ell$ denotes lagged values taken from a previous
 iteration or from a previous stage of a Runge-Kutta scheme. This was
 the approach taken by \citet{weller-shahrokhi2014}. However, the
-numerical solution of equation \ref{eq:contDd} turns out to be unstable
+numerical solution of equation (\ref{eq:contDd}) turns out to be unstable
 when using a large time-step on highly non-orthogonal meshes associated
 with terrain following layers over steep orography. Improved stability
 and energy conservation can be achieved by splitting $H$ into a diagonal

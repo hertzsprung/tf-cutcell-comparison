@@ -1,0 +1,28 @@
+Be more explicit where the manuscript has changed.
+
+1) grid generation
+2) tracer blob advection tests
+3) resting atmosphere test
+4) gravity wave/thermal advection plots
+5) thermal advection: "tracer density" or "potential temperature"?
+
+thermal advection test
+- should I call the field "theta" rather than "tracer density"?  reviewer #2 objected to the latter making no physical sense, and also said that the field needs units.  this conveys our intention for the test, but I chose to call it "tracer density" to avoid readers mistaking the pure advection test for a dynamical one
+
+horizontal advection test
+- don't plot horizontal advection results
+- remove results on regular grid?  I only included them for completeness, what they show should be obvious -- but ARE they identical?  and if not, why not?
+- sensitivity to terrain profile, this was more a passing comment than a sensitivity test.  WHAT TO DO?
+
+Lines 312-322: we're fitting a 2D polynomial over a stencil of distorted cells.  I don't see how this reduces to a 1D problem for us (it would if we were using dimensional splitting and a TF coord transform).  I should explain more clearly?
+
+cut cell grid generation
+- I can't answer the question of horizontal movement any better without understanding snappyHexMesh better
+- we could just switch to our slanted cell grids, but this will mean rerunning *everything*
+
+resting atmosphere
+- inversion layer intersecting the terrain sounds good.  I think zaengl2012 did this?  alternative would be to remove this test.
+- line 481--482: do small spurious vertical velocities matter?
+
+gravity waves
+- "amplitude of the disturbance decays with downstream distance" -- the gravity waves decay but the error doesn't

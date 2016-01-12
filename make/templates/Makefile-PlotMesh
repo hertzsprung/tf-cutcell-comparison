@@ -1,4 +1,5 @@
 # $1 -- case
+# $2 -- gmtDict
 define PlotMesh
 
 $1/constant/mesh.pdf: \
@@ -9,7 +10,7 @@ $1/constant/mesh.pdf: \
 | $1/$(gmtDicts)
 	$(gmtFoam) -case $1 -constant mesh
 
-$(eval $(call CopyFile,src/mesh/plotMesh,$1/$(gmtDicts)/mesh))
+$(eval $(call CopyFile,$2,$1/$(gmtDicts)/mesh))
 $(eval $(call MakeDir,$1/$(gmtDicts)))
 
 endef

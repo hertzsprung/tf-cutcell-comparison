@@ -1,0 +1,457 @@
+\documentclass{article}
+\usepackage{url}
+\usepackage{natbib}
+\usepackage{enumitem}
+\newlist{comment}{enumerate}{1}
+\setlist[comment,1]{label={\arabic{commenti}.},leftmargin=*,resume=comment}
+
+\begin{document}
+\section*{Review \#1}
+\begin{quotation}
+In this paper, the authors compare the behavior of idealized
+test-case results for a terrain-following vertical coordinate and a
+cut-cell coordinate, where both grid structures are configured within
+the same non hydrostatic finite-volume model. The 2-D test cases
+considered are tracer advection within a fixed wind field, a resting
+atmosphere simulation with terrain, and a mountain wave simulation
+following \citet{schaer2002}. The  results in testing this model
+with terrain-following coordinates for the resting atmosphere and
+mountain wave cases have already been well documented by \citet{weller-shahrokhi2014}. The application of this model in the cut-cell
+configuration appears to be the new and interesting advancement, but
+I feel further description and testing of this cut-cell
+implementation is needed to demonstrate that it is a viable
+alternative to terrain following coordinates.
+\end{quotation}
+We are not trying to prove that cut cells are a viable alternative. We are trying to do a fair, clean comparison between cut cells and terrain following on a range of test cases. 
+
+In the revised version, we present further description of the cut cell grids and of the numerics necessary to run on a cut cell grid with small cells. We also present results of an additional test case in comparison to the previous draft. 
+
+\begin{quotation}
+\noindent
+\textbf{Specific comments}
+
+The tracer advection test is not really a test of the dynamic core
+with terrain-following or cut-cell coordinates per se. Rather, it is
+a test of the accuracy of advection in a fixed wind field that is
+either parallel to the coordinate surfaces (zero covariant normal
+component of wind) or non-parallel with a varying covariant
+component. Schar's (2002) original test case clearly showed that the
+advection numerics are more accurate as the cross-coordinate flow is
+reduced. The authors' results for uniform flow reproduce this
+behavior. Specifying a wind field that is everywhere parallel to the
+terrain-following coordinate surfaces again just confirms this
+behavior, with the terrain-following configuration (now having zero
+covariant flow) being more accurate. I don't see where much new has
+been learned from this test.
+\end{quotation}
+The terrain following configuration is designed to find out whether
+error is primarily due to a non-orthogonal grid or misalignment of the
+flow.  Our results demonstrate that the latter is the primary source of
+error.  The manuscript has been revised to make this clearer.
+
+The terrain following velocity test case is proposed as a challenge for those developing cut cell models. Advection schemes must be accurate to advect tracers using terrain following winds on cut cell grids. 
+
+We have also now developed this test case further to advect stratified temperature in order to explain the discrepancies in the gravity wave test case. 
+
+\begin{quotation}
+Verifying that the cut-cell implementation produces much smaller 
+perturbations than the terrain-following version is a relevant
+sanity check. As the authors' point out, defining variables in the
+centers of uncut cells essentially removes the perturbations to
+machine roundoff.
+\end{quotation}
+It is Good et al. 2014 that use centres of uncut cells.  We use geometric cell centres.  This has been clarified in the revised manuscript.
+
+\begin{quotation}
+Thus the small vertical variations along a coordinate surface in the 
+present implementation should (and do) produce much smaller 
+perturbations than in the terrain-following version (which, except
+for a minor change in the implicit formulation, has already been
+documented in Weller and Shahrokhi (2014)). However, this is not a
+challenging test case for a cut-cell coordinate model.
+\end{quotation}
+We are not specifically trying to challenge the cut cell model. We are trying to do a clean comparison between cut cells and terrain following. This test case is an essential part of such a comparison. It is also of relevance that errors considerably larger than round-off are produced by the model on the cut cell grid because pressure gradients are not exactly horizontal between the cut and uncut cells because we are using the geometric cell centre of the cut cells. 
+
+\begin{quotation}
+The mountain wave test case represents a realistic flow that can 
+challenge the numerics of the cut-cell implementation. These
+challenges are known to arise, for example, when the terrain cuts
+through horizontal coordinate surfaces and when cells are present
+that have a very small volume. In the test case shown, with a
+vertical grid spacing of 300 m and a maximum terrain height of 250 m,
+the terrain does not reach the first grid level, so the cut-cell
+numerics are not fundamentally different from those in the
+terrain-following formulation and should (and do) produce similar
+results. The potential temperature anomalies at low levels in the lee
+of the mountain do suggest, however, that there is already some
+distortion caused by the cut-cell numerics. The authors attribute
+these inaccuracies to presence of the Lorenz computational mode. As
+evidence, they refer to a "zig-zag" structure in the vertical
+potential temperature profile in figure 5, which is not very apparent
+to me. It's also quite possible that the slightly warmer air at level
+1 and cooler air at levels 2 and 3 are produced in the vicinity of
+the cut cells above the terrain and swept downstream. In any event,
+the terrain-following version also uses Lorenz staggering and does
+not exhibit this anomalous behavior.
+\end{quotation}
+Having analysed test results at increasing vertical resolution (as
+suggested below), we agree that errors are primarily due to inaccuracies
+in the advection of theta.  An additional advection test has been
+performed which provides evidence for this hypothesis.  Errors on cut
+cell grids have been reduced since the submission of the previous manuscript due to improvements to the advection scheme and due to using fixed gradient rather than fixed values boundary conditions.
+
+The numerics are identical when using cut cell or terrain following. It is the different grids leading to different truncation errors. 
+
+\begin{quotation}
+As mentioned above, I believe this work would have stronger
+scientific merit if it were refocused, with more emphasis on the
+construction and discriminative testing of the cut-cell numerics, and
+less emphasis on cases that provide little challenge for these
+numerics. To begin, it would be helpful to expand the description of
+the grid construction presently given on lines 127-137. A number of
+questions immediately come to  mind, for example: How are the BTF
+grid surfaces actually used to modify the cut-cell grid. Why do grid
+points need to be moved horizontally,
+\end{quotation}
+This section has been expanded to further explain and justify how cut
+cell grids are generated.  An illustrative example has been included in
+a new figure demonstrating the movement of grid points and the lack of
+pentagonal cells. 
+
+\begin{quotation}
+and where are the cell centers used for the numerics actually
+located.
+\end{quotation}
+Clarified in section 2 that values are stored at cell centroids.
+
+\begin{quotation}
+What are the most problematic cells that might arise with this
+technique, and is there anything that limits the minimum cell size?
+Perhaps illustrating the cut-cell grid structures for several types
+of terrain situations would be helpful. In testing the cut-cell 
+numerics, the mountain wave case provides a realistic flow with
+known solutions. If its desired to stay with the same terrain height,
+then evaluating the sensitivity of results to the vertical grid size
+would be informative. Setting the nominal dz to 200, 250, and 300 m
+would span a range of grid configurations relative to the terrain,
+from nonintersecting for dz=300m, to just intersecting the terrain
+crest for dz=250 m, to more fully intersecting the terrain for
+dz=200m. Setting dz=125 m could also be interesting as it would
+presumably correspond to the same relative grid cells as shown it
+figure 1c. One could also consider a higher terrain (say 500 m) with
+similar relative grid spacings. I believe such tests could be quite
+illuminating in evaluating the viability of this interesting cut-cell
+implementation.
+\end{quotation}
+Further tests have been performed at dz=500m, 250m, 200m, 150m, 125m,
+100m, 75m and 50m, keeping the mountain height, $h_0$=250m constant.  The
+same grids have also been used in the thermal advection test.  A figure
+has been added showing the 300m, 250m and 200m cut cell grids. Agreed, these new tests are illuminating. 
+
+\section*{Review \#2}
+\begin{quotation}
+\noindent
+\textbf{Summary}
+
+\noindent The paper uses a non-hydrostatic 2D (x-z) slice model to compare two terrain-following (TF) vertical coordinates (the BTF grid by \citet{galchen-somerville1975} and the SLEVE coordinate by \citet{schaer2002}) to the `cut cell' method via idealized test cases.
+This reveals the accuracy of the two modelling paradigms for tracer advection experiments with prescribed flow fields, a steady-state test in the presence of topography and nonlinear flows with orographically-induced gravity waves.  The new aspects of the manuscript are that the TF and cut cell methods are compared in an identical model framework, and that a new advection test is proposed that prescribes the flow along sloping TF coordinates.  This reveals the differences between TF and cut cell methods more objectively.
+Another theme of the paper is that the comparison also involves different numerical methods.
+
+In general, the results are interesting.  It is found that the accuracy of the methods strongly depends on the alignment of the flow field with the model levels, and that the cut cell method can trigger a computational mode that is present with the vertical Lorenz staggering.
+In addition, it is interesting that the curl-free formulation of the non-hydrostatic model significantly improves the results of the steady-state test case.
+Even when using the TF coordinates this mimetic property diminishes the spurious vertical velocities that have been documented in various other publications for TF coordinates.
+
+
+There are a couple of weaknesses in the paper that need to be addressed:
+\begin{comment}
+\item A sign error in the derivation of the new advection test case in section 4b.
+	Maybe it is just a typo in the manuscript, but if this wrong formulation has indeed been used
+	in the example results, they all need to be rerun and corrected (see the detailed information below).
+\end{comment}
+\end{quotation}
+Many thanks, fixed.
+\begin{quotation}
+\begin{comment}
+\item Inconsistent sign convention for the stream function and the derived velocities.  The sign is switched in sections 4a and 4b, which needs to be unified.
+\end{comment}
+\end{quotation}
+Many thanks, fixed.
+\begin{quotation}
+\begin{comment}
+\item Model description in section 3: Since this paper not only compares the orography treatment but also the accuracy of some numerical methods it needs to provide more information about these numerical variants.  E.g. there is no information about the `centered linear' finite-volume scheme, not even a reference.  Is the linear scheme 2nd-order accurate and the cubic scheme 4th-order accurate?  In addition, it is unclear what method the nonlinear steady-state test at rest and the gravity wave test used (the cubic option?).  Include a short description of the linear scheme, the cubic scheme and the fourth-order scheme from \cite{schaer2002} since the manuscript emphasises these aspects in combination with the orography treatment.
+
+The description of the Hodge dual operator is incomprehensible in its current form and does not seem to be crucial for the assessment of the orography analysis.  I suggest moving this description into an appendix and extending it somewhat to make it self-explanatory.  Currently, it is very confusing to read about a semi-implicit formulation, and see the explicit Runge-Kutta time stepping algorithm in the next paragraph.
+\end{comment}
+\end{quotation}
+New `Model' section added, each model is described separately.  Description of the Hodge dual operator is expanded, clarified and moved to appendix.
+
+\begin{quotation}
+\noindent
+\textbf{Detailed comments}
+
+\begin{comment}
+\setcounter{commenti}{0}
+\item Line 21: The Scorer parameter and Froude number are mentioned in the abstract, but never again in the manuscript.  Either remove this sentence from the abstract, or add the missing discussion why larger Scorer parameters and Froude numbers are a challenge for the cut cell method.  This is not obvious.
+\end{comment}
+\end{quotation}
+Removed.
+
+\begin{quotation}
+\begin{comment}
+\item Line 33: another way of treating orography are `immersed boundary methods' or `embedded boundary methods'.  Please add this information including a reference.
+\end{comment}
+\end{quotation}
+Done, cited \citet{simon2012}.
+
+\begin{quotation}
+\begin{comment}
+\item Line 33, typo: `\ldots approaches to respresenting \ldots'
+\end{comment}
+\end{quotation}
+Fixed.
+
+\begin{quotation}
+\begin{comment}
+\item Line 53/54: do you mean interpolations to z-levels in order to compute the pressure gradient?
+\end{comment}
+\end{quotation}
+Yes, rephrased this sentence to say so.
+
+\begin{quotation}
+\begin{comment}
+\item Line 58/59: conflicting information: you highlight the variable spacing and then the fact that cell sizes remain almost constant
+\end{comment}
+\end{quotation}
+Removed the latter statement, since cell sizes are not constant even with constant layer spacing, especially over steep terrain.
+
+\begin{quotation}
+\begin{comment}
+\item Line 67: provide some brief information about the `several approaches'.  A since sentence does not justify a paragraph.
+\end{comment}
+\end{quotation}
+Added description of each approach.
+
+\begin{quotation}
+\begin{comment}
+\item Line 80: add `\ldots artificially weak in the Eta model'.
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Line 102: be more explicit: `\ldots of the Cartesian coordinate surface at the model level with transformed height $z^\star$'.  Spell out explicitly that $z$ varies between $h$ and $H$ and that $z^\star$ varies between 0 and $H$.
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Line 106--111: This manuscript does not discuss or use pressure-based vertical coordinates at all, and the information about sigma and HTF is irrelevant.  Furthermore, the sigma definition is only correct for models with zero pressure at the model top.  Remove these lines.
+\end{comment}
+\end{quotation}
+Removed discussion of sigma and HTF.
+
+\begin{quotation}
+\begin{comment}
+\item Line 124: It is not clear what you mean by `unstructured grids'.  The grids seem to be very structured.  Clarify.
+\end{comment}
+\end{quotation}
+Changed to `non-orthogonal grids'.  We hope this clarifies that the issue is the treatment of non-orthogonality: metric terms or the grid.
+
+\begin{quotation}
+\begin{comment}
+\item Section 3: It would be helpful to point out up front that you use the model in a 2D x-z slice configuration without Coriolis forces.
+\end{comment}
+\end{quotation}
+Added.
+
+\begin{quotation}
+\begin{comment}
+\item Line 142: typo `\ldots temperature, \ldots'
+\end{comment}
+\end{quotation}
+Fixed.
+
+\begin{quotation}
+\begin{comment}
+\item Line 145: There is no `Lorenz C grid staggering', the model uses the C-grid staggering in the horizontal and the Lorenz grid in the vertical.
+\end{comment}
+\end{quotation}
+Amended.
+
+\begin{quotation}
+\begin{comment}
+\item Lines 145--160: This information is disconnected from the whole paper.  Expand the explanations to make them self-explanatory and move the paragraph into an appendix.  Clarify that this treatment is only needed for nonlinear flows and that the advection uses an explicit time-stepping scheme.
+\end{comment}
+\end{quotation}
+Description expanded and moved to the appendix.
+
+\begin{quotation}
+\begin{comment}
+\item Eq. (7): The tracer symbol $\phi$ is undefined from a physical viewpoints.  Do you imply the tracer density?
+\end{comment}
+\end{quotation}
+Yes, now says, `\ldots where the tracer density, $\phi$, \ldots'.
+
+\begin{quotation}
+Later, in Eqs. (8) and (12) symbol $\varphi$ or a mix of $\phi$ and $\varphi$ are used.  Unify the presentation.
+\end{quotation}
+$\varphi$ removed, now using $\phi$ everywhere.
+
+\begin{quotation}
+\begin{comment}
+\item Section 3: Add information about the different numerical options that are assessed in combination with the orography treatment.
+\end{comment}
+\end{quotation}
+Included clearer description of models, including advection schemes.
+
+\begin{quotation}
+\begin{comment}
+\item Line 189: the term 2a needs be in parenthesis
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Line 194: be more precise: `\ldots constant wind above $z_2$ \ldots'
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Line 198 and Eq. (16): Two different sign conventions for the stream function are used with flipped signs that either lead to a negative (line 198) or positive (Eq. (16)) sign in the definition of the zonal velocity $u$.  Unify the presentation.
+\end{comment}
+\end{quotation}
+We now follow \citet{schaer2002} and use $u=-\partial \Psi/\partial z$ everywhere.  Signs corrected as appropriate to ensure horizontal velocities are positive.
+
+\begin{quotation}
+\begin{comment}
+\item Line 199: rephrase `A tracer with density $\phi$ is \ldots'
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+Why do you highlight a tracer `anomaly' in lines 202, 203 and 204?  Is there a background tracer distribution?  If not, rephrase the `anomaly'.
+\end{quotation}
+There is no background tracer distribution.  Changed `anomaly' to `tracer'.
+
+\begin{quotation}
+\begin{comment}
+\item Line 211: The information about different numerical schemes is very sudden here without enough information.  Add a description and references for all numerical options in section 2.
+\end{comment}
+\end{quotation}
+Moved to section 3, more details of schemes added.
+
+\begin{quotation}
+\begin{comment}
+\item Line 223: typo: artifact
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Eq. 14: It is highly unusual to use a superscript (instead of a subscript) for the error norm
+\end{comment}
+\end{quotation}
+Changed to subscript everywhere.
+
+\begin{quotation}
+\begin{comment}
+\item Line 247: The result that the increase of the model domain from 300 to 301km leads to a 50\% increase in the $\ell_2$ error seems to be highly questionable.  This needs to be double-checked and explained in greater detail.
+\end{comment}
+\end{quotation}
+Verified in two models, more detail included in the revised manuscript.
+
+\begin{quotation}
+\begin{comment}
+\item Eq. (16): see comment 19 concerning the different sign conventions and unify the presentation.  In addition, the formulation for $w$ is wrong and has a sign error.  The vertical velocity $w$ needs to be multiplied with ($-1$) to correct it in its current form.  In case you used the wrong formulation for the results, they all need to be rerun.
+\end{comment}
+\end{quotation}
+Sign error in $w$ equation fixed, but the code was already correct\footnote{\url{https://github.com/hertzsprung/AtmosFOAM/blob/master/src/orography/BtfVelocityProfile.C#L25}}.
+
+\begin{quotation}
+\begin{comment}
+\item Line 281: `\ldots Courant number \ldots'
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Section 3d: what is the grid spacing for this test case?
+\end{comment}
+\end{quotation}
+The original test case was $\Delta x = 500m$, $\Delta z = 300m$.  The other reviewer suggested additional tests at higher resolutions.  The text has been improvedso that the grid spacing used for every test case is clear.
+
+\begin{quotation}
+\begin{comment}
+\item Line 344: The physical unit of $\mu$ is missing.
+\end{comment}
+\end{quotation}
+$\mu$ is dimensionless.  It is now included in the momentum eqn 4a and noted that it is only used in the gravity waves test.  We also note that $\mu = 0$ for the resting atmosphere test in section 4c.
+
+\begin{quotation}
+\begin{comment}
+\item Line 414: `\ldots Charney--Phillips \ldots'
+\end{comment}
+\end{quotation}
+Fixed.
+
+\begin{quotation}
+\begin{comment}
+\item line 414: I assume that `eta' need to be capitalized here, correct?
+\end{comment}
+\end{quotation}
+Yes, it is now `Meso-Eta'.
+
+\begin{quotation}
+\begin{comment}
+\item Line 428: reference is incomplete
+\end{comment}
+\end{quotation}
+Now includes type, number and address.
+
+\begin{quotation}
+\begin{comment}
+\item Line 443: `\ldots Eta model \ldots'
+\end{comment}
+\end{quotation}
+Fixed.
+
+\begin{quotation}
+\begin{comment}
+\item Line 466: `\ldots Cartesian \ldots'
+\end{comment}
+\end{quotation}
+Fixed.
+
+\begin{quotation}
+\begin{comment}
+\item Table 1: instead of showing these strange numbers like 13.6, -623 and 3480 it would be helpful to say `unstable'.
+\end{comment}
+\end{quotation}
+Done.
+
+\begin{quotation}
+\begin{comment}
+\item Figure 3: Replot this figure.  The lines need to be thicker, e.g. the SLEVE line is almost invisible.
+\end{comment}
+\end{quotation}
+Done, and made the SLEVE colour darker to improve contrast.
+
+\begin{quotation}
+\begin{comment}
+\item Figure 5: The BTF $\theta$ line needs to be thicker.
+\end{comment}
+\end{quotation}
+Figure 5 now replaced by figure 7.
+
+\bibliographystyle{ametsoc2014}
+\bibliography{references}
+\end{document}
+

@@ -8,9 +8,25 @@ build/tf-cutcell-comparison/tf-cutcell-comparison.pdf: \
   src/tf-cutcell-comparison/model.tex \
   build/fig-advection-tracer/fig-advection-tracer.pdf \
   build/fig-meshes/fig-meshes.pdf \
-  build/fig-snappyHexMesh/fig-snappyHexMesh.pdf \
+  build/fig-grid-generation/fig-grid-generation.pdf \
   build/fig-resting/fig-resting.pdf \
+  build/fig-gravityWaves-meshes/fig-gravityWaves-meshes.pdf \
   build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf \
-  build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf
+  build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf \
+  build/fig-thermalAdvection/fig-thermalAdvection.pdf
 
-$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-snappyHexMesh,fig-snappyHexMesh))
+$(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-grid-generation,fig-grid-generation))
+
+$(eval $(call LaTeXWithBibTeX,src/tf-cutcell-comparison,build,responses))
+
+build/responses/responses.pdf: \
+  src/tf-cutcell-comparison/ametsoc.cls \
+  src/tf-cutcell-comparison/ametsoc2014.bst \
+  src/tf-cutcell-comparison/references.bib
+
+$(eval $(call LaTeXWithBibTeX,src/tf-cutcell-comparison,build,responses2))
+
+build/responses2/responses2.pdf: \
+  src/tf-cutcell-comparison/ametsoc.cls \
+  src/tf-cutcell-comparison/ametsoc2014.bst \
+  src/tf-cutcell-comparison/references.bib
