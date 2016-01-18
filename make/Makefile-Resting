@@ -1,7 +1,8 @@
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-resting,fig-resting))
 
 build/fig-resting/fig-resting.pdf: \
-  build/resting-diagnostics/w.tex
+  build/resting-diagnostics/w.tex \
+  build/resting-diagnostics/inversion.tex
 
 $(eval $(call Gnuplot,build/resting-diagnostics,w.tex,src/tf-cutcell-comparison/resting-w.plt))
 
@@ -10,7 +11,18 @@ build/resting-diagnostics/w.tex: \
   $(ATMOSTESTS_DIR)/build/resting-btf-low/energy.dat \
   $(ATMOSTESTS_DIR)/build/resting-sleve-low/energy.dat \
   $(ATMOSTESTS_DIR)/build/resting-cutCell-low/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-noOrography-high/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-btf-high/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-sleve-high/energy.dat \
+  $(ATMOSTESTS_DIR)/build/resting-cutCell-high/energy.dat \
 | build/resting-diagnostics
 
 $(eval $(call MakeDir,build/resting-diagnostics))
 
+build/fig-resting-inversion/fig-resting-inversion.pdf: \
+  build/resting-diagnostics/inversion.tex
+
+$(eval $(call Gnuplot,build/resting-diagnostics,inversion.tex,src/tf-cutcell-comparison/resting-inversion.plt))
+
+build/resting-diagnostics/inversion.tex: \
+| build/resting-diagnostics
