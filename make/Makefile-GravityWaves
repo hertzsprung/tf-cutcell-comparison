@@ -1,22 +1,9 @@
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-theta,fig-gravityWaves-theta))
 
-build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf: \
-  build/gravityWaves-btf-250m-300dz/18000/thetaDiffOverview.pdf
+#build/fig-gravityWaves-theta/fig-gravityWaves-theta.pdf: \
+#  build/gravityWaves-btf-250m-50dz/18000/thetaDiffOverview.pdf
 
-$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-300dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-300dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-250dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-250dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-200dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-200dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-150dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-150dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-100dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-100dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-75dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-75dz))
 $(eval $(call GravityWavesPlots,build/gravityWaves-btf-250m-50dz))
-$(eval $(call GravityWavesPlots,build/gravityWaves-cutCell-250m-50dz))
 
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-gravityWaves-sampleLine,fig-gravityWaves-sampleLine))
 
@@ -26,8 +13,6 @@ build/fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf: \
 $(eval $(call Gnuplot,build/gravityWaves-diagnostics,sampleLine.tex,src/tf-cutcell-comparison/gravityWaves-sampleLine.plt))
 
 build/gravityWaves-diagnostics/sampleLine.tex: \
-  $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-50dz/18000/sampleLine.dat \
-  $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-75dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-100dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-125dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-150dz/18000/sampleLine.dat \
@@ -35,15 +20,12 @@ build/gravityWaves-diagnostics/sampleLine.tex: \
   $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-250dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-300dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-btf-250m-500dz/18000/sampleLine.dat \
-  $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-75dz/18000/sampleLine.dat \
-  $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-100dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-125dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-150dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-200dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-250dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-300dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/gravityWaves-cutCell-250m-500dz/18000/sampleLine.dat \
-  $(ATMOSTESTS_DIR)/build/thermalAdvection-btf-250m-50dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/thermalAdvection-btf-250m-75dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/thermalAdvection-btf-250m-100dz/18000/sampleLine.dat \
   $(ATMOSTESTS_DIR)/build/thermalAdvection-btf-250m-125dz/18000/sampleLine.dat \

@@ -370,11 +370,11 @@ Hence, the analytic solution, $\theta_T$, can be found by considering the vertic
 \end{align}
 where the potential temperature at $z = 0$, $\theta_0 = \SI{288}{\kelvin}$, and the transform, $z^\star$, is given by rearranging equation~(\ref{eqn:btf}).
 
-Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours of potential temperature overlayed.  Errors are too small to be visible on the BTF grid with a maximum $\ell_2$ error of \num{4.26e-4}.
+Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours of potential temperature overlayed.  Errors are too small to be visible on the BTF grid with a maximum $\ell_2$ error of \TODO{\num{999}}.
 However, on the cut cell grid, the maximum error is \TODO{\num{999}}.  Advection errors are apparent around mountainous terrain, with small cells having the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
 The same error structure is present on all cut cell grids in which the terrain intersects the grid layers.
 
-For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of potential temperature error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-theta}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-theta}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.  The magnitude of error is about ten times larger than the potential temperature anomalies found on the cut cell grids in the gravity waves test seen in figure~\ref{fig:gw-theta}b.  We offer two explanations for this difference: first, there are no restoring forces in the linear advection model and, second, the wind fields in the two tests are different.
+For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of potential temperature error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-theta}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-theta}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.  \TODO{the following is no longer true.  in fact, so far, the reverse appears to be true: errors are larger in the GW tests compared to the thermal advection tests ... ``The magnitude of error is about ten times larger than the potential temperature anomalies found on the cut cell grids in the gravity waves test seen in figure~\ref{fig:gw-theta}b.  We offer two explanations for this difference: first, there are no restoring forces in the linear advection model and, second, the wind fields in the two tests are different.''}
 
 While the magnitude and structure of error on the cut cell grids in this test differs from potential temperature anomalies in the gravity waves test, results on the BTF grids are in close agreement in both tests but not on the cut cell grids.  Therefore, it is likely that anomalies on the cut cell grids in the gravity waves test are primarily due to errors in the advection of potential temperature through cut cells.
 
@@ -534,7 +534,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics[width=6in]{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$.  The dashed line at $x = \SI{50}{\kilo\meter}$ marks the position of the vertical profile in figure~\ref{fig:gw-sampleLine}.  Axes are in units of \si{\meter}.}
+	\caption{\TODO{replot this} Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$.  The dashed line at $x = \SI{50}{\kilo\meter}$ marks the position of the vertical profile in figure~\ref{fig:gw-sampleLine}.  Axes are in units of \si{\meter}.}
 	\label{fig:gw-theta}
 \end{figure*}
 
@@ -542,7 +542,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  The results are convergent, except for errors found in the lowest layers on the cut cell grids.}
+	\caption{\TODO{awaiting more, higher resolution, results for this figure} Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  The results are convergent, except for errors found in the lowest layers on the cut cell grids.}
 	\label{fig:gw-sampleLine}
 \end{figure*}
 
@@ -550,7 +550,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics{../fig-thermalAdvection/fig-thermalAdvection.pdf}
 %
-	\caption{Error in tracer density in the thermal advection test at a resolution of $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  Errors are negligible on the BTF grid, but on the cut cell grid errors are generated near mountainous terrain and are advected horizontally on the lee side.  Contours in tracer density are overlayed.  Axes are in units of \si{\meter}.}
+	\caption{\TODO{replot these} Error in tracer density in the thermal advection test at a resolution of $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  Errors are negligible on the BTF grid, but on the cut cell grid errors are generated near mountainous terrain and are advected horizontally on the lee side.  Contours in tracer density are overlayed.  Axes are in units of \si{\meter}.}
 	\label{fig:thermalAdvection}
 \end{figure}
 

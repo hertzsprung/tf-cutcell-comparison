@@ -19,8 +19,6 @@ a = 5e3
 hm = 1e3
 lambda = 4e3
 
-# TODO: use schaerExp, not schaerCos
-schaerCos(x) = abs(x) < a ? hm*cos(pi*x/(2*a))**2 * cos(pi*x/lambda)**2 : 0
 schaerExp(x) = hm*exp(-(x/a)**2) * cos(pi/lambda*x)**2
 
 set samples 200
