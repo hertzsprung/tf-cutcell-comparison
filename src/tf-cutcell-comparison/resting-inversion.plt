@@ -25,8 +25,8 @@ set samples 200
 set parametric
 set trange [-25:25]
 
-set object 1 rect from -25,0.5 to 25,1.5 fc rgbcolor '#cccccc' fs pattern 7 noborder behind
-set object 2 rect from -25,2 to 25,3 fc rgbcolor '#dddddd' fs solid noborder behind
+set object 1 rect from -25,0.5 to 25,1.5 fc rgbcolor '#aaaaaa' fs pattern 7 noborder behind
+set object 2 rect from -25,2 to 25,3 fc rgbcolor '#bbbbbb' fs solid noborder behind
 set label "High inversion" at 10,2.5 front
 set label "Low inversion" at 10,1 front
 
