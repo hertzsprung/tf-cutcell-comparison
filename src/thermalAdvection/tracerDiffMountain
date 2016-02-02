@@ -11,14 +11,14 @@ FoamFile {
     object          gmtDict;
 }
 
-projection "X5i/1.8i";
+projection "X3i/2.1i";
 projection2D XZ;
 separateLegend true;
 plotBoundaryDots false;
 plotZeroValuePolys false;
 
 FieldsToPlot (
-    [T_diff rawValues -0.2 0.2 0.05 "$GMTU/colours/red_white_blue.cpt"]
+    [T_diff rawValues -0.04 0.04 0.01 "$GMTU/colours/red_white_blue.cpt"]
     [T contours 288.5 300 0.5 "black"]
 );
 
