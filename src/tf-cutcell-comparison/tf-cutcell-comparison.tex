@@ -375,8 +375,8 @@ Hence, the analytic solution, $\theta_T$, can be found by considering the vertic
 \end{align}
 where the potential temperature at $z = 0$, $\theta_0 = \SI{288}{\kelvin}$, and the transform, $z^\star$, is given by rearranging equation~(\ref{eqn:btf}).
 
-Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours of potential temperature overlayed.  Errors are too small to be visible on the BTF grid with a maximum $\ell_2$ error of \TODO{\num{999}}.
-However, on the cut cell grid, the maximum error is \TODO{\num{999}}.  Advection errors are apparent around mountainous terrain, with small cells having the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
+Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours of potential temperature overlayed.  Errors are only just visible on the BTF grid with an $\ell_2$ error of \num{1.12e-7}.
+However, on the cut cell grid, the error is about ten times larger.  Advection errors are apparent around mountainous terrain, with small cells having some of the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
 The same error structure is present on all cut cell grids in which the terrain intersects the grid layers.
 
 For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of potential temperature error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-theta}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-theta}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.
@@ -557,7 +557,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics{../fig-thermalAdvection/fig-thermalAdvection.pdf}
 %
-	\caption{\TODO{replot these} Error in tracer density in the thermal advection test at a resolution of $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  Errors are negligible on the BTF grid, but on the cut cell grid errors are generated near mountainous terrain and are advected horizontally on the lee side.  Contours in tracer density are overlayed.  Axes are in units of \si{\meter}.}
+	\caption{Error in tracer density in the thermal advection test at a resolution of $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  Errors are negligible on the BTF grid, but on the cut cell grid errors are generated near mountainous terrain and are advected horizontally on the lee side.  Contours in tracer density are overlayed.  Axes are in units of \si{\meter}.}
 	\label{fig:thermalAdvection}
 \end{figure}
 
