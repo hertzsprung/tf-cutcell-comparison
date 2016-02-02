@@ -1,8 +1,9 @@
 $(eval $(call LaTeX,src/tf-cutcell-comparison,build/fig-thermalAdvection,fig-thermalAdvection))
 
-build/fig-gravityWaves-theta/fig-thermalAdvection.pdf: \
+build/fig-thermalAdvection/fig-thermalAdvection.pdf: \
   build/thermalAdvection-btf-250m-50dz/18000/tracerDiffMountain.pdf \
-  build/thermalAdvection-cutCell-250m-50dz/18000/tracerDiffMountain.pdf
+  build/thermalAdvection-cutCell-250m-50dz/18000/tracerDiffMountain.pdf \
+  src/tf-cutcell-comparison/tracerDiffMountain_T_diff.eps
 
 $(eval $(call ThermalAdvectionPlots,build/thermalAdvection-btf-250m-50dz))
 $(eval $(call ThermalAdvectionPlots,build/thermalAdvection-cutCell-250m-50dz))
