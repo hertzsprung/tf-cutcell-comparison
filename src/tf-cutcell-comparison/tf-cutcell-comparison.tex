@@ -8,8 +8,6 @@
 
 \bibpunct{(}{)}{;}{a}{}{,}
 
-\newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
-
 \title{Comparison of Terrain Following and Cut Cell Grids using a Non-Hydrostatic Model}
 \authors{James Shaw\correspondingauthor{Department of Meteorology, University of Reading, Earley Gate, PO Box 243, Reading, RG6 6BB, UK.} and Hilary Weller}
 \affiliation{Department of Meteorology, University of Reading, Reading, United Kingdom}
@@ -52,7 +50,7 @@ In an experiment of orographically induced gravity waves, \citet{gallus-klemp200
 
 \citet{mesinger2012} refined the formulation to allow diagonal transport of momentum and temperature immediately above sloping terrain.  This arrangement is similar to the finite volume cut cell method.  The new method improved test results, increasing lee slope winds by \SIrange{4}{5}{\meter\per\second} \citep{mesinger2012}.
 
-This study uses a modified version of the fully-compressible model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we give the governing equations, outline the model from \citet{weller-shahrokhi2014} and describe the modification which improves stability for long timesteps in the presence of steep orography.  Section 4 analyses the results from three advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
+This study uses a modified version of the fully-compressible model from \citet{weller-shahrokhi2014} to enable a like-for-like comparison between terrain following and cut cell grids for idealised, two-dimensional test cases from the literature.  Section 2 presents the formulation of the terrain following and cut cell grids used in the experiments that follow.  In section 3 we give the governing equations and outline the model from \citet{weller-shahrokhi2014}.  Section 4 analyses the results from three advection tests, a test of a stably stratified atmosphere initially at rest, and orographically induced gravity waves.  Concluding remarks are made in section 5.
 
 
 \section{Grids}
@@ -77,9 +75,10 @@ and \(s_1\) and \(s_2\) are the scale heights of large-scale and small-scale ter
 Most implementations of terrain following layers use a coordinate system that makes the computational domain rectangular, but introduces metric terms into the equations of motion.  Instead, the model employed in this study uses Cartesian coordinates and non-orthogonal grids.  By doing so, results from the same model can be compared between terrain following and cut cell grids without modifying the equation set or discretisation.
 
 Cut cell grids are generated in a different way to the typical shaving technique described by \citet{adcroft1997}.  Starting from a uniform grid, all cell vertices that lie beneath the orography are moved up to the surface.  Additionally, to avoid creating very thin cells, all vertices up to $2 \Delta z/5$ above the orography are moved down to the surface.
-Where all four of a cell's vertices are moved, the cell has zero volume and so it is removed.  Where two vertices at the same horizontal location are moved up to the surface they will occupy the same point; this results in a zero-length edge that is removed to create a triangular cell.  Figure~\ref{fig:grid-generation} shows how a $2 \times 2$-cell, uniform grid is transformed into a cut cell grid.  Cell $c_4$ is removed because it has zero volume, and the zero-length edge at point $p$ is removed to create a triangular cell, $c_3$.
+Where all four of a cell's vertices are moved, the cell has zero volume and so it is removed.  Where two vertices at the same horizontal location are moved up to the surface they will occupy the same point; this results in a zero-length edge that is removed to create a triangular cell.  Figure~\ref{fig:grid-generation} shows how a $2 \times 3$-cell, uniform grid is transformed into a cut cell grid.  Cells $c_5$ and $c_6$ are removed because they have zero volume, and the zero-length edge at point $q$ is removed to create a triangular cell, $c_3$.
+Point $p$ is moved down because it is within $2\Delta z/5$ of the surface, avoiding the creation of a very thin cell.
 
-Some thin cells are generated but, unlike most cut cell grids, cells are typically made smaller in height but their width is unaltered.  A grid that has these thin cells can be seen in figure~\ref{fig:gw-meshes}c.  This technique has the advantage that cells are not shortened in the direction of flow and so there should be no additional constraints on the advective Courant number.
+Some small cells are generated but, unlike most cut cell grids, cells are typically made smaller in height but their width is unaltered.  A grid that has these thin cells can be seen in figure~\ref{fig:gw-meshes}c.  This technique has the advantage that cells are not shortened in the direction of flow and so there should be no additional constraints on the advective Courant number.
 
 
 \section{Models}
@@ -377,20 +376,20 @@ where the potential temperature at $z = 0$, $\theta_0 = \SI{288}{\kelvin}$, and 
 
 Enlargements of the error field near the mountain are shown in figure~\ref{fig:thermalAdvection} at $\Delta z = \SI{50}{\meter}$ with contours of potential temperature overlayed.  Errors are only just visible on the BTF grid with an $\ell_2$ error of \num{1.12e-7}.
 However, on the cut cell grid, the error is about ten times larger.  Advection errors are apparent around mountainous terrain, with small cells having some of the largest errors.  These errors are advected horizontally along the lee slope, forming stripes.
-The same error structure is present on all cut cell grids in which the terrain intersects the grid layers.
+The same error structure is present on all cut cell grids.
 
-For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of potential temperature error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-theta}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-theta}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.
+For comparison with the potential temperature anomalies in the gravity waves test, vertical profiles of potential temperature error are taken at $x = \SI{50}{\kilo\meter}$.  As seen in figure~\ref{fig:gw-sampleLine}c, errors are negligible on the BTF grids, but figure~\ref{fig:gw-sampleLine}d reveals significant errors in the lowest layers of the cut cell grids that were advected from the mountain peaks.
 
 While the magnitude and structure of error on the cut cell grids in this test differs from potential temperature anomalies in the gravity waves test, results on the BTF grids are in close agreement in both tests but not on the cut cell grids.  Therefore, it is likely that anomalies on the cut cell grids in the gravity waves test are primarily due to errors in the advection of potential temperature through cut cells.
 
 \section{Conclusions}
 We have presented a like-for-like comparison between terrain following and cut cell grids using a single model.  Accuracy on the BTF, SLEVE and cut cell grids was evaluated in a series of two-dimensional tests.
 
-Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid, which has previously been found to give poor results \citep{schaer2002,klemp2011,good2014}, errors were often small in the tests presented here.  In the first two tests, tracers were advected by horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid rather than on grid distortions.
+Across all tests, a high degree of accuracy was achieved for all grids.  Even on the highly-distorted BTF grid errors were often small in the tests presented here.  In the first two tests, tracers were advected by horizontal and terrain following velocity fields.  We found that the accuracy of the upwind-biased cubic advection scheme depended upon alignment of the flow with the grid rather than on grid distortions.
 Spurious vertical velocities in the resting atmosphere tests were similar on terrain following and cut cell grids.
 In the gravity waves test, vertical velocities were in good agreement with the reference solution from \citet{melvin2010} across all grids.
 
-Cut cell grids reduced errors in the horizontal advection test.  Conversely, in the terrain following tracer advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  Errors were also large on the cut cell grids in the second terrain following thermal advection test.  This result suggests that, in the gravity waves test, potential temperature errors in the cut cell grids are primarily due to advection errors.
+Cut cell grids reduced errors in the horizontal advection test.  Conversely, in the terrain following tracer advection test, errors were large on the SLEVE and cut cell grids where velocities were misaligned with the grids.  Errors were also large on the cut cell grids in the terrain following thermal advection test.  This result suggests that, in the gravity waves test, potential temperature errors in the cut cell grids are primarily due to advection errors.
 
 The cubic upwind-biased advection scheme takes an approach for treating small cut cells that differs from other existing approaches by adjusting weightings to ensure that advection remains upwind-biased near small cells.  The implementation of this technique in OpenFOAM is available at \url{https://github.com/hertzsprung/AtmosFOAM/tree/shaw-weller-2015-mwr} and will be described in greater detail a future publication.  Combined with semi-implicit timestepping and a new cut cell generation technique that preserves cell length in the direction of the flow, small cells did not impose additional timestep constraints.
 By using a suitable multidimensional advection scheme and a curl-free pressure gradient formulation, we did not find significant advantages of cut cells or smoothed coordinate systems unlike \citet{good2014,klemp2011,schaer2002}.
@@ -523,7 +522,7 @@ Terrain following & Centred linear      & \(\ell_2\) error & 0        & 0.0338  
 %
 	\caption{Setup and results of a stratified atmosphere initially at rest.  Tests are performed on four grids for two different stability profiles, with panel (a) showing the placement of the inversion layer in the two profiles.
 The low inversion is positioned so that it intersects the terrain, shown immediately above the $x$ axis.
-In each test, the inversion layer has a Brunt-V\"ais\"al\"a frequency $N = \SI{0.02}{\per\second}$ and $N = \SI{0.01}{\per\second}$ elsewhere.  
+In each test, the inversion layer has a Brunt-V\"ais\"al\"a frequency $N = \SI{0.02}{\per\second}$, and $N = \SI{0.01}{\per\second}$ elsewhere.  
 Panel (b) shows the maximum magnitude of spurious vertical velocity, \(w\) (\si{\meter\per\second}), with results on BTF, SLEVE, cut cell and regular grids using the model from \citet{weller-shahrokhi2014} which includes a curl-free pressure gradient formulation.
 Results for the high inversion test are shown with solid lines, the low inversion test with dashed lines.}
 	\label{fig:resting}
@@ -541,7 +540,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics[width=6in]{../fig-gravityWaves-theta/fig-gravityWaves-theta.pdf}
 %
-	\caption{\TODO{replot this} Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$.  The dashed line at $x = \SI{50}{\kilo\meter}$ marks the position of the vertical profile in figure~\ref{fig:gw-sampleLine}.  Axes are in units of \si{\meter}.}
+	\caption{Differences in potential temperature between the start and end of the gravity waves test on the BTF grid with $\Delta z = \SI{50}{\meter}$.  The dashed line at $x = \SI{50}{\kilo\meter}$ marks the position of the vertical profile in figure~\ref{fig:gw-sampleLine}.  Axes are in units of \si{\meter}.}
 	\label{fig:gw-theta}
 \end{figure*}
 
@@ -549,7 +548,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics{../fig-gravityWaves-sampleLine/fig-gravityWaves-sampleLine.pdf}
 %
-	\caption{\TODO{awaiting more, higher resolution, results for this figure} Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in tracer density between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  The results are convergent, except for errors found in the lowest layers on the cut cell grids.}
+	\caption{Vertical profiles of potential temperature differences between the start and end of the gravity waves test on (a) the BTF grid, and (b) the cut cell grid.  Results are compared with thermal advection tests results, showing differences in potential temperature between the numeric and analytic solutions at $t = \SI{18000}{\second}$ on (c) the BTF grid, and (d) the cut cell grid.  The results are convergent, except for errors found in the lowest layers on the cut cell grids.}
 	\label{fig:gw-sampleLine}
 \end{figure*}
 
@@ -557,7 +556,7 @@ Results for the high inversion test are shown with solid lines, the low inversio
 	\centering
 	\includegraphics{../fig-thermalAdvection/fig-thermalAdvection.pdf}
 %
-	\caption{Error in tracer density in the thermal advection test at a resolution of $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  Errors are negligible on the BTF grid, but on the cut cell grid errors are generated near mountainous terrain and are advected horizontally on the lee side.  Contours in tracer density are overlayed.  Axes are in units of \si{\meter}.}
+	\caption{Error in potential temperature (measured in \si{\kelvin}) in the thermal advection test at a resolution of $\Delta z = \SI{50}{\meter}$ on (a) the BTF grid, and (b) the cut cell grid.  Errors are negligible on the BTF grid, but on the cut cell grid errors are generated near mountainous terrain and are advected horizontally on the lee side.  Contours of the potential temperature field at $t = \SI{18000}{\second}$ are overlayed.  Axes are in units of \si{\meter}.}
 	\label{fig:thermalAdvection}
 \end{figure}
 

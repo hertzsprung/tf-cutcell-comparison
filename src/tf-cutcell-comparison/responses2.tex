@@ -9,7 +9,6 @@
 \usepackage{xcolor}
 \newlist{comment}{enumerate}{1}
 \setlist[comment,1]{label={\arabic{commenti}.},leftmargin=*,resume=comment}
-\newcommand{\TODO}[1]{\textcolor{purple}{TODO: \emph{#1}}}
 
 \begin{document}
 In addition to the responses below, we have strengthened the abstract and conclusions, saying that we do not find any significant problems with results on BTF grids and we do not find significant advantages of cut cells or smoothed coordinates that are found by other authors.
@@ -20,7 +19,7 @@ This revised manuscript is improved from its original version. The Sch\"{a}r mou
 
 Sections 4a and 4b -- Section 4a presents results for the Sch\"{a}r advection test case for various vertical coordinates and advection schemes; there is little new here that is not already covered in the \citet{schaer2002} paper. The advection tests in section 4b provide an interesting counter example to this test. I would recommend switching the emphasis in these two sections, presenting the advected tracer contours in a new Fig. 3 for the terrain-following advection, and just including results from the Sch\"{a}r case in table 1 for comparison purposes.
 \end{quotation}
-Terrain following advection results on BTF and cut cell grids are now shown in figure 3, with the accompanying discussion starting at line \TODO{xxx}.  The analysis of the horizontal advection tests has been rewritten more succinctly and starts at line \TODO{xxx}.
+Terrain following advection results on BTF and cut cell grids are now shown in figure 3, with the accompanying discussion starting at line 282.  The analysis of the horizontal advection tests has been rewritten more succinctly and starts at line 248.
 
 \begin{quotation}
  Lines 131-147 on cut-cell grid generation -- It's still not clear how or why a cell vertex  is moved laterally in constructing the cut-cell mesh. Taking Fig. 2 as an example, it  seems that following the authors' directions to move all vertices lying underneath the  orography on the uniform grid up to the surface would produce four grid cells as  shown in the figure below rather than the three cells shown in Fig. 2. This four-cell structure appears to be consistent with the generation of thin cells as the authors  point out in Fig. 5c. If lateral displacement of a vertex is allowed, how is it decided  whether it should be moved and how is it decided where along the surface it should  be located (i.e. the location of point v in Fig. 2)?
@@ -64,14 +63,14 @@ In the first draft, the $\ell_2$ values had not been normalised, such that $\ell
 \end{quotation}
 Yes, the change in domain width causes the terrain to be shifted by $\Delta x / 2$, and it is this which results in a change in accuracy.  We had not intended to perform a sensitivity test, but only to clarify the specification for the \citet{schaer2002} advection test.
 
-The paragraph discussing the sensitivity of CTCS to the change in mountain profile has been removed.  Line \TODO{xxx} clarifies the test setup required to reproduce \citet{schaer2002}'s results.
+The paragraph discussing the sensitivity of CTCS to the change in mountain profile has been removed.  Line 218 clarifies the test setup required to reproduce \citet{schaer2002}'s results.
 
 \begin{quotation}
  Lines 321-322 -- When the flow is aligned with the grid there is no cross coordinate 
  flow and therefore the numerics are essentially reduced to a one-dimensional 
  advection equation. I don't see how grid distortion is even an issue. 
 \end{quotation}
-The advection scheme fits a multidimensional polynomial using a stencil of cell centroids, hence grid distortions could affect the resulting least squares fit.  If the test used a dimensionally-split advection scheme with a terrain-following coordinate transform, then the test would indeed reduce to a one-dimensional problem.  We have provided a more detailed motivation of this test in the introductory paragraph starting at line \TODO{xxx}.
+The advection scheme fits a multidimensional polynomial using a stencil of cell centroids, hence grid distortions could affect the resulting least squares fit.  If the test used a dimensionally-split advection scheme with a terrain-following coordinate transform, then the test would indeed reduce to a one-dimensional problem.  We have provided a more detailed motivation of this test in the introductory paragraph starting at line 258.
 
 \begin{quotation}
  Lines 364-368 -- The authors did not need to run these resting atmosphere 
@@ -109,12 +108,12 @@ As suggested, the inversion layer has been lowered to intersects the terrain.  S
  that errors in the advection of theta through the cut cells may be responsible for the 
  anomalies appearing with this grid.
 \end{quotation}
-We considered plotting heatmaps but found that it was not easy to distinguish between gravity waves and numerical errors.  The position of the sample line was chosen so that numerical errors would be revealed more clearly: far away from the mountain, the wave amplitude is small but the potential temperature errors remain constant in the lee of the mountain.  The manuscript now explains this choice at line \TODO{xxx}.
+We considered plotting heatmaps but found that it was not easy to distinguish between gravity waves and numerical errors.  The position of the sample line was chosen so that numerical errors would be revealed more clearly: far away from the mountain, the wave amplitude is small but the potential temperature errors remain constant in the lee of the mountain.  The manuscript now explains this choice at line 398.
 
 \begin{quotation}
  Lines 479-480 -- As mentioned above, for the horizontal advection test, shouldn't the  results for the cut-cell and regular grids be identical?
 \end{quotation}
-This was a mistake: table 1 confirmed that min, max and $\ell_2$ errors were identical on both grids.  This line now reads, `in the horizontal advection test, accuracy was greatest on the cut cell grid'.
+This was a mistake: table 1 confirmed that min, max and $\ell_2$ errors were identical on both grids.  This line has been removed.
 
 \begin{quotation}
  Lines 481-482 -- Emphasizing an error reduction of two orders of magnitude for this 
@@ -122,7 +121,7 @@ This was a mistake: table 1 confirmed that min, max and $\ell_2$ errors were ide
  not very informative. In both cases the errors appear to be quite small, and thus the 
  more relevant question is whether these differences are of any realistic significance. 
 \end{quotation}
-The advantage of the cut cell grid is not seen when the inversion layer is lowered to intersect the terrain.  Section 4c has been rewritten to discuss the new results and this conclusion has been removed.  Also removed is the paragraph previously starting at line 488, stating that there was a trade-off between pressure gradient calculations and advection errors.
+The advantage of the cut cell grid is not seen when the inversion layer is lowered to intersect the terrain.  Section 4c has been rewritten to discuss the new results and this conclusion has been removed.  Also removed is the paragraph starting at line 488 in the previous manuscript draft, stating that there was a trade-off between pressure gradient calculations and advection errors.
 
 
 \section*{Review \#2}
@@ -134,7 +133,7 @@ However, there are still a few minor aspects that need attention:
 that mu is dimensionless is therefore wrong and needs to be corrected.
 \end{comment}
 \end{quotation}
-Removed `dimensionless' on line \TODO{xxx} and now included correct units where $\mu$ is specified on lines \TODO{xxx} and \TODO{xxx}.
+Removed `dimensionless' on line 190 and now included correct units where $\mu$ is specified on lines 325 and 370.
 
 \begin{quotation}
 	\begin{comment}
@@ -148,14 +147,14 @@ Added physical units to $\phi_0$ and in the caption for table 1.
 	\item Page 18, test c): The initial conditions look incomplete. Please provide information about the initial density or pressure initialization. Do you assume that the pressure at z=0 m is 1000 hPa?
 	\end{comment}
 \end{quotation}
-Yes, amended line \TODO{xxx} to state that $p_0 = \SI{1000}{\hecto\pascal}$, which applies to all tests that use the model.  Line \TODO{xxx} now cites \citet{weller-shahrokhi2014} which explains how the Exner function of pressure is calculated so that it is in discrete hydrostatic balance with the prescribed potential temperature file.
+Yes, amended line 189 to state that $p_0 = \SI{1000}{\hecto\pascal}$, which applies to all tests that use the model.  Line 324 now cites \citet{weller-shahrokhi2014} which explains how the Exner function of pressure is calculated so that it is in discrete hydrostatic balance with the prescribed potential temperature file.
 
 \begin{quotation}
 	\begin{comment}
 	\item Test d) and e): As for test c), the descriptions of the initial conditions looks incomplete. Is the initial w zero in d,e?
 \end{comment}
 \end{quotation}
-The value of $p_0$ applies to tests (c) and (d).  For test (d), line \TODO{xxx} now states that $w = \SI{0}{\meter\per\second}$.  For test (e), the velocity field is defined by the streamfunction in equation (26), and $w = \SI{0}{\meter\per\second}$ only where $\mathrm{d}h/\mathrm{d}x = 0$.
+The value of $p_0$ applies to tests (c) and (d).  For test (d), line 357 now states that $w = \SI{0}{\meter\per\second}$.  For test (e), the velocity field is defined by the streamfunction in equation (26), and $w = \SI{0}{\meter\per\second}$ only where $\mathrm{d}h/\mathrm{d}x = 0$.
 
 \begin{quotation}
 	\begin{comment}
@@ -176,7 +175,7 @@ Instead of amending this line, we now refer to the field as a potential temperat
 	\item Line 445: While it is mathematically possible to initialize the tracer density with 288 (needs physical units!) at the ground, it does not make any physical sense. However, it is okay to leave it for this idealized test case, but a more physical choice is clearly more desirable.
 	\end{comment}
 \end{quotation}
-The field is really the potential temperature field from the gravity waves test.  We have modified this section so that the tracer density field is now called a potential temperature field.  Lines \TODO{xxx twice in the abstract, in the intro and conclusion} have also been amended accordingly so that this test is no longer refered to as a tracer advection test..  Equation (\TODO{xxx}) now has $\theta_0 = \SI{288}{\kelvin}$.
+The field is really the potential temperature field from the gravity waves test.  We have modified this section so that the tracer density field is now called a potential temperature field.  Lines 19, 22, 102, 459, 683 and 686--689 have also been amended accordingly so that this test is no longer refered to as a tracer advection test.  Equation (28) now has $\theta_0 = \SI{288}{\kelvin}$.
 
 \begin{quotation}
 	\begin{comment}
